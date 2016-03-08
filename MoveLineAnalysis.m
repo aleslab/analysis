@@ -2,7 +2,7 @@ cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data
 %cd C:\Users\aril\Documents\Data
 %Need to automate loading and loop it so that multiple files can be
 %analysed at once.
-load('MoveLine_combined_away_ALp_20160222_154924');
+load('');
 
 ResponseTable = struct2table(experimentData); %The data struct is converted to a table
 
@@ -56,7 +56,7 @@ axis([min(orderedVelocities) max(orderedVelocities) 0 100]);
 set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
 xlabel('Velocity of the first section (cm/s)');
 ylabel('Percentage correct responses');
-title('towards');
+title('depth');
 
 if length(allTrialNumbers) > 7
 figure
