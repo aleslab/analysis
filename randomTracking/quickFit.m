@@ -29,7 +29,7 @@ nCond = length(sessionInfo.conditionInfo);
 for iCond = 1:nCond,
 contrastList(iCond) = sessionInfo.conditionInfo(iCond).contrast;
 nT = length(fitData(iCond).gain);
-goodFits = find(fitData(iCond).resnorm< 1e9);
+goodFits = find(fitData(iCond).resnorm< 1e6);
 
 nT = length([fitData(iCond).gain(goodFits)]);
 gainMean(iCond) = mean([fitData(iCond).gain(goodFits)]);
@@ -40,13 +40,20 @@ delaySEM(iCond)  = std([fitData(iCond).delay(goodFits)])./sqrt(nT);
 
 end
 
-figure
-subplot(1,2,1)
-errorbar(contrastList, gainMean,gainSEM,'o')
-title('Kalman Gain')
-subplot(1,2,2)
-errorbar(contrastList, delayMean,delaySEM,'o')
-title('Delay')
+figure(142)
+clf
+
+%subplot(1,2,1)
+h=bar(contrastList, gainMean,'k')
+set(h,'faceColor','w')
+hold on;
+errorbar(contrastList, gainMean,gainSEM,'.k','linewidth',4)
+
+xlabel('Contrast')
+ylabel('Kalman Gain')
+% subplot(1,2,2)
+% errorbar(contrastList, delayMean,delaySEM,'o')
+% title('Delay')
 
 
 

@@ -11,6 +11,7 @@ idx =1;
 
 timePerFrame = sessionInfo.expInfo.frameDur;
 for iCond = 1:nCond,
+    iCond
     nTrial = length(sortedTrialData(iCond).trialData);
     for iTrial = 1:nTrial,
         
@@ -40,7 +41,7 @@ for iCond = 1:nCond,
             [fitParam,RESNORM,RESIDUAL,EXITFLAG,OUTPUT,LAMBDA,JACOBIAN] = ...
                 lsqnonlin(myObj,x0,[0],[1],opts);
             
-            thisCond = experimentData(iTrial).condNumber;
+            thisCond = iCond;
             fitData(thisCond).gain(end+1) = fitParam(1);
             fitData(thisCond).delay(end+1) = delay;%fitParam(2)*timePerFrame;
             

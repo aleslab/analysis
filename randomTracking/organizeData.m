@@ -20,6 +20,10 @@ repsPerCond = zeros(nCond,1); %Keep track of the repetitions per condition
 
 for iTrial = 1:length(experimentData),
 
+    if ~experimentData(iTrial).validTrial
+        continue
+    end
+    
 thisCond = experimentData(iTrial).condNumber;
 %Increment the reps by 1; 
 repsPerCond(thisCond) = repsPerCond(thisCond) + 1; 
