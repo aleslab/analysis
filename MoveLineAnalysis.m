@@ -10,7 +10,7 @@ cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data
 % fileNameStart = char(fileNameString);
 
 %filenames = dir('C:\Users\aril\Documents\Data\MoveLine_combined_towards_ALp*'); %for the lilac room
-filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_combined_towards_ALp*'); %for the lab mac
+filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_combined_towards_BPnewest*'); %for the lab mac
 %will load all AL pilots in the combined towards paradigm
 filenames = {filenames.name}; %makes a cell of filenames
 i = 1;
@@ -60,7 +60,12 @@ end
 conditionFirstSectionVelocities = [allSessionInfo.conditionInfo.velocityCmPerSecSection1]; %looking at the initial speed of the movement of the line to plot on the graph
 FirstVelocities = unique(conditionFirstSectionVelocities); %we don't want the entire matrix of hundreds of the same speeds over and over again, just want to know the speeds, so use unique.
 %get rid of negative sign as it doesn't matter which direction the condition was here.
-if min(FirstVelocities) < 0;
+flippedSpeed = true; %the slow section is at the beginning rather than at the end
+if flippedSpeed == true
+    normalisedFirstVelocities = FirstVelocities;
+    orderedVelocities = normalisedFirstVelocities;
+    
+elseif min(FirstVelocities) < 0
     normalisedFirstVelocities = FirstVelocities*-1;
     orderedVelocities = fliplr(normalisedFirstVelocities);
 else
