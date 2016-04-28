@@ -1,12 +1,24 @@
-%cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data
-cd C:\Users\aril\Documents\Data
-%Need to automate loading and loop it so that multiple files can be
-%analysed at once.
-load('');
+cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data
+%cd C:\Users\aril\Documents\Data
+
+%filenames = dir('C:\Users\aril\Documents\Data\MoveLine_cd_towards_ALnew*'); %for the lilac room
+filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_combined_towards_BPnewest*'); %for the lab mac
+filenames = {filenames.name}; %makes a cell of filenames
+i = 1;
+for i = 1:length(filenames)
+    filenamestr = char(filenames(i));
+    dataFile(i) = load(filenamestr); 
+    i = i+1;
+    %creates a struct with the data from each loaded file, so that data 
+    %from different blocks of the same condition can be loaded to be analysed together.
+end
+
+allExperimentData = [dataFile.experimentData]; %all of the experiment data in one combined struct
+allSessionInfo = dataFile.sessionInfo; %all of the session info data in one combined struct
+ResponseTable = struct2table(allExperimentData); %The data struct is converted to a table
 
 message = 'Parametric Bootstrap (1) or Non-Parametric Bootstrap? (2): ';
 ParOrNonPar = input(message);
-ResponseTable = struct2table(experimentData); %The data struct is converted to a table
 
 %excluding invalid trials
 wantedData = ~(ResponseTable.validTrial == 0); %creates a logical of which trials in the data table were valid
@@ -33,17 +45,21 @@ allTrialNumbers = histc(validCondNumber, allTrialConditions); %the total number 
 depthTrialNumbers = allTrialNumbers(1:7);
 allCorrectPercentages = (condCorrectNumbers./allTrialNumbers)*100; %creates a double of the percentage correct responses for every condition
 
-if length(allTrialNumbers) > 7
-allDepthPercentageCorrect = allCorrectPercentages(1:7);
-allLateralPercentageCorrect = allCorrectPercentages(8:14);
-else
-    allDepthPercentageCorrect = allCorrectPercentages;
-end
+% if length(allTrialNumbers) > 7
+% allDepthPercentageCorrect = allCorrectPercentages(1:7);
+% allLateralPercentageCorrect = allCorrectPercentages(8:14);
+% else
+%     allDepthPercentageCorrect = allCorrectPercentages;
+% end
 
-conditionFirstSectionVelocities = [sessionInfo.conditionInfo.velocityCmPerSecSection1];
+conditionFirstSectionVelocities = [allSessionInfo.conditionInfo.velocityCmPerSecSection1];
 FirstVelocities = unique(conditionFirstSectionVelocities);
-%get rid of negative sign as it doesn't matter which direction the condition was here.
-if min(FirstVelocities) < 0;
+flippedSpeed = false; %the slow section is at the beginning rather than at the end
+if flippedSpeed == true
+    normalisedFirstVelocities = FirstVelocities;
+    orderedVelocities = normalisedFirstVelocities;
+    
+elseif min(FirstVelocities) < 0
     normalisedFirstVelocities = FirstVelocities*-1;
     orderedVelocities = fliplr(normalisedFirstVelocities);
 else
@@ -54,7 +70,6 @@ end
 
 tic
 
-%Use the Logistic function
 PF = @PAL_CumulativeNormal;  
 
 %Threshold and Slope are free parameters, guess and lapse rate are fixed
