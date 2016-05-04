@@ -5,7 +5,7 @@ cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data
 %to load from within the piece of code.
 
 %filenames = dir('C:\Users\aril\Documents\Data\MoveLine_combined_towards_ALp*'); %for the lilac room
-filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_combined_towards_MGnewest*'); %for the lab mac
+filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_combined_towards_ALnew_*'); %for the lab mac
 %will load all AL pilots in the combined towards paradigm
 filenames = {filenames.name}; %makes a cell of filenames
 i = 1;
@@ -43,7 +43,7 @@ condCorrectNumbers = histc(correctTrials, correctTrialConditions); %the total nu
 allTrialConditions = unique(validCondNumber); %the conditions for which any response was made
 allTrialNumbers = histc(validCondNumber, allTrialConditions); %the total number of responses for each condition
 
-allCorrectPercentages = (condCorrectNumbers./allTrialNumbers)*100; %creates a double of the percentage correct responses for every condition
+allCorrectPercentages = (condCorrectNumbers./allTrialNumbers); %creates a double of the percentage correct responses for every condition
 [phat, pci] = binofit(condCorrectNumbers, allTrialNumbers); %want pci (confidence intervals) for error bars 
 if length(allTrialNumbers) > 7 %if there's more than 7 conditions because there's both lateral and depth presentations
 allDepthPercentageCorrect = allCorrectPercentages(1:7);
@@ -52,13 +52,23 @@ depthPCI = pci(1:7,:); %takes the confidence interval for the first 7 conditions
 lateralPCI = pci(8:14,:); %takes the confidence interval for the lateral (last 7) conditions calculated by the binofit
 depthLowerCI = depthPCI(1:7,1); %the lower confidence intervals for the depth trials
 depthUpperCI = depthPCI(1:7,2); %the upper confidence intervals for the depth trials
-lateralLowerCI = lateralPCI(1:7,1);
-lateralUpperCI = lateralPCI(1:7,2);
+lateralLowerCI = lateralPCI(1:7,1); %the lower confidence intervals for the lateral trials
+lateralUpperCI = lateralPCI(1:7,2); %the upper confidence intervals for the lateral trials
+
+depthLowerErrorBars = allDepthPercentageCorrect - depthLowerCI; 
+depthUpperErrorBars = depthUpperCI - allDepthPercentageCorrect;
+lateralLowerErrorBars = allLateralPercentageCorrect - lateralLowerCI; 
+lateralUpperErrorBars = lateralUpperCI - allLateralPercentageCorrect;
+%the size of the error bars to plot around the points to indicate the confidence bounds
+
 else
     allDepthPercentageCorrect = allCorrectPercentages;
     depthPCI = pci;
     depthLowerCI = depthPCI(1:7,1); %the lower confidence intervals for the depth trials
     depthUpperCI = depthPCI(1:7,2); %the upper confidence intervals for the depth trials
+    
+    depthLowerErrorBars = allDepthPercentageCorrect - depthLowerCI; 
+    depthUpperErrorBars = depthUpperCI - allDepthPercentageCorrect;
 end
 
 conditionFirstSectionVelocities = [allSessionInfo.conditionInfo.velocityCmPerSecSection1]; %looking at the initial speed of the movement of the line to plot on the graph
@@ -84,9 +94,9 @@ end
 %depth conditions
 figure
 %plot(orderedVelocities, allDepthPercentageCorrect, '-xk');
-errorbar(orderedVelocities, allDepthPercentageCorrect, depthLowerCI, depthUpperCI, '-xk');
+errorbar(orderedVelocities, allDepthPercentageCorrect, depthLowerErrorBars, depthUpperErrorBars, '-xk');
 %plot the graph of depth conditions with upper and lower confidence intervals as error bars
-axis([min(orderedVelocities) max(orderedVelocities) 0 100]);
+axis([min(orderedVelocities) max(orderedVelocities) 0 1]);
 set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
 set(gca,'FontSize',24);
 xlabel('Velocity of the first section (cm/s)');
@@ -97,9 +107,9 @@ title('depth');
 if length(allTrialNumbers) > 7 %if there were lateral conditions, drawing a second graph for those conditions
 figure
 %plot(orderedVelocities, allLateralPercentageCorrect, '-xk');
-errorbar(orderedVelocities, allLateralPercentageCorrect, lateralLowerCI, lateralUpperCI, '-xk');
+errorbar(orderedVelocities, allLateralPercentageCorrect, lateralLowerErrorBars, lateralUpperErrorBars, '-xk');
 %plot the graph of the lateral conditions with upper and lower confidence intervals as error bars
-axis([min(orderedVelocities) max(orderedVelocities) 0 100]);
+axis([min(orderedVelocities) max(orderedVelocities) 0 1]);
 set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
 set(gca,'FontSize',24);
 xlabel('Velocity of the first section (cm/s)');
