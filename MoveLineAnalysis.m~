@@ -4,6 +4,11 @@ cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data
 %Eventually want it so that you can specify the initials and the conditions
 %to load from within the piece of code.
 
+% condition = {'combined_towards'};
+% subjectInitials = {'ALp'};
+% fileNameString = strcat('MoveLine_', condition, '_', subjectInitials,'_');
+% fileNameStart = char(fileNameString);
+
 %filenames = dir('C:\Users\aril\Documents\Data\MoveLine_combined_towards_ALp*'); %for the lilac room
 filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_combined_towards_MGnewest*'); %for the lab mac
 %will load all AL pilots in the combined towards paradigm
@@ -76,8 +81,6 @@ else
     normalisedFirstVelocities = FirstVelocities;
     orderedVelocities = normalisedFirstVelocities;
 end
-%This section is basically here so that the axes aren't weird when you flip
-%the speed orders around as it was drawing the graphs backwards.
 
 
 %Drawing the graph of percentage correct responses for
@@ -88,12 +91,11 @@ errorbar(orderedVelocities, allDepthPercentageCorrect, depthLowerCI, depthUpperC
 %plot the graph of depth conditions with upper and lower confidence intervals as error bars
 axis([min(orderedVelocities) max(orderedVelocities) 0 100]);
 set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
-set(gca,'FontSize',24);
 xlabel('Velocity of the first section (cm/s)');
 ylabel('Percentage correct responses');
 title('depth');
 
-%lateral conditions
+%
 if length(allTrialNumbers) > 7 %if there were lateral conditions, drawing a second graph for those conditions
 figure
 %plot(orderedVelocities, allLateralPercentageCorrect, '-xk');
@@ -101,7 +103,6 @@ errorbar(orderedVelocities, allLateralPercentageCorrect, lateralLowerCI, lateral
 %plot the graph of the lateral conditions with upper and lower confidence intervals as error bars
 axis([min(orderedVelocities) max(orderedVelocities) 0 100]);
 set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
-set(gca,'FontSize',24);
 xlabel('Velocity of the first section (cm/s)');
 ylabel('Percentage correct responses');
 title('lateral');
