@@ -5,7 +5,7 @@ cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data
 %to load from within the piece of code.
 
 %filenames = dir('C:\Users\aril\Documents\Data\MoveLine_combined_towards_ALp*'); %for the lilac room
-filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_combined_towards_ALnew_*'); %for the lab mac
+filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_looming_towards_BPnewest_*'); %for the lab mac
 %will load all AL pilots in the combined towards paradigm
 filenames = {filenames.name}; %makes a cell of filenames
 i = 1;
@@ -98,6 +98,8 @@ errorbar(orderedVelocities, allDepthPercentageCorrect, depthLowerErrorBars, dept
 %plot the graph of depth conditions with upper and lower confidence intervals as error bars
 axis([min(orderedVelocities) max(orderedVelocities) 0 1]);
 set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
+set(gca, 'Ytick', 0:0.1:1);
+set(gca, 'YTickLabel', 0:10:100);
 set(gca,'FontSize',24);
 xlabel('Velocity of the first section (cm/s)');
 ylabel('Percentage correct responses');
@@ -111,6 +113,8 @@ errorbar(orderedVelocities, allLateralPercentageCorrect, lateralLowerErrorBars, 
 %plot the graph of the lateral conditions with upper and lower confidence intervals as error bars
 axis([min(orderedVelocities) max(orderedVelocities) 0 1]);
 set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
+set(gca, 'Ytick', 0:0.1:1);
+set(gca, 'YTickLabel', 0:10:100);
 set(gca,'FontSize',24);
 xlabel('Velocity of the first section (cm/s)');
 ylabel('Percentage correct responses');
