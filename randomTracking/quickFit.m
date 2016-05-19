@@ -8,19 +8,20 @@ load(fullfile(pathname,filename))
 opts = optimoptions(@lsqnonlin,'display','off');
 
 nCond = length(sortedTrialData);
-chunkTime = 10; % in seconds
+chunkTime = 15; % in seconds
 chunkSize = round(chunkTime*sessionInfo.expInfo.monRefresh);
 
 allGains = ones(nCond,1);
-for i=1:5,
+for i=1:10,
 quickFitDelay;
+fitDataDelay = fitData;
 delay = mean([fitData(:).delay])
 quickFitGain;
 
 for iCond = 1:nCond
    allGains(iCond)= mean([fitData(iCond).gain]);
 end
-allGains
+%allGains
 end
 
 %%
@@ -35,10 +36,14 @@ nT = length([fitData(iCond).gain(goodFits)]);
 gainMean(iCond) = mean([fitData(iCond).gain(goodFits)]);
 gainSEM(iCond)  = std([fitData(iCond).gain(goodFits)])./sqrt(nT);
 
-delayMean(iCond) = mean([fitData(iCond).delay(goodFits)]);
-delaySEM(iCond)  = std([fitData(iCond).delay(goodFits)])./sqrt(nT);
+delayMean(iCond) = mean([fitDataDelay(iCond).delay(goodFits)]);
+delaySEM(iCond)  = std([fitDataDelay(iCond).delay(goodFits)])./sqrt(nT);
 
 end
+
+%% make plots
+
+timePerFrame = 1000*sessionInfo.expInfo.ifi; %Frame duration in milliseconds
 
 figure(142)
 clf
@@ -51,10 +56,22 @@ errorbar(contrastList, gainMean,gainSEM,'.k','linewidth',4)
 
 xlabel('Contrast')
 ylabel('Kalman Gain')
-% subplot(1,2,2)
-% errorbar(contrastList, delayMean,delaySEM,'o')
-% title('Delay')
+
+figure(143)
+clf
+h=bar(contrastList, timePerFrame*delayMean,'k')
+set(h,'faceColor','w')
+hold on;
+errorbar(contrastList, timePerFrame*delayMean,timePerFrame*delaySEM,'.k','linewidth',4)
+title('Delay')
 
 
 
+[contrastSorted,contrastOrder] = sort(contrastList);
+
+disp(['Participant: ' sessionInfo.participantID])
+disp(['Contrast:    ' num2str(contrastSorted)]);
+disp(['Kalman Gain: ' num2str(gainMean(contrastOrder))]);
+
+disp(['Delay: ' num2str(timePerFrame*delayMean(contrastOrder))]);
 

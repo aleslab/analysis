@@ -17,7 +17,6 @@ for iCond = 1:nCond,
     for iTrial = 1:nTrial,
         
         
-        
         input = (sortedTrialData(iCond).trialData(iTrial).stimOri)';
         response = (sortedTrialData(iCond).trialData(iTrial).respOri)';
         
@@ -47,10 +46,12 @@ for iCond = 1:nCond,
             %     [fitParam,RESNORM,RESIDUAL,EXITFLAG,OUTPUT,LAMBDA,JACOBIAN] = ...
             %     lsqnonlin(myObj,x0,[0],[inf],opts);
             
-            thisCond = experimentData(iTrial).condNumber;
-            
+            %thisCond = experimentData(iTrial).condNumber;
+            thisCond = iCond;
+            fitData(thisCond).gain(end+1) = thisGain;
             fitData(thisCond).delay(end+1) = fitParam(1);%*timePerFrame;
-            
+%             [iCond iTrial]
+%             [fitParam thisGain]
             %if fitParam(2) <0, keyboard, end
             fitData(thisCond).resnorm(end+1) = RESNORM;
             
