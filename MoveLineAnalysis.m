@@ -1,10 +1,10 @@
-cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data
-%cd C:\Users\aril\Documents\Data
+cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
+%cd C:\Users\aril\Documents\Data %lilac room
 
 %Eventually want it so that you can specify the initials and the conditions
 %to load from within the piece of code.
 
-%filenames = dir('C:\Users\aril\Documents\Data\MoveLine_combined_towards_ALp*'); %for the lilac room
+%filenames = dir('C:\Users\aril\Documents\Data\MoveLine_cd_towards_ALnew*'); %for the lilac room
 filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_looming_towards_BPnewest_*'); %for the lab mac
 %will load all AL pilots in the combined towards paradigm
 filenames = {filenames.name}; %makes a cell of filenames
@@ -89,6 +89,7 @@ end
 %This section is basically here so that the axes aren't weird when you flip
 %the speed orders around as it was drawing the graphs backwards.
 
+%% Drawing the graphs
 
 %Drawing the graph of percentage correct responses for
 %depth conditions
@@ -120,3 +121,8 @@ xlabel('Velocity of the first section (cm/s)');
 ylabel('Percentage correct responses');
 title('lateral');
 end
+
+%% export to an excel file
+
+excelFileName = 'MoveLine_looming_towards_BPnewest.csv';
+writetable(ResponseTable, excelFileName);
