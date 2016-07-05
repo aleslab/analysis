@@ -5,7 +5,7 @@ cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
 %to load from within the piece of code.
 
 %filenames = dir('C:\Users\aril\Documents\Data\MoveLine_cd_towards_ALnew*'); %for the lilac room
-filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_looming_towards_BPnewest_*'); %for the lab mac
+filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/driftGrating_fast__*'); %for the lab mac
 %will load all AL pilots in the combined towards paradigm
 filenames = {filenames.name}; %makes a cell of filenames
 i = 1;
@@ -93,36 +93,36 @@ end
 
 %Drawing the graph of percentage correct responses for
 %depth conditions
-figure
+figure(101); %hold on;
 %plot(orderedVelocities, allDepthPercentageCorrect, '-xk');
-errorbar(orderedVelocities, allDepthPercentageCorrect, depthLowerErrorBars, depthUpperErrorBars, '-xk');
+errorbar([0 1 2 3 4 5 6], allDepthPercentageCorrect, depthLowerErrorBars, depthUpperErrorBars, '-xk');
 %plot the graph of depth conditions with upper and lower confidence intervals as error bars
-axis([min(orderedVelocities) max(orderedVelocities) 0 1]);
-set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
+axis([0 6 0 1]);
+set(gca, 'Xtick', [0:1:6]);
 set(gca, 'Ytick', 0:0.1:1);
 set(gca, 'YTickLabel', 0:10:100);
-set(gca,'FontSize',24);
-xlabel('Velocity of the first section (cm/s)');
+set(gca,'FontSize',20);
+xlabel('+/- Speed change relative to standard (cm/s)');
 ylabel('Percentage correct responses');
-title('depth');
-
-%lateral conditions
-if length(allTrialNumbers) > 7 %if there were lateral conditions, drawing a second graph for those conditions
-figure
-%plot(orderedVelocities, allLateralPercentageCorrect, '-xk');
-errorbar(orderedVelocities, allLateralPercentageCorrect, lateralLowerErrorBars, lateralUpperErrorBars, '-xk');
-%plot the graph of the lateral conditions with upper and lower confidence intervals as error bars
-axis([min(orderedVelocities) max(orderedVelocities) 0 1]);
-set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
-set(gca, 'Ytick', 0:0.1:1);
-set(gca, 'YTickLabel', 0:10:100);
-set(gca,'FontSize',24);
-xlabel('Velocity of the first section (cm/s)');
-ylabel('Percentage correct responses');
-title('lateral');
-end
+%title('depth');
+% 
+% %lateral conditions
+% if length(allTrialNumbers) > 7 %if there were lateral conditions, drawing a second graph for those conditions
+% figure(102); %hold on;
+% %plot(orderedVelocities, allLateralPercentageCorrect, '-xk');
+% errorbar(orderedVelocities, allLateralPercentageCorrect, lateralLowerErrorBars, lateralUpperErrorBars, '-xk');
+% %plot the graph of the lateral conditions with upper and lower confidence intervals as error bars
+% axis([min(orderedVelocities) max(orderedVelocities) 0 1]);
+% set(gca, 'Xtick', (min(orderedVelocities)):2.5:(max(orderedVelocities)));
+% set(gca, 'Ytick', 0:0.1:1);
+% set(gca, 'YTickLabel', 0:10:100);
+% set(gca,'FontSize',20);
+% xlabel('Velocity of the first section (cm/s)');
+% ylabel('Percentage correct responses');
+% title('lateral');
+% end
 
 %% export to an excel file
 
-excelFileName = 'MoveLine_looming_towards_BPnewest.csv';
-writetable(ResponseTable, excelFileName);
+% excelFileName = 'MoveLine_cd_towards__slow_fast.csv';
+% writetable(ResponseTable, excelFileName);
