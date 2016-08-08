@@ -1,16 +1,19 @@
-cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data
-%cd C:\Users\aril\Documents\Data
+cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
+%cd C:\Users\aril\Documents\Data %lilac room
 
-%filenames = dir('C:\Users\aril\Documents\Data\MoveLine_cd_towards_ALnew*'); %for the lilac room
-filenames = dir('/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/MoveLine_combined_towards_BPnewest*'); %for the lab mac
-filenames = {filenames.name}; %makes a cell of filenames
-i = 1;
+currDir = '/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
+participantCode = 'AL';
+currCondition = 'driftGrating_fast';
+condAndParticipant = strcat(currCondition, '_', participantCode);
+
+fileDir = strcat(currDir, condAndParticipant, '_*');
+filenames = dir(fileDir);
+filenames = {filenames.name}; %makes a cell of filenames from the same
+%participant and condition to be loaded together
+
 for i = 1:length(filenames)
     filenamestr = char(filenames(i));
-    dataFile(i) = load(filenamestr); 
-    i = i+1;
-    %creates a struct with the data from each loaded file, so that data 
-    %from different blocks of the same condition can be loaded to be analysed together.
+    dataFile(i) = load(filenamestr); %loads all of the files to be analysed together
 end
 
 allExperimentData = [dataFile.experimentData]; %all of the experiment data in one combined struct
@@ -36,35 +39,39 @@ end
 correctTrials = validCondNumber(correctResponsesLogical); %the conditions of each individual correct response
 correctTrialConditions = unique(correctTrials); %the conditions for which a correct response was made
 condCorrectNumbers = histc(correctTrials, correctTrialConditions); %the total number of correct responses for each condition 
-depthCorrectNumbers = condCorrectNumbers(1:7);
 
 % %Finding the total number of trials for each condition for the valid trials
-%allTrials = validCondNumber;
 allTrialConditions = unique(validCondNumber); %the conditions for which any response was made
 allTrialNumbers = histc(validCondNumber, allTrialConditions); %the total number of responses for each condition
-depthTrialNumbers = allTrialNumbers(1:7);
-allCorrectPercentages = (condCorrectNumbers./allTrialNumbers)*100; %creates a double of the percentage correct responses for every condition
+allCorrectPercentages = (condCorrectNumbers./allTrialNumbers); %creates a double of the percentage correct responses for every condition
 
-% if length(allTrialNumbers) > 7
-% allDepthPercentageCorrect = allCorrectPercentages(1:7);
-% allLateralPercentageCorrect = allCorrectPercentages(8:14);
-% else
-%     allDepthPercentageCorrect = allCorrectPercentages;
-% end
-
-conditionFirstSectionVelocities = [allSessionInfo.conditionInfo.velocityCmPerSecSection1];
-FirstVelocities = unique(conditionFirstSectionVelocities);
-flippedSpeed = false; %the slow section is at the beginning rather than at the end
-if flippedSpeed == true
-    normalisedFirstVelocities = FirstVelocities;
-    orderedVelocities = normalisedFirstVelocities;
+%finding the difference between the speeds used in the two sections - to be
+%plotted on the graph
+condInfo = allSessionInfo.conditionInfo;
+if isfield(condInfo, 'velocityCmPerSecSection1');
+    conditionV1s = [condInfo.velocityCmPerSecSection1];
+    conditionV2s = [condInfo.velocityCmPerSecSection2];
+    speedDiff = conditionV2s - conditionV1s;
     
-elseif min(FirstVelocities) < 0
-    normalisedFirstVelocities = FirstVelocities*-1;
-    orderedVelocities = fliplr(normalisedFirstVelocities);
-else
-    normalisedFirstVelocities = FirstVelocities;
-    orderedVelocities = normalisedFirstVelocities;
+elseif isfield(condInfo, 'velocityCmPerSecSection1') && any(condInfo.velocityCmPerSecSection1 < 0);
+    flippedConditionV1s = [condInfo.velocityCmPerSecSection1].*-1;
+    flippedConditionV2s = [condInfo.velocityCmPerSecSection2].*-1;
+    speedDiff = flippedConditionV2s - flippedConditionV1s;
+    
+elseif isfield(condInfo, 'L1velocityCmPerSecSection1'); 
+    %TO BE AWARE -- This section is only relevant for the CRS depth 
+    %experiments. These are currently values for cm/s on the screen, not
+    %values for cm/s in the world like the other conditions. 
+    %I still need to do this conversion, and then will need to include it here.
+    L1section1 = [condInfo.L1velocityCmPerSecSection1];
+    L1section2 = [condInfo.L1velocityCmPerSecSection2];
+    L2section1 = [condInfo.L2velocityCmPerSecSection1];
+    L2section2 = [condInfo.L2velocityCmPerSecSection2];
+    
+    L1change = L1section2 - L1section1;
+    L2change = L2section2 - L2section1;
+    speedDiff = (L1change + L2change)./2;
+    
 end
 %% Psychometric function fitting adapted from PAL_PFML_Demo
 
@@ -78,15 +85,15 @@ paramsFree = [1 1 0 0];  %1: free parameter, 0: fixed parameter
 %Parameter grid defining parameter space through which to perform a
 %brute-force search for values to be used as initial guesses in iterative
 %parameter search.
-searchGrid.alpha = 20:.01:35;
-searchGrid.beta = logspace(0,3,101);
+searchGrid.alpha = 0:0.01:2;
+searchGrid.beta = linspace(0,3,101);
 searchGrid.gamma = 0.5;  %scalar here (since fixed) but may be vector
-searchGrid.lambda = 0.02;  %ditto
+searchGrid.lambda = 0.00;  %ditto
 
 %Perform fit
 disp('Fitting function.....');
-[paramsValues, LL, exitflag] = PAL_PFML_Fit(orderedVelocities,depthCorrectNumbers, ...
-    depthTrialNumbers,searchGrid,paramsFree,PF);
+[paramsValues, LL, exitflag] = PAL_PFML_Fit(speedDiff,condCorrectNumbers, ...
+    allTrialNumbers,searchGrid,paramsFree,PF);
 
 disp('done:')
 message = sprintf('Threshold estimate: %6.4f',paramsValues(1));
@@ -101,11 +108,11 @@ disp('Determining standard errors.....');
 
 if ParOrNonPar == 1
     [SD, paramsSim, LLSim, converged] = PAL_PFML_BootstrapParametric(...
-        orderedVelocities, depthTrialNumbers, paramsValues, paramsFree, B, PF, ...
+        speedDiff, allTrialNumbers, paramsValues, paramsFree, B, PF, ...
         'searchGrid', searchGrid);
 else
     [SD, paramsSim, LLSim, converged] = PAL_PFML_BootstrapNonParametric(...
-        orderedVelocities, depthCorrectNumbers, depthTrialNumbers, [], paramsFree, B, PF,...
+        speedDiff, condCorrectNumbers, allTrialNumbers, [], paramsFree, B, PF,...
         'searchGrid',searchGrid);
 end
 
@@ -120,7 +127,7 @@ B=1000;
 
 disp('Determining Goodness-of-fit.....');
 
-[Dev, pDev] = PAL_PFML_GoodnessOfFit(orderedVelocities, depthCorrectNumbers, depthTrialNumbers, ...
+[Dev, pDev] = PAL_PFML_GoodnessOfFit(speedDiff, condCorrectNumbers, allTrialNumbers, ...
     paramsValues, paramsFree, B, PF, 'searchGrid', searchGrid);
 
 disp('done:');
@@ -132,19 +139,20 @@ message = sprintf('p-value: %6.4f',pDev);
 disp(message);
  
 %Create simple plot
-ProportionCorrectObserved=depthCorrectNumbers./depthTrialNumbers; 
-StimLevelsFineGrain=[min(orderedVelocities):max(orderedVelocities)./1000:max(orderedVelocities)];
+ProportionCorrectObserved=condCorrectNumbers./allTrialNumbers; 
+StimLevelsFineGrain=[min(speedDiff):max(speedDiff)./1000:max(speedDiff)];
 ProportionCorrectModel = PF(paramsValues,StimLevelsFineGrain);
  
 figure('name','Maximum Likelihood Psychometric Function Fitting');
 axes
 hold on
 plot(StimLevelsFineGrain,ProportionCorrectModel,'-','color',[0 .7 0],'linewidth',4);
-plot(orderedVelocities,ProportionCorrectObserved,'-k.','markersize',40);
+plot(speedDiff,ProportionCorrectObserved,'-k.','markersize',40);
 set(gca, 'fontsize',16);
-set(gca, 'Xtick',orderedVelocities);
-axis([min(orderedVelocities) max(orderedVelocities) .4 1]);
-xlabel('Stimulus Intensity');
+set(gca, 'Xtick', speedDiff);
+axis([min(speedDiff) max(speedDiff) .4 1]);
+xlabel('Difference in speed between sections (cm/s)');
 ylabel('proportion correct');
+title(condAndParticipant, 'interpreter', 'none');
 
 toc
