@@ -85,8 +85,8 @@ paramsFree = [1 1 0 0];  %1: free parameter, 0: fixed parameter
 %Parameter grid defining parameter space through which to perform a
 %brute-force search for values to be used as initial guesses in iterative
 %parameter search.
-searchGrid.alpha = 0:0.01:2;
-searchGrid.beta = linspace(0,3,101);
+searchGrid.alpha = 0:0.01:12;
+searchGrid.beta = logspace(0,3,101);
 searchGrid.gamma = 0.5;  %scalar here (since fixed) but may be vector
 searchGrid.lambda = 0.00;  %ditto
 
