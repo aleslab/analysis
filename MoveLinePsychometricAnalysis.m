@@ -3,7 +3,13 @@ cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
 
 currDir = '/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
 participantCode = 'AL';
-currCondition = 'driftGrating_fast';
+currCondition =   %'driftGrating_fast'; %'MoveLine_accelerating_depth_midspeed'; 
+%'MoveLine_accelerating_depth_slow';
+%'MoveLine_accelerating_lateral_midspeed';
+%'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed';
+%'MoveLine_CRS_lateral_fast'; 'MoveLine_CRS_lateral_slow';
+%  'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed';
+
 condAndParticipant = strcat(currCondition, '_', participantCode);
 
 fileDir = strcat(currDir, condAndParticipant, '_*');
@@ -85,7 +91,7 @@ paramsFree = [1 1 0 0];  %1: free parameter, 0: fixed parameter
 %Parameter grid defining parameter space through which to perform a
 %brute-force search for values to be used as initial guesses in iterative
 %parameter search.
-searchGrid.alpha = 0:0.01:12;
+searchGrid.alpha = [min(speedDiff):0.01:max(speedDiff)];
 searchGrid.beta = logspace(0,3,101);
 searchGrid.gamma = 0.5;  %scalar here (since fixed) but may be vector
 searchGrid.lambda = 0.00;  %ditto
