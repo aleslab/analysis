@@ -1,14 +1,20 @@
+clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
 %cd C:\Users\aril\Documents\Data %lilac room
 
 currDir = '/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
 participantCode = 'AL';
-currCondition =   %'driftGrating_fast'; %'MoveLine_accelerating_depth_midspeed'; 
+currCondition = 'MoveLine_accelerating_depth_midspeed';
+% 'driftGrating_fast'; %done
+%'MoveLine_accelerating_depth_midspeed';
 %'MoveLine_accelerating_depth_slow';
 %'MoveLine_accelerating_lateral_midspeed';
-%'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed';
-%'MoveLine_CRS_lateral_fast'; 'MoveLine_CRS_lateral_slow';
-%  'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed';
+%'MoveLine_accelerating_lateral_slow';
+%'MoveLine_CRS_lateral_fast';
+% 'MoveLine_CRS_lateral_slow';
+%'MoveLine_CRS_lateral_midspeed';
+%  'MoveLine_CRS_depth_slow';
+%'MoveLine_CRS_depth_midspeed';
 
 condAndParticipant = strcat(currCondition, '_', participantCode);
 
@@ -34,7 +40,7 @@ wantedData = ~(ResponseTable.validTrial == 0); %creates a logical of which trial
 validIsResponseCorrect = ResponseTable.isResponseCorrect(wantedData); %
 validCondNumber = ResponseTable.condNumber(wantedData);
 if iscell(validIsResponseCorrect) %if this is a cell because there were invalid responses
-    correctResponsesArray = cell2mat(validIsResponseCorrect); %convert to an array 
+    correctResponsesArray = cell2mat(validIsResponseCorrect); %convert to an array
     correctResponsesLogical = logical(correctResponsesArray); %then convert to a logical
 else
     correctResponsesLogical = logical(validIsResponseCorrect); %immediately convert to a logical
@@ -44,12 +50,17 @@ end
 %valid trials
 correctTrials = validCondNumber(correctResponsesLogical); %the conditions of each individual correct response
 correctTrialConditions = unique(correctTrials); %the conditions for which a correct response was made
-condCorrectNumbers = histc(correctTrials, correctTrialConditions); %the total number of correct responses for each condition 
-
+condCorrectNumbers = histc(correctTrials, correctTrialConditions); %the total number of correct responses for each condition
+condCorrectNumbers = condCorrectNumbers';
 % %Finding the total number of trials for each condition for the valid trials
 allTrialConditions = unique(validCondNumber); %the conditions for which any response was made
 allTrialNumbers = histc(validCondNumber, allTrialConditions); %the total number of responses for each condition
-allCorrectPercentages = (condCorrectNumbers./allTrialNumbers); %creates a double of the percentage correct responses for every condition
+allTrialNumbers = allTrialNumbers';
+%allCorrectPercentages = (condCorrectNumbers./allTrialNumbers); %creates a double of the percentage correct responses for every condition
+
+%these are for simulating figures for the psychometric fit
+% condCorrectNumbers = [18 19 27 30 29 29 30];
+% allTrialNumbers = [30 30 30 30 30 30 30];
 
 %finding the difference between the speeds used in the two sections - to be
 %plotted on the graph
@@ -59,15 +70,16 @@ if isfield(condInfo, 'velocityCmPerSecSection1');
     conditionV2s = [condInfo.velocityCmPerSecSection2];
     speedDiff = conditionV2s - conditionV1s;
     
-elseif isfield(condInfo, 'velocityCmPerSecSection1') && any(condInfo.velocityCmPerSecSection1 < 0);
-    flippedConditionV1s = [condInfo.velocityCmPerSecSection1].*-1;
-    flippedConditionV2s = [condInfo.velocityCmPerSecSection2].*-1;
-    speedDiff = flippedConditionV2s - flippedConditionV1s;
+    if [condInfo.velocityCmPerSecSection1] < 0;
+        flippedConditionV1s = [condInfo.velocityCmPerSecSection1].*-1;
+        flippedConditionV2s = [condInfo.velocityCmPerSecSection2].*-1;
+        speedDiff = flippedConditionV2s - flippedConditionV1s;
+    end
     
-elseif isfield(condInfo, 'L1velocityCmPerSecSection1'); 
-    %TO BE AWARE -- This section is only relevant for the CRS depth 
+elseif isfield(condInfo, 'L1velocityCmPerSecSection1');
+    %TO BE AWARE -- This section is only relevant for the CRS depth
     %experiments. These are currently values for cm/s on the screen, not
-    %values for cm/s in the world like the other conditions. 
+    %values for cm/s in the world like the other conditions.
     %I still need to do this conversion, and then will need to include it here.
     L1section1 = [condInfo.L1velocityCmPerSecSection1];
     L1section2 = [condInfo.L1velocityCmPerSecSection2];
@@ -83,11 +95,11 @@ end
 
 tic
 
-PF = @PAL_CumulativeNormal;  
+PF = @PAL_CumulativeNormal;
 
 %Threshold and Slope are free parameters, guess and lapse rate are fixed
 paramsFree = [1 1 0 0];  %1: free parameter, 0: fixed parameter
- 
+
 %Parameter grid defining parameter space through which to perform a
 %brute-force search for values to be used as initial guesses in iterative
 %parameter search.
@@ -108,7 +120,7 @@ message = sprintf('Slope estimate: %6.4f\r',paramsValues(2));
 disp(message);
 
 %Number of simulations to perform to determine standard error
-B=400;                  
+B=400;
 
 disp('Determining standard errors.....');
 
@@ -143,12 +155,12 @@ message = sprintf('Deviance: %6.4f',Dev);
 disp(message);
 message = sprintf('p-value: %6.4f',pDev);
 disp(message);
- 
+
 %Create simple plot
-ProportionCorrectObserved=condCorrectNumbers./allTrialNumbers; 
+ProportionCorrectObserved=condCorrectNumbers./allTrialNumbers;
 StimLevelsFineGrain=[min(speedDiff):max(speedDiff)./1000:max(speedDiff)];
 ProportionCorrectModel = PF(paramsValues,StimLevelsFineGrain);
- 
+
 figure('name','Maximum Likelihood Psychometric Function Fitting');
 axes
 hold on

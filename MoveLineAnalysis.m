@@ -1,9 +1,20 @@
+clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
 %cd C:\Users\aril\Documents\Data %lilac room
 
 currDir = '/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
 participantCode = 'AL';
-currCondition = 'driftGrating_fast';
+currCondition = 
+%'driftGrating_fast'; %done
+% 'MoveLine_accelerating_depth_midspeed'; %done
+%'MoveLine_accelerating_depth_slow'; %done
+%'MoveLine_accelerating_lateral_midspeed'; %done
+%'MoveLine_accelerating_lateral_slow'; %done
+%'MoveLine_CRS_lateral_fast'; %done
+% 'MoveLine_CRS_lateral_slow'; %done
+%'MoveLine_CRS_lateral_midspeed'; %done
+%  'MoveLine_CRS_depth_slow'; %done
+%'MoveLine_CRS_depth_midspeed';
 condAndParticipant = strcat(currCondition, '_', participantCode);
 
 fileDir = strcat(currDir, condAndParticipant, '_*');
@@ -58,11 +69,12 @@ if isfield(condInfo, 'velocityCmPerSecSection1');
     conditionV2s = [condInfo.velocityCmPerSecSection2];
     speedDiff = conditionV2s - conditionV1s;
     
-elseif isfield(condInfo, 'velocityCmPerSecSection1') && any(condInfo.velocityCmPerSecSection1 < 0);
+     if [condInfo.velocityCmPerSecSection1] < 0;
     flippedConditionV1s = [condInfo.velocityCmPerSecSection1].*-1;
     flippedConditionV2s = [condInfo.velocityCmPerSecSection2].*-1;
     speedDiff = flippedConditionV2s - flippedConditionV1s;
-    
+     end
+     
 elseif isfield(condInfo, 'L1velocityCmPerSecSection1'); 
     %TO BE AWARE -- This section is only relevant for the CRS depth 
     %experiments. These are currently values for cm/s on the screen, not
