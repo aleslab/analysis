@@ -1,24 +1,20 @@
 clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
-%cd C:\Users\aril\Documents\Data %lilac room
 
 currDir = '/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
 participantCode = 'AL';
-currCondition = 'MoveLine_accelerating_depth_midspeed';
-% 'driftGrating_fast'; %done
-%'MoveLine_accelerating_depth_midspeed';
-%'MoveLine_accelerating_depth_slow';
-%'MoveLine_accelerating_lateral_midspeed';
-%'MoveLine_accelerating_lateral_slow';
-%'MoveLine_CRS_lateral_fast';
-% 'MoveLine_CRS_lateral_slow';
-%'MoveLine_CRS_lateral_midspeed';
-%  'MoveLine_CRS_depth_slow';
-%'MoveLine_CRS_depth_midspeed';
+conditionList = {'driftGrating_fast'; 'MoveLine_CRS_lateral_fast';  ...
+    'MoveLine_accelerating_depth_midspeed'; 'MoveLine_accelerating_depth_slow'; ... 
+    'MoveLine_accelerating_lateral_midspeed'; 'MoveLine_accelerating_lateral_slow'; ... 
+    'MoveLine_CRS_depth_midspeed'; 'MoveLine_CRS_depth_slow'; ... 
+    'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
+
+for i = 1:length(conditionList)
+currCondition = conditionList(i);
 
 condAndParticipant = strcat(currCondition, '_', participantCode);
 
-fileDir = strcat(currDir, condAndParticipant, '_*');
+fileDir = cell2mat(strcat(currDir, condAndParticipant, '_*'));
 filenames = dir(fileDir);
 filenames = {filenames.name}; %makes a cell of filenames from the same
 %participant and condition to be loaded together
@@ -58,14 +54,16 @@ allTrialNumbers = histc(validCondNumber, allTrialConditions); %the total number 
 allTrialNumbers = allTrialNumbers';
 %allCorrectPercentages = (condCorrectNumbers./allTrialNumbers); %creates a double of the percentage correct responses for every condition
 
-%these are for simulating figures for the psychometric fit
-% condCorrectNumbers = [18 19 27 30 29 29 30];
-% allTrialNumbers = [30 30 30 30 30 30 30];
-
 %finding the difference between the speeds used in the two sections - to be
 %plotted on the graph
 condInfo = allSessionInfo.conditionInfo;
-if isfield(condInfo, 'velocityCmPerSecSection1');
+if isfield(condInfo, 'lateralCmPerSecS1lower');
+    
+    averageS1speed = ([condInfo.lateralCmPerSecS1lower] + [condInfo.lateralCmPerSecS1upper])./2;
+    averageS2speed = ([condInfo.lateralCmPerSecS2lower] + [condInfo.lateralCmPerSecS2upper])./2;
+    speedDiff = averageS2speed - averageS1speed;
+    
+elseif isfield(condInfo, 'velocityCmPerSecSection1');
     conditionV1s = [condInfo.velocityCmPerSecSection1];
     conditionV2s = [condInfo.velocityCmPerSecSection2];
     speedDiff = conditionV2s - conditionV1s;
@@ -76,19 +74,9 @@ if isfield(condInfo, 'velocityCmPerSecSection1');
         speedDiff = flippedConditionV2s - flippedConditionV1s;
     end
     
-elseif isfield(condInfo, 'L1velocityCmPerSecSection1');
-    %TO BE AWARE -- This section is only relevant for the CRS depth
-    %experiments. These are currently values for cm/s on the screen, not
-    %values for cm/s in the world like the other conditions.
-    %I still need to do this conversion, and then will need to include it here.
-    L1section1 = [condInfo.L1velocityCmPerSecSection1];
-    L1section2 = [condInfo.L1velocityCmPerSecSection2];
-    L2section1 = [condInfo.L2velocityCmPerSecSection1];
-    L2section2 = [condInfo.L2velocityCmPerSecSection2];
+elseif isfield(condInfo, 'depthSpeedSection1');
     
-    L1change = L1section2 - L1section1;
-    L2change = L2section2 - L2section1;
-    speedDiff = (L1change + L2change)./2;
+  speedDiff =  [condInfo.depthSpeedSection2] - [condInfo.depthSpeedSection1];
     
 end
 %% Psychometric function fitting adapted from PAL_PFML_Demo
@@ -106,7 +94,7 @@ paramsFree = [1 1 0 0];  %1: free parameter, 0: fixed parameter
 searchGrid.alpha = [min(speedDiff):0.01:max(speedDiff)];
 searchGrid.beta = logspace(0,3,101);
 searchGrid.gamma = 0.5;  %scalar here (since fixed) but may be vector
-searchGrid.lambda = 0.00;  %ditto
+searchGrid.lambda = 0.03;  %ditto
 
 %Perform fit
 disp('Fitting function.....');
@@ -161,7 +149,7 @@ ProportionCorrectObserved=condCorrectNumbers./allTrialNumbers;
 StimLevelsFineGrain=[min(speedDiff):max(speedDiff)./1000:max(speedDiff)];
 ProportionCorrectModel = PF(paramsValues,StimLevelsFineGrain);
 
-figure('name','Maximum Likelihood Psychometric Function Fitting');
+figure;
 axes
 hold on
 plot(StimLevelsFineGrain,ProportionCorrectModel,'-','color',[0 .7 0],'linewidth',4);
@@ -173,4 +161,7 @@ xlabel('Difference in speed between sections (cm/s)');
 ylabel('proportion correct');
 title(condAndParticipant, 'interpreter', 'none');
 
+saveas(gcf, condAndParticipant, 'pdf');
+
 toc
+end
