@@ -1,8 +1,6 @@
 clearvars;
-%cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
-cd /Users/aril/Documents/Repositories/psychtoolboxProjects/psychMaster/Data
-%currDir = '/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
-currDir = '/Users/aril/Documents/Repositories/psychtoolboxProjects/psychMaster/Data/';
+cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
+currDir = '/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
 participantCode = 'AL';
 conditionList = {'driftGrating_fast'}; % 'MoveLine_CRS_lateral_fast';  ...
 %'MoveLine_accelerating_depth_midspeed'; 'MoveLine_accelerating_depth_slow'; ...
