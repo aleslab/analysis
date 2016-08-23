@@ -3,7 +3,7 @@ clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
 currDir = '/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
 participantCode = 'AL';
-conditionList = {'MoveLine_CRS_depth_midspeed'}; % 'MoveLine_CRS_lateral_fast';  ...
+conditionList = {'MoveLine_CRS_depth_midspeed'};; % 'MoveLine_CRS_lateral_fast';  ...
 %'MoveLine_accelerating_depth_midspeed'; 'MoveLine_accelerating_depth_slow'; ...
 %'MoveLine_accelerating_lateral_midspeed'; 'MoveLine_accelerating_lateral_slow'; ...
 %'MoveLine_CRS_depth_midspeed'; 'MoveLine_CRS_depth_slow'; ...
@@ -56,10 +56,58 @@ for i = 1:length(conditionList)
     %finding the difference between the speeds used in the two sections - to be
     %plotted on the graph
     condInfo = allSessionInfo.conditionInfo;
-
-    %this needs to be changed so that everything is done in terms of
-    %retinal speed in the monocular image.
     
+    if isfield(condInfo, 'lateralCmPerSecS1lower');
+        
+        averageS1speed = ([condInfo.lateralCmPerSecS1lower] + [condInfo.lateralCmPerSecS1upper])./2;
+        averageS2speed = ([condInfo.lateralCmPerSecS2lower] + [condInfo.lateralCmPerSecS2upper])./2;
+        speedDiff = averageS2speed - averageS1speed;
+        
+    elseif isfield(condInfo, 'velocityCmPerSecSection1');
+        conditionV1s = [condInfo.velocityCmPerSecSection1];
+        conditionV2s = [condInfo.velocityCmPerSecSection2];
+        speedDiff = conditionV2s - conditionV1s;
+        
+        if [condInfo.velocityCmPerSecSection1] < 0;
+            flippedConditionV1s = [condInfo.velocityCmPerSecSection1].*-1;
+            flippedConditionV2s = [condInfo.velocityCmPerSecSection2].*-1;
+            speedDiff = flippedConditionV2s - flippedConditionV1s;
+            >>>>>>> Stashed changes
+        end
+        
+        allExperimentData = [dataFile.experimentData]; %all of the experiment data in one combined struct
+        allSessionInfo = dataFile.sessionInfo; %all of the session info data in one combined struct
+        ResponseTable = struct2table(allExperimentData); %The data struct is converted to a table
+        
+        message = 'Parametric Bootstrap (1) or Non-Parametric Bootstrap? (2): ';
+        ParOrNonPar = input(message);
+        
+        %excluding invalid trials
+        wantedData = ~(ResponseTable.validTrial == 0); %creates a logical of which trials in the data table were valid
+        validIsResponseCorrect = ResponseTable.isResponseCorrect(wantedData); %
+        validCondNumber = ResponseTable.condNumber(wantedData);
+        if iscell(validIsResponseCorrect) %if this is a cell because there were invalid responses
+            correctResponsesArray = cell2mat(validIsResponseCorrect); %convert to an array
+            correctResponsesLogical = logical(correctResponsesArray); %then convert to a logical
+        else
+            correctResponsesLogical = logical(validIsResponseCorrect); %immediately convert to a logical
+        end
+        
+        %Calculating the number of correct responses for each condition for the
+        %valid trials
+        correctTrials = validCondNumber(correctResponsesLogical); %the conditions of each individual correct response
+        correctTrialConditions = unique(correctTrials); %the conditions for which a correct response was made
+        condCorrectNumbers = histc(correctTrials, correctTrialConditions); %the total number of correct responses for each condition
+        condCorrectNumbers = condCorrectNumbers';
+        % %Finding the total number of trials for each condition for the valid trials
+        allTrialConditions = unique(validCondNumber); %the conditions for which any response was made
+        allTrialNumbers = histc(validCondNumber, allTrialConditions); %the total number of responses for each condition
+        allTrialNumbers = allTrialNumbers';
+        %allCorrectPercentages = (condCorrectNumbers./allTrialNumbers); %creates a double of the percentage correct responses for every condition
+        
+        %finding the difference between the speeds used in the two sections - to be
+        %plotted on the graph
+        condInfo = allSessionInfo.conditionInfo;
         if isfield(condInfo, 'lateralCmPerSecS1lower');
             
             averageS1speed = ([condInfo.lateralCmPerSecS1lower] + [condInfo.lateralCmPerSecS1upper])./2;
