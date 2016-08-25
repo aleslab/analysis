@@ -58,8 +58,8 @@ for i = 1:length(conditionList)
     %fast lateral conditions
     if strcmp(currCondition, 'driftGrating_fast') || strcmp(currCondition, 'MoveLine_CRS_lateral_fast');
         
-        s1speeds = [];
-        s2speeds = [];
+        s1speeds = [283.4 248.0 212.6 177.2 141.7 106.3 70.9];
+        s2speeds = [283.4 318.7 354.1 389.4 424.7 460.0 495.3];
         speedDiff = s2speeds - s1speeds;
         
         xLabelTitle  = 'Change in speed between sections (arcmin/s)';
@@ -67,12 +67,12 @@ for i = 1:length(conditionList)
     %midspeed accelerating conditions
     elseif strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
         
-        s1minspeeds = [];
-        s1maxspeeds = [];
+        s1minspeeds = [30.1 26.4 22.6 18.8 15.1 11.3 7.5];
+        s1maxspeeds = [43.8 36.4 29.7 23.6 18.0 12.9 8.2];
         s1averagespeeds = (s1minspeeds+s1maxspeeds)./2;
         
-        s2minspeeds = [];
-        s2maxspeeds = [];
+        s2minspeeds = [43.9 46.9 49.6 52.0 54.1 55.9 57.6];
+        s2maxspeeds = [69.5 78.1 86.8 95.5 104.1 112.8 121.4];
         s2averagespeeds = (s2minspeeds+s2maxspeeds)./2;
         
         speedDiff = s2averagespeeds - s1averagespeeds;
@@ -82,12 +82,12 @@ for i = 1:length(conditionList)
     %slow accelerating conditions    
     elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
         
-        s1minspeeds = [];
-        s1maxspeeds = [];
+        s1minspeeds = [18.0 15.8 13.5 11.3 9.0 6.8 4.5];
+        s1maxspeeds = [21.9 18.7 15.6 12.7 9.9 7.3 4.7];
         s1averagespeeds = (s1minspeeds+s1maxspeeds)./2;
         
-        s2minspeeds = [];
-        s2maxspeeds = [];
+        s2minspeeds = [21.9 24.0 26.0 27.9 29.7 31.4 33.1];
+        s2maxspeeds = [27.2 30.6 34.0 37.4 40.8 44.2 47.6];
         s2averagespeeds = (s2minspeeds+s2maxspeeds)./2;
         
         speedDiff = s2averagespeeds - s1averagespeeds;
@@ -97,32 +97,45 @@ for i = 1:length(conditionList)
     %CRS depth conditions
     elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
         
-        l1s1speeds = [];
-        l2s1speeds = [];
-        s1averagespeeds = ()
+        l1s1speeds = [31.75 21.2 17.6 14.1 10.9 8 5];
+        l2s1speeds = [63.45 42.4 35.2 28.3 21.9 16 10.2];
+        s1averagespeeds = (l1s1speeds+l2s1speeds)./2;
         
+        l1s2speeds = [31.75 42.3 45.9 49.4 52.6 55.5 58.3];
+        l2s2speeds = [63.45 84.5 91.7 98.6 105 110.9 116.5];
+        s2averagespeeds = (l1s2speeds+l2s2speeds)./2;
         
+        speedDiff = s2averagespeeds - s1averagespeeds;
         
         xLabelTitle  = 'Line average change in speed between sections (arcmin/s)';
     
     %slow and midspeed CRS lateral conditions    
     elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
         
+        l1s1speeds = [14.85 11.43 9.74 8 6.25 4.67 3.07];
+        l2s1speeds = [29.75 22.97 19.46 16 12.55 9.33 6.13];
+        s1averagespeeds = (l1s1speeds+l2s1speeds)./2;
+        
+        l1s2speeds = [14.85 18.27 19.96 21.7 23.45 25.03 26.63];
+        l2s2speeds = [29.75 36.53 40.04 43.5 46.95 50.17 53.37];
+        s2averagespeeds = (l1s2speeds+l2s2speeds)./2;
+        
+        speedDiff = s2averagespeeds - s1averagespeeds;
         
         xLabelTitle  = 'Line average change in speed between sections (arcmin/s)';
         
     elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
         
-        s1speeds = [];
-        s2speeds = [];
+        s1speeds = [47.6 31.8 26.4 21.3 16.5 11.9 7.7];
+        s2speeds = [47.6 63.4 68.8 73.9 78.7 83.2 ];
         speedDiff = s2speeds - s1speeds;
         
         xLabelTitle  = 'Change in speed between sections (arcmin/s)';
         
     elseif strcmp(currCondition, 'MoveLine_CRS_lateral_slow');
                 
-        s1speeds = [];
-        s2speeds = [];
+        s1speeds = [22.3 17.3 14.6 12.0 9.5 7.0 4.6];
+        s2speeds = [22.3 27.4 30.1 32.7 35.2 37.7 40.1];
         speedDiff = s2speeds - s1speeds;
         
         xLabelTitle  = 'Change in speed between sections (arcmin/s)';
