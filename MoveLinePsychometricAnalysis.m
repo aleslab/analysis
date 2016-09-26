@@ -61,17 +61,9 @@ for i = 1:length(analysisType)
         
         %% Getting the speed difference in arcmin/s
         if strcmp(currAnalysisType, 'arcmin')
-            %fast lateral conditions
-            if strcmp(currCondition, 'driftGrating_fast') || strcmp(currCondition, 'MoveLine_CRS_lateral_fast');
-                
-                s1speeds = [283.4 248.0 212.6 177.2 141.7 106.3 70.9];
-                s2speeds = [283.4 318.7 354.1 389.4 424.7 460.0 495.3];
-                speedDiff = s2speeds - s1speeds;
-                
-                xLabelTitle  = 'Change in speed between sections (arcmin/s)';
-                
-                %midspeed accelerating conditions
-            elseif strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+            
+            %midspeed accelerating conditions
+            if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
                 
                 s1minspeeds = [30.1 26.4 22.6 18.8 15.1 11.3 7.5];
                 s1maxspeeds = [43.8 36.4 29.7 23.6 18.0 12.9 8.2];
@@ -148,24 +140,16 @@ for i = 1:length(analysisType)
                 
             end
             
-% for analysing the data in terms of the change in arcmin/s, but only for
-% the first 6 conditions. Hopefully this will remove the effect of diplopia
-% in some conditions.
+            % for analysing the data in terms of the change in arcmin/s, but only for
+            % the first 6 conditions. Hopefully this will remove the effect of diplopia
+            % in some conditions.
         elseif strcmp(currAnalysisType, 'arcmin_less');
             
             condCorrectNumbers = condCorrectNumbers(1:6);
             allTrialNumbers = allTrialNumbers(1:6);
             
-             if strcmp(currCondition, 'driftGrating_fast') || strcmp(currCondition, 'MoveLine_CRS_lateral_fast');
-                
-                s1speeds = [283.4 248.0 212.6 177.2 141.7 106.3];
-                s2speeds = [283.4 318.7 354.1 389.4 424.7 460.0];
-                speedDiff = s2speeds - s1speeds;
-                
-                xLabelTitle  = 'Change in speed between sections (arcmin/s)';
-                
-                %midspeed accelerating conditions
-            elseif strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+            %midspeed accelerating conditions
+            if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
                 
                 s1minspeeds = [30.1 26.4 22.6 18.8 15.1 11.3];
                 s1maxspeeds = [43.8 36.4 29.7 23.6 18.0 12.9];
@@ -242,11 +226,76 @@ for i = 1:length(analysisType)
                 
             end
             
+            % to do the analysis in terms of the percentage speed change, but comparing
+            %the difference in speed at the beginning and end of the interval
         elseif strcmp(currAnalysisType, 'speed_change_start_end');
             
+            xLabelTitle  = 'Percentage speed change between the beginning and end of the interval';
+            
+            %midspeed accelerating conditions
+            if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+                
+                speedDiff = [0.57 0.66 0.74 0.80 0.85 0.90 0.94]; %2dp
+                
+                %slow accelerating conditions
+            elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
+                
+                speedDiff = [0.34 0.48 0.60 0.70 0.78 0.85 0.91]; %2dp
+                
+                %CRS depth conditions
+            elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
+                
+                speedDiff = [0 0.50 0.62 0.71 0.79 0.86 0.91]; %2dp
+
+                %slow and midspeed CRS lateral conditions
+            elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
+                
+                speedDiff = [0 0.37 0.51 0.63 0.73 0.81 0.88]; %2dp
+                
+            elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
+                
+                speedDiff = [0 0.50 0.62 0.71 0.79 0.86 0.91]; %2dp
+                
+            elseif strcmp(currCondition, 'MoveLine_CRS_lateral_slow');
+                
+                speedDiff = [0 0.37 0.51 0.63 0.73 0.81 0.89]; %2dp
+                
+            end
             
         elseif strcmp(currAnalysisType, 'speed_change_changepoint');
             
+            xLabelTitle  = 'Percentage speed change at the point of the speed change';
+            
+              %midspeed accelerating conditions
+            if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+                
+                speedDiff = [0 0.22 0.40 0.55 0.67 0.77 0.86]; %2dp
+                
+                %slow accelerating conditions
+            elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
+                
+                speedDiff = [0 0.22 0.40 0.54 0.67 0.77 0.86]; %2dp
+                
+            
+             %CRS depth conditions
+            elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
+                
+                speedDiff = [0 0.50 0.62 0.71 0.79 0.86 0.91]; %2dp
+
+                %slow and midspeed CRS lateral conditions
+            elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
+                
+                speedDiff = [0 0.37 0.51 0.63 0.73 0.81 0.88]; %2dp
+                
+            elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
+                
+                speedDiff = [0 0.50 0.62 0.71 0.79 0.86 0.91]; %2dp
+                
+            elseif strcmp(currCondition, 'MoveLine_CRS_lateral_slow');
+                
+                speedDiff = [0 0.37 0.51 0.63 0.73 0.81 0.89]; %2dp
+                
+            end
             
         end
         
