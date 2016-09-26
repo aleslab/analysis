@@ -1,12 +1,12 @@
 clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
-currDir = '/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
-participantCode = 'AL';
-conditionList = {'driftGrating_fast'; 'MoveLine_CRS_lateral_fast';  ...
-    'MoveLine_accelerating_depth_midspeed'; 'MoveLine_accelerating_depth_slow'; ...
-    'MoveLine_accelerating_lateral_midspeed'; 'MoveLine_accelerating_lateral_slow'; ...
-    'MoveLine_CRS_depth_midspeed'; 'MoveLine_CRS_depth_slow'; ...
-    'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
+currDir = '/Users/Abigail/Documents/Experiment Data/Experiment 1/Participant_D/';
+%'/Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data/';
+participantCode = 'D';
+conditionList = {'MoveLine_accelerating_depth_midspeed'; ... 
+    'MoveLine_accelerating_depth_slow'; 'MoveLine_accelerating_lateral_midspeed'; ...
+    'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ... 
+    'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
 
 for i = 1:length(conditionList)
     currCondition = cell2mat(conditionList(i));
@@ -25,6 +25,9 @@ for i = 1:length(conditionList)
     allExperimentData = [dataFile.experimentData]; %all of the experiment data in one combined struct
     allSessionInfo = dataFile.sessionInfo; %all of the session info data in one combined struct
     ResponseTable = struct2table(allExperimentData); %The data struct is converted to a table
+    
+    message = 'Parametric Bootstrap (1) or Non-Parametric Bootstrap? (2): ';
+    ParOrNonPar = input(message);
     
     %excluding invalid trials
     wantedData = ~(ResponseTable.validTrial == 0); %creates a logical of which trials in the data table were valid
