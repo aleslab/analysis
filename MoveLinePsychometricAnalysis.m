@@ -11,7 +11,7 @@ conditionList = {'MoveLine_accelerating_depth_midspeed'; ...
 message = 'Parametric Bootstrap (1) or Non-Parametric Bootstrap? (2): ';
 ParOrNonPar = input(message);
 
-analysisType = {'arcmin', 'arcmin_less', 'speed_change_start_end', 'speed_change_changepoint'};
+analysisType = {'arcmin', 'arcmin_less', 'speed_change_start_end',  'speed_change_changepoint'}; 
 for i = 1:length(analysisType)
     currAnalysisType = cell2mat(analysisType(i));
     for i = 1:length(conditionList)
@@ -230,7 +230,7 @@ for i = 1:length(analysisType)
             %the difference in speed at the beginning and end of the interval
         elseif strcmp(currAnalysisType, 'speed_change_start_end');
             
-            xLabelTitle  = 'Percentage speed change between the beginning and end of the interval';
+            xLabelTitle  = 'Percentage speed change between the interval start and end';
             
             %midspeed accelerating conditions
             if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
@@ -381,7 +381,7 @@ for i = 1:length(analysisType)
         ylabel('proportion correct');
         title(condAndParticipant, 'interpreter', 'none');
         
-        figFileName = strcat('psychometric_', analysisType, '_', condAndParticipant, '.pdf');
+        figFileName = strcat('psychometric_', currAnalysisType, '_', condAndParticipant, '.pdf');
         saveas(gcf, figFileName);
         
         if strcmp(currAnalysisType, 'arcmin');
@@ -399,7 +399,9 @@ for i = 1:length(analysisType)
         toc
     end
     psychTable = struct2table(psychInfo);
-    psychExcelFileName = strcat('psychometric_data_', analysisType, '_', participantCode, '.csv');
+    psychExcelFileName = strcat('psychometric_data_', currAnalysisType, '_', participantCode, '.csv');
     writetable(psychTable, psychExcelFileName);
+    clearvars;
+    ParOrNonPar = 2;
 end
 
