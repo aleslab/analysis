@@ -1,6 +1,6 @@
 clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
-participantCodes = {'A' 'B' 'C' 'D' 'F' 'H'}; % 'E' 'G' 'I' 'J'
+participantCodes = {'F' 'H'}; % 'E' 'G' 'I' 'J' 'A' 'B' 'C' 'D'
 
 ParOrNonPar = 2; %non-parametric bootstrap for all
 
@@ -13,7 +13,7 @@ for i = 1:length(participantCodes)
         'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
     
-    analysisType = {'arcmin', 'arcmin_less', 'speed_change_start_end',  'speed_change_changepoint'};
+    analysisType = {'arcmin_less', 'arcmin', 'speed_change_start_end',  'speed_change_changepoint'};
     for i = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(i));
         for i = 1:length(conditionList)
@@ -398,14 +398,14 @@ for i = 1:length(participantCodes)
             psychInfo(i).condDev = Dev;
             psychInfo(i).condPDev = pDev;
             
+            stimAt75PercentCorrect = PAL_CumulativeNormal(paramsValues, 0.75, 'Inverse');
+            
+            psychInfo(i).stimAt75PercentCorrect = stimAt75PercentCorrect;
+            
             toc
         end
         psychTable = struct2table(psychInfo);
         psychExcelFileName = strcat('psychometric_data_', currAnalysisType, '_', currParticipantCode, '.csv');
         writetable(psychTable, psychExcelFileName);
-        clearvars;
-        ParOrNonPar = 2;
     end
-    clearvars;
-    ParOrNonPar = 2;
 end
