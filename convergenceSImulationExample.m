@@ -3,8 +3,8 @@
 options = PAL_minimize('options');
 
 stimLevels = 100*[0, 0.22, 0.4, 0.55, 0.67, 0.77, 0.86];%linspace(10,90,7);
-NumPos =  [13 25 29 30 30 30 30];
-%NumPos = [15 16 17 21 30 27 29]
+%NumPos =  [13 25 29 30 30 30 30];
+NumPos = [15 16 17 21 30 27 29]
 outOfNum = [30 30 30 30 30 30 30];
 searchGrid.alpha = [0:1:90];    %structure defining grid to
 searchGrid.beta = linspace(0,2,40); %search for initial values
@@ -24,7 +24,7 @@ searchGrid.lambda = 0;
 
 %% Quick Bootstrap
  [SD paramsSim LLSim converged] = ...
-     PAL_PFML_BootstrapParametric(stimLevels,outOfNum,paramsValues,[1 1 0 0],1000,@PAL_CumulativeNormal,...
+     PAL_PFML_BootstrapParametric(stimLevels,outOfNum,paramsValues,[1 1 0 0],300,@PAL_CumulativeNormal,...
      'searchGrid',searchGrid);
  
  100*sum(converged)/length(converged)
@@ -78,4 +78,18 @@ figure(242);clf;
 plot(trialNums,percentConverged,'+','markersize',10,'linewidth',3)
 xlabel('Number of Trials Per Condition')
 ylabel('Percent Bootstrap simulations that converge')
+
+%95 confidence interval:
+
+%From the bootstrap take all the bootstrap sampled paramaters
+%Sort them, then interpolate the data up to 1000 data points to make it
+%easy to grab the 2.5% and 97.5% points for the 95% CI
+alphaInterp = interp1( sort(paramsSim(:,1)),linspace(1,nBoot,1000));
+
+%Here is the CI for alpha
+alphaCI = [alphaInterp(25) alphaInterp(975)]
+
+betaInterp = interp1( sort(paramsSim(:,2)),linspace(1,nBoot,1000));
+
+betaCI = [betaInterp(25) betaInterp(975)]
 
