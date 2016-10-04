@@ -20,6 +20,7 @@ searchGrid.lambda = 0;  %ditto
 [paramsValues LL exitflag output]  = PAL_PFML_Fit(stimLevels, NumPos, outOfNum, ...
       searchGrid, [1 1 0 0], pf,'searchOptions',options);
   
+  
  %paramsValues = PAL_PFML_BruteForceFit(StimLevels, NumPos, OutOfNum, searchGrid, @PAL_CumulativeNormal,'gammaEQlambda',false); 
 % [paramsFreeVals, negLL, exitflag, output] = PAL_minimize(@PAL_PFML_negLL, paramsFreeVals, options, paramsFixedVals, paramsFree, StimLevels, NumPos, OutOfNum, PF,'lapseLimits',lapseLimits,'guessLimits',guessLimits,'lapseFit',lapseFit,'gammaEQlambda',gammaEQlambda);
 
@@ -30,7 +31,6 @@ searchGrid.lambda = 0;  %ditto
 
 %% Quick Bootstrap
  [SD paramsSim LLSim converged] = ...
-
      PAL_PFML_BootstrapNonParametric(stimLevels,NumPos,outOfNum,paramsValues,[1 1 0 0],300,@PAL_CumulativeNormal,...
      'searchGrid',searchGrid);
  
@@ -111,7 +111,9 @@ xlabel('Number of Trials Per Condition')
 ylabel('beta')
 
 
+
 for iBoot = 1:nBoot,
     
     myThreshSim(iBoot) = inverse,75 (paramSim(iBoot,:))
+
 

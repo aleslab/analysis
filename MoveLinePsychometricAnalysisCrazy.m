@@ -4,18 +4,18 @@ participantCodes = {'A'}; % 'G' 'J' 'K' 'A' 'B' 'C' 'E' 'D' 'H'
 
 ParOrNonPar = 2; %non-parametric bootstrap for all
 
-for iParticipant = 1:length(participantCodes)
+for i = 1:length(participantCodes)
     
-    currParticipantCode = cell2mat(participantCodes(iParticipant));
+    currParticipantCode = cell2mat(participantCodes(i));
     
     conditionList = {'MoveLine_accelerating_depth_midspeed'; ...
         'MoveLine_accelerating_depth_slow'; 'MoveLine_accelerating_lateral_midspeed'; ...
         'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
     
-    analysisType = { 'arcmin', 'speed_change_start_end',  'speed_change_changepoint'}; %'arcmin_less',
-    for iAnalysis = 1:length(analysisType)
-        currAnalysisType = cell2mat(analysisType(iAnalysis));
+    analysisType = {'speed_change_changepoint'};%{ 'arcmin', 'speed_change_start_end',  'speed_change_changepoint'}; %'arcmin_less',
+    for j = 1:length(analysisType)
+        currAnalysisType = cell2mat(analysisType(j));
         for iCond = 1:length(conditionList)
             currCondition = cell2mat(conditionList(iCond));
             condAndParticipant = strcat(currCondition, '_', currParticipantCode);
@@ -316,109 +316,155 @@ for iParticipant = 1:length(participantCodes)
             searchGrid.alpha = linspace(min(speedDiff),max(speedDiff),101);
             searchGrid.beta = linspace(0,(30/max(speedDiff)),101);
             searchGrid.gamma = 0.5;  %scalar here (since fixed) but may be vector
-            searchGrid.lambda = 0;  %ditto
+            searchGrid.lambda = .03;  %ditto
             
             %Perform fit
             disp('Fitting function.....');
-            [paramsValues, LL, exitflag] = PAL_PFML_Fit(speedDiff,condCorrectNumbers, ...
-                allTrialNumbers,searchGrid,paramsFree,PF);
             
-            disp('done:')
-            message = sprintf('Threshold estimate: %6.4f',paramsValues(1));
-            disp(message);
-            message = sprintf('Slope estimate: %6.4f\r',paramsValues(2));
-            disp(message);
-            
+            speedDiffMatrix(iCond,:) = speedDiff;
+            condCorrectMatrix(iCond,:) =condCorrectNumbers;
+            allTrialMatrix(iCond,:) = allTrialNumbers;
+%             [paramsValues, LL, exitflag] = PAL_PFML_Fit(speedDiff,condCorrectNumbers, ...
+%                 allTrialNumbers,searchGrid,paramsFree,PF);
+% %             
+%             disp('done:')
+%             message = sprintf('Threshold estimate: %6.4f',paramsValues(1));
+%             disp(message);
+%             message = sprintf('Slope estimate: %6.4f\r',paramsValues(2));
+%             disp(message);
+%             
             %Number of simulations to perform to determine standard error
-            B=1000;
+            B=400;
             
             disp('Determining standard errors.....');
             
-            if ParOrNonPar == 1
-                [SD, paramsSim, LLSim, converged] = PAL_PFML_BootstrapParametric(...
-                    speedDiff, allTrialNumbers, paramsValues, paramsFree, B, PF, ...
-                    'searchGrid', searchGrid);
-            else
-                [SD, paramsSim, LLSim, converged] = PAL_PFML_BootstrapNonParametric(...
-                    speedDiff, condCorrectNumbers, allTrialNumbers, [], paramsFree, B, PF,...
-                    'searchGrid',searchGrid);
-            end
-            
-            disp('done:');
-            message = sprintf('Standard error of Threshold: %6.4f',SD(1));
-            disp(message);
-            message = sprintf('Standard error of Slope: %6.4f\r',SD(2));
-            disp(message);
-            
-            %Number of simulations to perform to determine Goodness-of-Fit
-            B=1000;
-            
-            disp('Determining Goodness-of-fit.....');
-            
-            [Dev, pDev] = PAL_PFML_GoodnessOfFit(speedDiff, condCorrectNumbers, allTrialNumbers, ...
-                paramsValues, paramsFree, B, PF, 'searchGrid', searchGrid);
-            
-            disp('done:');
-            
-            %Put summary of results on screen
-            message = sprintf('Deviance: %6.4f',Dev);
-            disp(message);
-            message = sprintf('p-value: %6.4f',pDev);
-            disp(message);
+%             if ParOrNonPar == 1
+%                 [SD, paramsSim, LLSim, converged] = PAL_PFML_BootstrapParametric(...
+%                     speedDiff, allTrialNumbers, paramsValues, paramsFree, B, PF, ...
+%                     'searchGrid', searchGrid);
+%             else
+%                 [SD, paramsSim, LLSim, converged] = PAL_PFML_BootstrapNonParametric(...
+%                     speedDiff, condCorrectNumbers, allTrialNumbers, [], paramsFree, B, PF,...
+%                     'searchGrid',searchGrid);
+%             end
+%             
+%             disp('done:');
+%             message = sprintf('Standard error of Threshold: %6.4f',SD(1));
+%             disp(message);
+%             message = sprintf('Standard error of Slope: %6.4f\r',SD(2));
+%             disp(message);
+%             
+%             %Number of simulations to perform to determine Goodness-of-Fit
+%             B=1000;
+%             
+%             disp('Determining Goodness-of-fit.....');
+%             
+%             [Dev, pDev] = PAL_PFML_GoodnessOfFit(speedDiff, condCorrectNumbers, allTrialNumbers, ...
+%                 paramsValues, paramsFree, B, PF, 'searchGrid', searchGrid);
+%             
+%             disp('done:');
+%             
+%             %Put summary of results on screen
+%             message = sprintf('Deviance: %6.4f',Dev);
+%             disp(message);
+%             message = sprintf('p-value: %6.4f',pDev);
+%             disp(message);
             
             %Create simple plot
-            ProportionCorrectObserved=condCorrectNumbers./allTrialNumbers;
-            StimLevelsFineGrain=[min(speedDiff):max(speedDiff)./1000:max(speedDiff)];
-            ProportionCorrectModel = PF(paramsValues,StimLevelsFineGrain);
-            
-            figure;
-            axes
-            hold on
-            plot(StimLevelsFineGrain,ProportionCorrectModel,'-','color',[0 .7 0],'linewidth',4);
-            plot(speedDiff,ProportionCorrectObserved,'-k.','markersize',40);
-            set(gca, 'fontsize',16);
-            set(gca, 'Xtick', speedDiff);
-            axis([min(speedDiff) max(speedDiff) .4 1]);
-            xlabel(xLabelTitle);
-            ylabel('proportion correct');
-            title(condAndParticipant, 'interpreter', 'none');
-            
-            figFileName = strcat('psychometric_', currAnalysisType, '_', condAndParticipant, '.pdf');
-            saveas(gcf, figFileName);
-            
-            if strcmp(currAnalysisType, 'arcmin');
-                
-                RawDataExcelFileName = strcat('raw_data_', condAndParticipant, '.csv');
-                writetable(ResponseTable, RawDataExcelFileName);
-            end
-            
-            stimAt75PercentCorrect = PAL_CumulativeNormal(paramsValues, 0.75, 'Inverse');
-            
-            for iBoot = 1:B;
-                myThresholdSim(iBoot) = PAL_PFML_BootstrapNonParametric(paramsValues(iBoot), 0.75, 'Inverse');
-            
-            [SD, paramsSim, LLSim, converged] = ...
-                PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
-                paramsValues, [1 1 0 0], B, PF,'searchGrid',searchGrid);
-            
-            slopeAt75PercentThreshold = PAL_CumulativeNormal(paramsValues, stimAt75PercentCorrect, 'Derivative');
-            
-            [SD, paramsSim, LLSim, converged] = ...
-                PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
-                paramsValues, [1 1 0 0], B, PF,'searchGrid',searchGrid);
-            
-            psychInfo(iCond).condition = currCondition;
-            psychInfo(iCond).condParamsValues = paramsValues;
-            psychInfo(iCond).condSE = SD;
-            psychInfo(iCond).condDev = Dev;
-            psychInfo(iCond).condPDev = pDev;
-            psychInfo(iCond).stimAt75PercentCorrect = stimAt75PercentCorrect;
-            psychInfo(iCond).slopeAt75PercentThreshold = slopeAt75PercentThreshold;
-            
-            toc
+%             ProportionCorrectObserved=condCorrectNumbers./allTrialNumbers;
+%             StimLevelsFineGrain=[min(speedDiff):max(speedDiff)./1000:max(speedDiff)];
+%             ProportionCorrectModel = PF(paramsValues,StimLevelsFineGrain);
+%             
+%             figure;
+%             axes
+%             hold on
+%             plot(StimLevelsFineGrain,ProportionCorrectModel,'-','color',[0 .7 0],'linewidth',4);
+%             plot(speedDiff,ProportionCorrectObserved,'-k.','markersize',40);
+%             set(gca, 'fontsize',16);
+%             set(gca, 'Xtick', speedDiff);
+%             axis([min(speedDiff) max(speedDiff) .4 1]);
+%             xlabel(xLabelTitle);
+%             ylabel('proportion correct');
+%             title(condAndParticipant, 'interpreter', 'none');
+%             
+%             figFileName = strcat('psychometric_', currAnalysisType, '_', condAndParticipant, '.pdf');
+%             saveas(gcf, figFileName);
+%             
+%             if strcmp(currAnalysisType, 'arcmin');
+%                 
+%                 RawDataExcelFileName = strcat('raw_data_', condAndParticipant, '.csv');
+%                 writetable(ResponseTable, RawDataExcelFileName);
+%             end
+%             
+%             psychInfo(iCond).condition = currCondition;
+%             psychInfo(iCond).condParamsValues = paramsValues;
+%             psychInfo(iCond).condSE = SD;
+%             psychInfo(iCond).condDev = Dev;
+%             psychInfo(iCond).condPDev = pDev;
+%             
+%             stimAt75PercentCorrect = PAL_CumulativeNormal(paramsValues, 0.75, 'Inverse');
+%             slopeAt75PercentThreshold = PAL_CumulativeNormal(paramsValues, stimAt75PercentCorrect, 'Derivative');
+%             
+%             psychInfo(iCond).stimAt75PercentCorrect = stimAt75PercentCorrect;
+%             psychInfo(iCond).slopeAt75PercentThreshold = slopeAt75PercentThreshold;
+%             
+%             toc
         end
-        psychTable = struct2table(psychInfo);
-        psychExcelFileName = strcat('psychometric_data_', currAnalysisType, '_', currParticipantCode, '.csv');
-        writetable(psychTable, psychExcelFileName);
+%         psychTable = struct2table(psychInfo);
+%         psychExcelFileName = strcat('psychometric_data_', currAnalysisType, '_', currParticipantCode, '.csv');
+%         writetable(psychTable, psychExcelFileName);
     end
 end
+
+
+
+
+
+%% Do PAL MULTIPLE FIT
+PF = @PAL_CumulativeNormal;
+paramsValues = [.7 10 .5 0];
+myCond =2:7;
+
+
+for iBrute = 1:size(speedDiffMatrix,1);
+    searchGrid.alpha = linspace(0,1,101);
+    searchGrid.beta = linspace(0,20,101);
+    searchGrid.gamma = 0.5;  %scalar here (since fixed) but may be vector
+    searchGrid.lambda = 0;  %ditto
+            
+paramsValuesMatrix(iBrute,:) = ...
+    PAL_PFML_BruteForceFit(speedDiffMatrix(iBrute,:), ...
+      condCorrectMatrix(iBrute,:), allTrialMatrix(iBrute,:), ...
+      searchGrid, @PAL_CumulativeNormal,'gammaEQlambda',false);
+end
+
+%%
+  paramsFitted = PAL_PFML_FitMultiple(speedDiffMatrix(:,myCond), ...
+      condCorrectMatrix(:,myCond), allTrialMatrix(:,myCond), ...
+      paramsValues, PF,  'thresholds','unconstrained','slopes','unconstrained',...
+      'guessrates','fixed','lapserates','constrained',...
+      'lapselimits',[0 .2])
+
+  %%
+  for iPlot = 1:size(speedDiffMatrix,1),
+      xval = linspace(min(speedDiffMatrix(iPlot,:)),max(speedDiffMatrix(iPlot,:)),100);
+      
+       figure(142+iPlot);clf
+       
+       plot(speedDiffMatrix(iPlot,myCond),condCorrectMatrix(iPlot,myCond)./allTrialMatrix(iPlot,myCond),'x')
+       hold on;
+       plot(xval,PAL_CumulativeNormal(paramsFitted(iPlot,:),xval));
+  end
+  
+      
+  %%
+  
+%      [SD paramsSim LLSim converged ] = PAL_PFML_BootstrapNonParametricMultiple(speedDiffMatrix(:,myCond), ...
+%       condCorrectMatrix(:,myCond), allTrialMatrix(:,myCond), ...
+%       paramsValues, 3,PF,  'thresholds','unconstrained','slopes','unconstrained',...
+%       'guessrates','fixed','lapserates','constrained',...
+%       'lapselimits',[0 .2])
+%   
+%   
+%      
+  
