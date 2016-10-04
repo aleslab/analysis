@@ -38,10 +38,10 @@ trialNums = [10 15 30 60 120];
 params = [19.3 .08 .5 0.0]; %Fit for the low threshold data
 
 % These are the stim levels you used.
-stimLevels = 100*[0, 0.22, 0.4, 0.55, 0.67, 0.77, 0.86];
+%stimLevels = 100*[0, 0.22, 0.4, 0.55, 0.67, 0.77, 0.86];
 
 % Uncomment this line to try a different choice of conditions
-%stimLevels = 30*[0, 0.22, 0.4, 0.55, 0.67, 0.77, 0.86];
+stimLevels = 30*[0, 0.22, 0.4, 0.55, 0.67, 0.77, 0.86];
 
 for iTrialNum = 1:length(trialNums),
     nBoot = 500;
@@ -66,30 +66,41 @@ for iTrialNum = 1:length(trialNums),
     
     %Percent of bootstraps that fail to converge.
     percentConverged(iTrialNum) = 100*sum(converged)/length(converged);
+    %95 confidence interval:
+
+    %From the bootstrap take all the bootstrap sampled paramaters
+    %Sort them, then interpolate the data up to 1000 data points to make it
+    %easy to grab the 2.5% and 97.5% points for the 95% CI
+    alphaInterp = interp1( sort(paramsSim(:,1)),linspace(1,nBoot,1000));
+    
+    %Here is the CI for alpha
+    alphaCI(iTrialNum,:) = [alphaInterp(25) alphaInterp(975)];
+    
+    betaInterp = interp1( sort(paramsSim(:,2)),linspace(1,nBoot,1000));
+    
+    betaCI(iTrialNum,:) = [betaInterp(25) betaInterp(975)];
+
 end
 
- figure(342);clf
+ figure(242);clf
  plot(stimLevels,PAL_CumulativeNormal(params,stimLevels),'x')
  hold on;
  plot(0:1:100,PAL_CumulativeNormal(params,0:1:100))
  legend('Condition Locations')
  
-figure(242);clf;
+figure(342);clf;
 plot(trialNums,percentConverged,'+','markersize',10,'linewidth',3)
 xlabel('Number of Trials Per Condition')
 ylabel('Percent Bootstrap simulations that converge')
 
-%95 confidence interval:
+figure(442);clf;
+subplot(2,1,1)
+plot(trialNums,alphaCI,'-o')
+ylabel('Alpha')
+title('Confidence Ineterval bounds by number of trials');
+subplot(2,1,2)
+plot(trialNums,betaCI,'-o')
+xlabel('Number of Trials Per Condition')
+ylabel('beta')
 
-%From the bootstrap take all the bootstrap sampled paramaters
-%Sort them, then interpolate the data up to 1000 data points to make it
-%easy to grab the 2.5% and 97.5% points for the 95% CI
-alphaInterp = interp1( sort(paramsSim(:,1)),linspace(1,nBoot,1000));
-
-%Here is the CI for alpha
-alphaCI = [alphaInterp(25) alphaInterp(975)]
-
-betaInterp = interp1( sort(paramsSim(:,2)),linspace(1,nBoot,1000));
-
-betaCI = [betaInterp(25) betaInterp(975)]
 
