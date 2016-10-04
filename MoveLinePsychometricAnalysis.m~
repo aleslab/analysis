@@ -392,28 +392,30 @@ for iParticipant = 1:length(participantCodes)
                 writetable(ResponseTable, RawDataExcelFileName);
             end
             
+            %%
             stimAt75PercentCorrect = PAL_CumulativeNormal(paramsValues, 0.75, 'Inverse');
             
             for iBoot = 1:B;
-                myThresholdSim(iBoot) = PAL_PFML_BootstrapNonParametric(paramsValues(iBoot), 0.75, 'Inverse');
-            
-            [SD, paramsSim, LLSim, converged] = ...
-                PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
-                paramsValues, [1 1 0 0], B, PF,'searchGrid',searchGrid);
-            
-            slopeAt75PercentThreshold = PAL_CumulativeNormal(paramsValues, stimAt75PercentCorrect, 'Derivative');
-            
-            [SD, paramsSim, LLSim, converged] = ...
-                PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
-                paramsValues, [1 1 0 0], B, PF,'searchGrid',searchGrid);
-            
-            psychInfo(iCond).condition = currCondition;
-            psychInfo(iCond).condParamsValues = paramsValues;
-            psychInfo(iCond).condSE = SD;
-            psychInfo(iCond).condDev = Dev;
-            psychInfo(iCond).condPDev = pDev;
-            psychInfo(iCond).stimAt75PercentCorrect = stimAt75PercentCorrect;
-            psychInfo(iCond).slopeAt75PercentThreshold = slopeAt75PercentThreshold;
+                myThresholdSim(iBoot) = PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
+                paramsValues(iBoot), [1 1 0 0], B, PF,'searchGrid',searchGrid, 0.75, 'Inverse');
+            end
+%             [SD, paramsSim, LLSim, converged] = ...
+%                 PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
+%                 paramsValues, [1 1 0 0], B, PF,'searchGrid',searchGrid);
+%             
+%             slopeAt75PercentThreshold = PAL_CumulativeNormal(paramsValues, stimAt75PercentCorrect, 'Derivative');
+%             
+%             [SD, paramsSim, LLSim, converged] = ...
+%                 PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
+%                 paramsValues, [1 1 0 0], B, PF,'searchGrid',searchGrid);
+%             
+%             psychInfo(iCond).condition = currCondition;
+%             psychInfo(iCond).condParamsValues = paramsValues;
+%             psychInfo(iCond).condSE = SD;
+%             psychInfo(iCond).condDev = Dev;
+%             psychInfo(iCond).condPDev = pDev;
+%             psychInfo(iCond).stimAt75PercentCorrect = stimAt75PercentCorrect;
+%             psychInfo(iCond).slopeAt75PercentThreshold = slopeAt75PercentThreshold;
             
             toc
         end
