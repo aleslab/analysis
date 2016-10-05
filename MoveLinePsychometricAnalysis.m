@@ -1,8 +1,8 @@
 clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
-participantCodes = {'A'}; % 'G' 'J' 'K' 'A' 'B' 'C' 'E' 'D' 'H'
-
+participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H'}; % 'J' 'K' 
 ParOrNonPar = 2; %non-parametric bootstrap for all
+B = 1000; %number of simulations for all bootstraps and goodness of fits
 
 for iParticipant = 1:length(participantCodes)
     
@@ -13,7 +13,7 @@ for iParticipant = 1:length(participantCodes)
         'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
     
-    analysisType = { 'arcmin', 'speed_change_start_end',  'speed_change_changepoint'}; %'arcmin_less',
+    analysisType = {'arcmin_less' 'arcmin', 'speed_change_start_end',  'speed_change_changepoint'};
     for iAnalysis = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(iAnalysis));
         for iCond = 1:length(conditionList)
@@ -329,9 +329,6 @@ for iParticipant = 1:length(participantCodes)
             message = sprintf('Slope estimate: %6.4f\r',paramsValues(2));
             disp(message);
             
-            %Number of simulations to perform to determine standard error
-            B=1000;
-            
             disp('Determining standard errors.....');
             
             if ParOrNonPar == 1
@@ -349,9 +346,6 @@ for iParticipant = 1:length(participantCodes)
             disp(message);
             message = sprintf('Standard error of Slope: %6.4f\r',SD(2));
             disp(message);
-            
-            %Number of simulations to perform to determine Goodness-of-Fit
-            B=1000;
             
             disp('Determining Goodness-of-fit.....');
             
@@ -393,27 +387,29 @@ for iParticipant = 1:length(participantCodes)
             end
             
             stimAt75PercentCorrect = PAL_CumulativeNormal(paramsValues, 0.75, 'Inverse');
-            
-            for iBoot = 1:B;
-                myThresholdSim(iBoot) = PAL_PFML_BootstrapNonParametric(paramsValues(iBoot), 0.75, 'Inverse');
-            
-            [SD, paramsSim, LLSim, converged] = ...
-                PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
-                paramsValues, [1 1 0 0], B, PF,'searchGrid',searchGrid);
-            
             slopeAt75PercentThreshold = PAL_CumulativeNormal(paramsValues, stimAt75PercentCorrect, 'Derivative');
+            correctParams = [stimAt75PercentCorrect, slopeAt75PercentThreshold, paramsValues(3), paramsValues(4)];
             
-            [SD, paramsSim, LLSim, converged] = ...
+            [correctSD, correctParamsSim, LLSim, converged] = ...
                 PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
-                paramsValues, [1 1 0 0], B, PF,'searchGrid',searchGrid);
+                correctParams, [1 1 0 0], B, PF,'searchGrid',searchGrid);
+            
+            sortedThresholdSim = sort(correctParamsSim(:,1));
+            sortedSlopeSim = sort(correctParamsSim(:,2));
+            alphaCI = [sortedThresholdSim(25) sortedThresholdSim(975)];
+            betaCI = [sortedSlopeSim(25) sortedThresholdSim(975)];
             
             psychInfo(iCond).condition = currCondition;
             psychInfo(iCond).condParamsValues = paramsValues;
-            psychInfo(iCond).condSE = SD;
-            psychInfo(iCond).condDev = Dev;
-            psychInfo(iCond).condPDev = pDev;
+            psychInfo(iCond).condParamsSE = SD;
+            psychInfo(iCond).condParamsDev = Dev;
+            psychInfo(iCond).condParamsPDev = pDev;
             psychInfo(iCond).stimAt75PercentCorrect = stimAt75PercentCorrect;
             psychInfo(iCond).slopeAt75PercentThreshold = slopeAt75PercentThreshold;
+            psychInfo(iCond).correctSD = correctSD; %correct standard deviations 
+            %taken for the bootstrap for the threshold and slope values that I've found seperately.
+            psychInfo(iCond).alphaCI = alphaCI;
+            psychInfo(iCond).betaCI = betaCI;
             
             toc
         end
