@@ -1,6 +1,6 @@
 clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
-participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H'}; % 'J' 'K' 
+participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H'}; % 'J' 'K'
 ParOrNonPar = 2; %non-parametric bootstrap for all
 B = 1000; %number of simulations for all bootstraps and goodness of fits
 
@@ -386,30 +386,46 @@ for iParticipant = 1:length(participantCodes)
                 writetable(ResponseTable, RawDataExcelFileName);
             end
             
+            
+            %%
             stimAt75PercentCorrect = PAL_CumulativeNormal(paramsValues, 0.75, 'Inverse');
             slopeAt75PercentThreshold = PAL_CumulativeNormal(paramsValues, stimAt75PercentCorrect, 'Derivative');
-            correctParams = [stimAt75PercentCorrect, slopeAt75PercentThreshold, paramsValues(3), paramsValues(4)];
+            % this slope value might not be particularly close to the beta
+            %value that comes out of the paramsValues things as with the
+            %cumulative normal function the beta value is the inverse of
+            %the standard deviation, which is related/proportional to the
+            %slope but not actually the slope.  
             
-            [correctSD, correctParamsSim, LLSim, converged] = ...
-                PAL_PFML_BootstrapNonParametric(speedDiff, condCorrectNumbers, allTrialNumbers, ...
-                correctParams, [1 1 0 0], B, PF,'searchGrid',searchGrid);
+            for iBootThreshold = 1:length(B)
+                boot75Threshold(iBootThreshold) = PAL_CumulativeNormal(paramsSim, 0.75, 'Inverse');
+            end
             
-            sortedThresholdSim = sort(correctParamsSim(:,1));
-            sortedSlopeSim = sort(correctParamsSim(:,2));
-            alphaCI = [sortedThresholdSim(25) sortedThresholdSim(975)];
-            betaCI = [sortedSlopeSim(25) sortedThresholdSim(975)];
+            for iBootSlope = 1:length(B)
+                bootSlopeAt75Threshold(iBootSlope) = PAL_CumulativeNormal(paramsSim, stimAt75PercentCorrect, 'Derivative');
+            end
+            
+            thresholdSE = std(boot75Threshold);
+            slopeSE = std(bootSlopeAt75Threshold);
+            
+            sortedThresholdSim = sort(boot75Threshold);
+            sortedSlopeSim = sort(bootSlopeAt75Threshold);
+            thresholdCI = [sortedThresholdSim(25) sortedThresholdSim(975)];
+            slopeCI = [sortedSlopeSim(25) sortedThresholdSim(975)];
             
             psychInfo(iCond).condition = currCondition;
+            %correct values that i've calculated
+            psychInfo(iCond).stimAt75PercentCorrect = stimAt75PercentCorrect;
+            psychInfo(iCond).slopeAt75PercentThreshold = slopeAt75PercentThreshold;
+            psychInfo(iCond).alphaCI = thresholdCI;
+            psychInfo(iCond).betaCI = slopeCI;
+            psychInfo(iCond).thresholdSE = thresholdSE;
+            psychInfo(iCond).slopeSE = slopeSE;
+            %the original parameters, standard errors from bootstrapping
+            %and values from goodness of fit (dev and pdev).
             psychInfo(iCond).condParamsValues = paramsValues;
             psychInfo(iCond).condParamsSE = SD;
             psychInfo(iCond).condParamsDev = Dev;
             psychInfo(iCond).condParamsPDev = pDev;
-            psychInfo(iCond).stimAt75PercentCorrect = stimAt75PercentCorrect;
-            psychInfo(iCond).slopeAt75PercentThreshold = slopeAt75PercentThreshold;
-            psychInfo(iCond).correctSD = correctSD; %correct standard deviations 
-            %taken for the bootstrap for the threshold and slope values that I've found seperately.
-            psychInfo(iCond).alphaCI = alphaCI;
-            psychInfo(iCond).betaCI = betaCI;
             
             toc
         end
