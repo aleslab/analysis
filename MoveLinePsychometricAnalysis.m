@@ -13,7 +13,7 @@ for iParticipant = 1:length(participantCodes)
         'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
     
-    analysisType = {'arcmin_less' 'arcmin', 'speed_change_start_end',  'speed_change_changepoint'};
+    analysisType = { 'speed_change_changepoint'}; %'arcmin_less' 'arcmin', 'speed_change_start_end', 
     for iAnalysis = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(iAnalysis));
         for iCond = 1:length(conditionList)
@@ -396,12 +396,12 @@ for iParticipant = 1:length(participantCodes)
             %the standard deviation, which is related/proportional to the
             %slope but not actually the slope.  
             
-            for iBootThreshold = 1:length(B)
-                boot75Threshold(iBootThreshold) = PAL_CumulativeNormal(paramsSim, 0.75, 'Inverse');
+            for iBootThreshold = 1:B
+                boot75Threshold(iBootThreshold) = PAL_CumulativeNormal(paramsSim(iBootThreshold,:), 0.75, 'Inverse');
             end
             
-            for iBootSlope = 1:length(B)
-                bootSlopeAt75Threshold(iBootSlope) = PAL_CumulativeNormal(paramsSim, stimAt75PercentCorrect, 'Derivative');
+            for iBootSlope = 1:B
+                bootSlopeAt75Threshold(iBootSlope) = PAL_CumulativeNormal(paramsSim(iBootSlope,:), stimAt75PercentCorrect, 'Derivative');
             end
             
             thresholdSE = std(boot75Threshold);
@@ -410,7 +410,7 @@ for iParticipant = 1:length(participantCodes)
             sortedThresholdSim = sort(boot75Threshold);
             sortedSlopeSim = sort(bootSlopeAt75Threshold);
             thresholdCI = [sortedThresholdSim(25) sortedThresholdSim(975)];
-            slopeCI = [sortedSlopeSim(25) sortedThresholdSim(975)];
+            slopeCI = [sortedSlopeSim(25) sortedSlopeSim(975)];
             
             psychInfo(iCond).condition = currCondition;
             %correct values that i've calculated
