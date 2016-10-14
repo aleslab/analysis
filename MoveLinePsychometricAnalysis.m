@@ -2,7 +2,7 @@ clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
 participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H'}; % 'J' 'K'
 ParOrNonPar = 2; %non-parametric bootstrap for all
-B = 1000; %number of simulations for all bootstraps and goodness of fits
+BootNo = 1000; %number of simulations for all bootstraps and goodness of fits
 
 for iParticipant = 1:length(participantCodes)
     
@@ -333,11 +333,11 @@ for iParticipant = 1:length(participantCodes)
             
             if ParOrNonPar == 1
                 [SD, paramsSim, LLSim, converged] = PAL_PFML_BootstrapParametric(...
-                    speedDiff, allTrialNumbers, paramsValues, paramsFree, B, PF, ...
+                    speedDiff, allTrialNumbers, paramsValues, paramsFree, BootNo, PF, ...
                     'searchGrid', searchGrid);
             else
                 [SD, paramsSim, LLSim, converged] = PAL_PFML_BootstrapNonParametric(...
-                    speedDiff, condCorrectNumbers, allTrialNumbers, [], paramsFree, B, PF,...
+                    speedDiff, condCorrectNumbers, allTrialNumbers, [], paramsFree, BootNo, PF,...
                     'searchGrid',searchGrid);
             end
             
@@ -350,7 +350,7 @@ for iParticipant = 1:length(participantCodes)
             disp('Determining Goodness-of-fit.....');
             
             [Dev, pDev] = PAL_PFML_GoodnessOfFit(speedDiff, condCorrectNumbers, allTrialNumbers, ...
-                paramsValues, paramsFree, B, PF, 'searchGrid', searchGrid);
+                paramsValues, paramsFree, BootNo, PF, 'searchGrid', searchGrid);
             
             disp('done:');
             
@@ -396,12 +396,9 @@ for iParticipant = 1:length(participantCodes)
             %the standard deviation, which is related/proportional to the
             %slope but not actually the slope.  
             
-            for iBootThreshold = 1:B
-                boot75Threshold(iBootThreshold) = PAL_CumulativeNormal(paramsSim(iBootThreshold,:), 0.75, 'Inverse');
-            end
-            
-            for iBootSlope = 1:B
-                bootSlopeAt75Threshold(iBootSlope) = PAL_CumulativeNormal(paramsSim(iBootSlope,:), stimAt75PercentCorrect, 'Derivative');
+            for iBoot = 1:BootNo
+                boot75Threshold(iBoot) = PAL_CumulativeNormal(paramsSim(iBoot,:), 0.75, 'Inverse');
+                bootSlopeAt75Threshold(iBoot) = PAL_CumulativeNormal(paramsSim(iBoot,:), boot75Threshold(iBoot), 'Derivative');
             end
             
             thresholdSE = std(boot75Threshold);
@@ -409,8 +406,8 @@ for iParticipant = 1:length(participantCodes)
             
             sortedThresholdSim = sort(boot75Threshold);
             sortedSlopeSim = sort(bootSlopeAt75Threshold);
-            thresholdCI = [sortedThresholdSim(25) sortedThresholdSim(975)];
-            slopeCI = [sortedSlopeSim(25) sortedSlopeSim(975)];
+            thresholdCI = [sortedThresholdSim(25) sortedThresholdSim(BootNo-25)];
+            slopeCI = [sortedSlopeSim(25) sortedSlopeSim(BootNo-25)];
             
             psychInfo(iCond).condition = currCondition;
             %correct values that i've calculated
