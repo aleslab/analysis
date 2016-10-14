@@ -1,16 +1,22 @@
 %% Quick Fit
-
+pf = @PAL_CumulativeNormal;
 options = PAL_minimize('options');
 
-stimLevels = 100*[0, 0.22, 0.4, 0.55, 0.67, 0.77, 0.86];%linspace(10,90,7);
+stimLevels =100*[0, 0.22, 0.4, 0.55, 0.67, 0.77, 0.86];%linspace(10,90,7);
+stimLevels = speedDiff;
 %NumPos =  [13 25 29 30 30 30 30];
 NumPos = [15 16 17 21 30 27 29]
 outOfNum = [30 30 30 30 30 30 30];
-searchGrid.alpha = [0:1:90];    %structure defining grid to
-searchGrid.beta = linspace(0,2,40); %search for initial values
-searchGrid.gamma = .5;
-searchGrid.lambda = 0;
-
+% searchGrid.alpha = [0:1:90];    %structure defining grid to
+% searchGrid.beta = linspace(0,2,40); %search for initial values
+% searchGrid.gamma = .5;
+% searchGrid.lambda = 0;
+% % 
+searchGrid.alpha = linspace(0,90,101);
+searchGrid.beta = linspace(0,2,101);
+searchGrid.gamma = 0.5;  %scalar here (since fixed) but may be vector
+searchGrid.lambda = 0;  %ditto
+            
 [paramsValues LL exitflag output]  = PAL_PFML_Fit(stimLevels, NumPos, outOfNum, ...
       searchGrid, [1 1 0 0], pf,'searchOptions',options);
   
@@ -24,7 +30,8 @@ searchGrid.lambda = 0;
 
 %% Quick Bootstrap
  [SD paramsSim LLSim converged] = ...
-     PAL_PFML_BootstrapParametric(stimLevels,outOfNum,paramsValues,[1 1 0 0],300,@PAL_CumulativeNormal,...
+
+     PAL_PFML_BootstrapNonParametric(stimLevels,NumPos,outOfNum,paramsValues,[1 1 0 0],300,@PAL_CumulativeNormal,...
      'searchGrid',searchGrid);
  
  100*sum(converged)/length(converged)
@@ -103,4 +110,8 @@ plot(trialNums,betaCI,'-o')
 xlabel('Number of Trials Per Condition')
 ylabel('beta')
 
+
+for iBoot = 1:nBoot,
+    
+    myThreshSim(iBoot) = inverse,75 (paramSim(iBoot,:))
 
