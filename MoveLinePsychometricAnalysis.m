@@ -1,6 +1,6 @@
 clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
-participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H'}; % 'J' 'K'
+participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'J'}; %  'K'
 ParOrNonPar = 2; %non-parametric bootstrap for all
 BootNo = 1000; %number of simulations for all bootstraps and goodness of fits
 
@@ -13,7 +13,7 @@ for iParticipant = 1:length(participantCodes)
         'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
     
-    analysisType = { 'speed_change_changepoint'}; %'arcmin_less' 'arcmin', 'speed_change_start_end', 
+    analysisType = {'speed_change_changepoint_less', 'speed_change_start_end_less'}; %'speed_change_changepoint','arcmin''arcmin_less' 'speed_change_start_end'
     for iAnalysis = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(iAnalysis));
         for iCond = 1:length(conditionList)
@@ -62,6 +62,7 @@ for iParticipant = 1:length(participantCodes)
             %condInfo = allSessionInfo.conditionInfo;
             
             %% Getting the speed difference in arcmin/s
+            %SPEED CHANGE IN ARCMIN
             if strcmp(currAnalysisType, 'arcmin')
                 
                 %midspeed accelerating conditions
@@ -142,9 +143,15 @@ for iParticipant = 1:length(participantCodes)
                     
                 end
                 
+                
+                
+                
+                %SPEED CHANGE IN ARCMIN 6 CONDITIONS
+                
                 % for analysing the data in terms of the change in arcmin/s, but only for
                 % the first 6 conditions. Hopefully this will remove the effect of diplopia
                 % in some conditions.
+                
             elseif strcmp(currAnalysisType, 'arcmin_less');
                 
                 condCorrectNumbers = condCorrectNumbers(1:6);
@@ -228,8 +235,15 @@ for iParticipant = 1:length(participantCodes)
                     
                 end
                 
-                % to do the analysis in terms of the percentage speed change, but comparing
-                %the difference in speed at the beginning and end of the interval
+                
+                
+                
+                %PERCENTAGE SPEED CHANGE OVER THE WHOLE INTERVAL
+                
+                % to do the analysis in terms of the percentage speed
+                % change, but comparing the difference in speed at the
+                % beginning and end of the interval
+                
             elseif strcmp(currAnalysisType, 'speed_change_start_end');
                 
                 xLabelTitle  = 'Percentage speed change between the interval start and end';
@@ -264,6 +278,51 @@ for iParticipant = 1:length(participantCodes)
                     
                 end
                 
+                
+                
+                %PERCENTAGE SPEED CHANGE OVER THE WHOLE INTERVAL 6
+                %CONDITIONS
+                
+            elseif strcmp(currAnalysisType, 'speed_change_start_end_less');
+                condCorrectNumbers = condCorrectNumbers(1:6);
+                allTrialNumbers = allTrialNumbers(1:6);
+                
+                xLabelTitle  = 'Percentage speed change between the interval start and end';
+                
+                %midspeed accelerating conditions
+                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+                    
+                    speedDiff = [0.57 0.66 0.74 0.80 0.85 0.90]; %2dp
+                    
+                    %slow accelerating conditions
+                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
+                    
+                    speedDiff = [0.34 0.48 0.60 0.70 0.78 0.85]; %2dp
+                    
+                    %CRS depth conditions
+                elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
+                    
+                    speedDiff = [0 0.50 0.62 0.71 0.79 0.86]; %2dp
+                    
+                    %slow and midspeed CRS lateral conditions
+                elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
+                    
+                    speedDiff = [0 0.37 0.51 0.63 0.73 0.81]; %2dp
+                    
+                elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
+                    
+                    speedDiff = [0 0.50 0.62 0.71 0.79 0.86]; %2dp
+                    
+                elseif strcmp(currCondition, 'MoveLine_CRS_lateral_slow');
+                    
+                    speedDiff = [0 0.37 0.51 0.63 0.73 0.81]; %2dp
+                    
+                end
+                
+                
+                
+                %PERCENTAGE SPEED CHANGE AT POINT OF CHANGE
+                 
             elseif strcmp(currAnalysisType, 'speed_change_changepoint');
                 
                 xLabelTitle  = 'Percentage speed change at the point of the speed change';
@@ -298,7 +357,47 @@ for iParticipant = 1:length(participantCodes)
                     speedDiff = [0 0.37 0.51 0.63 0.73 0.81 0.89]; %2dp
                     
                 end
+               
                 
+                
+                %PERCENTAGE SPEED CHANGE AT POINT OF CHANGE 6 CONDITIONS
+                
+            elseif strcmp(currAnalysisType, 'speed_change_changepoint_less');
+                condCorrectNumbers = condCorrectNumbers(1:6);
+                allTrialNumbers = allTrialNumbers(1:6);
+                xLabelTitle  = 'Percentage speed change at the point of the speed change';
+                
+                
+                %midspeed accelerating conditions
+                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+                    
+                    speedDiff = [0 0.22 0.40 0.55 0.67 0.77]; %2dp
+                    
+                    %slow accelerating conditions
+                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
+                    
+                    speedDiff = [0 0.22 0.40 0.54 0.67 0.77]; %2dp
+                    
+                    
+                    %CRS depth conditions
+                elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
+                    
+                    speedDiff = [0 0.50 0.62 0.71 0.79 0.86]; %2dp
+                    
+                    %slow and midspeed CRS lateral conditions
+                elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
+                    
+                    speedDiff = [0 0.37 0.51 0.63 0.73 0.81]; %2dp
+                    
+                elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
+                    
+                    speedDiff = [0 0.50 0.62 0.71 0.79 0.86]; %2dp
+                    
+                elseif strcmp(currCondition, 'MoveLine_CRS_lateral_slow');
+                    
+                    speedDiff = [0 0.37 0.51 0.63 0.73 0.81]; %2dp
+                    
+                end
             end
             
             %% Psychometric function fitting adapted from PAL_PFML_Demo
@@ -394,7 +493,7 @@ for iParticipant = 1:length(participantCodes)
             %value that comes out of the paramsValues things as with the
             %cumulative normal function the beta value is the inverse of
             %the standard deviation, which is related/proportional to the
-            %slope but not actually the slope.  
+            %slope but not actually the slope.
             
             for iBoot = 1:BootNo
                 boot75Threshold(iBoot) = PAL_CumulativeNormal(paramsSim(iBoot,:), 0.75, 'Inverse');
