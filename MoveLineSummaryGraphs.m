@@ -1,4 +1,3 @@
-cd /Users/Abigail/Documents/Experiment Data/Experiment 1/
 
 participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'J'}; %'K'
 
@@ -20,11 +19,10 @@ for iParticipant = 1:length(participantCodes)
     currParticipantCode = cell2mat(participantCodes(iParticipant));
     for iAnalysis = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(iAnalysis));
-        fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 1/Participant_', ...
-            currParticipantCode, '/Analysis/', currAnalysisType,'psychometric_data_',...
-            currAnalysisType, currParticipantCode, '.csv');
-        
-        filename = dir(fileDir);
+        filename = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 1/Participant_', ...
+            currParticipantCode, '/Analysis/', currAnalysisType,'/psychometric_data_',...
+            currAnalysisType,'_', currParticipantCode, '.csv');
+
         allPsychData = csvread(filename, 1, 1);
         usefulPsychData = allPsychData(:, 1:8); %all rows giving all
         %conditions, then only rows 1-8, giving only the threshold, slope,
@@ -50,7 +48,8 @@ for iParticipant = 1:length(participantCodes)
         figure
         hold on
         bar(thresholds, 'r');
-        errorbar(thresholds, thresholdLowerCIsize, thresholdUpperCIsize, '.k');
+        errorbar(1:1:8, thresholds, thresholdLowerCIsize, thresholdUpperCIsize, '.k');
+        set(gca, 'XTick', 1:1:8);
         set(gca, 'XTickLabel', shortenedCondList);
         thresholdfigFileName = strcat('threshold_summary_graph_', currAnalysisType, '_', currParticipantCode, '.pdf');
         saveas(gcf, thresholdfigFileName);
@@ -59,7 +58,8 @@ for iParticipant = 1:length(participantCodes)
         figure
         hold on
         bar(slopes, 'b');
-        errorbar(slopes, slopeLowerCIsize, slopeUpperCIsize, '.k');
+        errorbar(1:1:8, slopes, slopeLowerCIsize, slopeUpperCIsize, '.k');
+        set(gca, 'XTick', 1:1:8);
         set(gca, 'XTickLabel', shortenedCondList);
         slopesfigFileName = strcat('slopes_summary_graph_', currAnalysisType, '_', currParticipantCode, '.pdf');
         saveas(gcf, slopesfigFileName);
