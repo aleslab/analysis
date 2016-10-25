@@ -7,6 +7,11 @@ fileToLoad = uigetfile; load(fileToLoad);
 %stimOri = [experimentData(1).trialData.stimOri];
 
 
+% iCond = 3;
+% iTrial = 1;
+% stimOri = (sortedTrialData(iCond).trialData(iTrial).stimOri)';
+% respOri = (sortedTrialData(iCond).trialData(iTrial).respOri)';
+
 iCond = 3; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
