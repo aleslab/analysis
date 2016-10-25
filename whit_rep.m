@@ -10,16 +10,15 @@ fileToLoad = uigetfile; load(fileToLoad);
 iCond = 1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
-
+%err = respOri - stimOri;
 
 
 
     for i=  2:length(respOri);
-        RO=respOri(i)- respOri(i-1);
-        err(i) = minAngleDiff(respOri, stimOri(i));
-        %err(i) = minAngleDiff(respOri(i) - stimOri(i));
-        %[ delta ] = minAngleDiff(a,b )
-       
+        RO(i)=respOri(i) - respOri(i-1);
+        err = minAngleDiff(respOri, stimOri);
+        
+        
     
         
    
@@ -34,7 +33,8 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
 %     RO(RO<-180) = 180+(RO(RO<-180)+180);
 
     
-    scatter (RO, err);
+    scatter (RO, err, 'r');
+    %plot for each con next job
 
 
 xlabel('relative orientation of previous trial'); % x-axis label
