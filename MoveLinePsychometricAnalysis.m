@@ -13,7 +13,7 @@ for iParticipant = 1:length(participantCodes)
         'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
     
-    analysisType = {'speed_change_changepoint_less', 'speed_change_start_end_less'}; %'speed_change_changepoint','arcmin''arcmin_less' 'speed_change_start_end'
+    analysisType = {'speed_change_start_end_less'}; % 'speed_change_changepoint','arcmin''arcmin_less' 'speed_change_start_end' 'speed_change_changepoint_less'
     for iAnalysis = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(iAnalysis));
         for iCond = 1:length(conditionList)
