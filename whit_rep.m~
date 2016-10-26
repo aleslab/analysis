@@ -9,7 +9,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 
 
 
-iCond = 3; %When you have only 1 condition
+iCond = 1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 %err = respOri - stimOri;
@@ -36,10 +36,15 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
 
        figure;
        scatter (RO, err, 'r');
-       %figure;
-       %scatter(stimOri, respOri);
-% %    %plot for each con next job
-       %gplotmatrix(RO,err,iCond);
+       hold on
+       tfit=(1:0.01:70)';
+       yfit[ones(size(tfit)) cos((2*pi/12*(tfif-7))] *s_coeffs
+       plot(tfit,yfit,'r-','Linewidth',2);
+       hold off
+%        figure;
+%        scatter(stimOri, respOri);
+% %     %plot for each con next job
+      %gplotmatrix(RO,err,iCond);
 % 
 % 
 xlabel('relative orientation of previous trial'); % x-axis label
