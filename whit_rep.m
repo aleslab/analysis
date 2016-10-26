@@ -7,12 +7,9 @@ fileToLoad = uigetfile; load(fileToLoad);
 %stimOri = [experimentData(1).trialData.stimOri];
 
 
-% iCond = 3;
-% iTrial = 1;
-% stimOri = (sortedTrialData(iCond).trialData(iTrial).stimOri)';
-% respOri = (sortedTrialData(iCond).trialData(iTrial).respOri)';
 
-iCond = 3; %When you have only 1 condition
+
+iCond = 1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 %err = respOri - stimOri;
@@ -38,7 +35,9 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
 %     RO(RO<-180) = 180+(RO(RO<-180)+180);
 
     
-      scatter (RO, err, 'r');
+       scatter (RO, err, 'r');
+       figure
+       scatter(stimOri, respOri);
 %     %plot for each con next job
       %gplotmatrix(RO,err,iCond);
 % 
