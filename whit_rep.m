@@ -34,18 +34,22 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
 %     RO(RO>180) = -180+(RO(RO>180)-180);
 %     RO(RO<-180) = 180+(RO(RO<-180)+180);
 
-    
+       figure;
        scatter (RO, err, 'r');
-       figure
+       figure;
        scatter(stimOri, respOri);
 %     %plot for each con next job
       %gplotmatrix(RO,err,iCond);
 % 
 % 
-% xlabel('relative orientation of previous trial'); % x-axis label
-% ylabel('error on current trial (deg)'); % y-axis label
+xlabel('relative orientation of previous trial'); % x-axis label
+ylabel('error on current trial (deg)'); % y-axis label
 
-
+% figure
+% xlabel('relative orientation of trial'); % x-axis label
+% ylabel('resp on current trial (deg)'); % y-axis label
+% 
+% 
 
 
 
