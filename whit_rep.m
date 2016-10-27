@@ -13,7 +13,9 @@ iCond = 3; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 %err = respOri - stimOri;
-
+%iCond = 3; %When you have only 1 condition
+%respOri = [sortedData.trialData(2).respOri];
+%stimOri = [sortedData.trialData(2).stimOri];
 
 
     for i=  2:length(respOri);
