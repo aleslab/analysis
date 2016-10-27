@@ -36,6 +36,7 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
 
        figure;
        scatter (RO, err, 'r');
+       lsline
        %figure;
        %scatter(stimOri, respOri);
 % %    %plot for each con next job
