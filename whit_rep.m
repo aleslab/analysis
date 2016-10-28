@@ -18,7 +18,7 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
 %stimOri = [sortedData.trialData(2).stimOri];
 
 
-    for i=  2:length(respOri);
+    for i=  1:length(respOri);
         RO(i)= stimOri(i-1) - stimOri(i);
         err = minAngleDiff(respOri, stimOri);
         
