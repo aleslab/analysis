@@ -36,7 +36,7 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
 %RO(RO<-180) = 180+(RO(RO<-180)+180);
 
        figure;
-       scatter (RO, err, 'r');
+       scatter (RO, err,);
        
 xlabel('relative orientation of previous trial'); % x-axis label
 ylabel('error on current trial (deg)'); % y-axis label
