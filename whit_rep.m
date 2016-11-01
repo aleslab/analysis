@@ -17,6 +17,8 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
        
         if RO > 180;
         RO = RO - 360*sign(RO);
+        elseif RO<180
+            RO = RO + 360*sign(RO);
         end;
         
 %         if
