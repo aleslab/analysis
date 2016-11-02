@@ -12,14 +12,17 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
     for i=  2:length(respOri);
         %respOri(i)=stimOri(i);
         
-        err(i) = minAngleDiff(respOri, stimOri);
+        %err(i) = minAngleDiff(respOri, stimOri);
+        err = minAngleDiff(respOri, stimOri);
         RO(i) =(stimOri(i-1) - stimOri(i));
+        
+        
        
-        if RO > 180;
-        RO = RO - 360*sign(RO);
-        elseif RO<180
-            RO = RO + 360*sign(RO);
-        end;
+%         if RO > 180;
+%         RO = RO - 360*sign(RO);
+%         elseif RO<180
+%             RO = RO + 360*sign(RO);
+%         end;
         
 %         if
 %             RO(i)(RO>180(i)) = -180+(RO(RO>180)-180);
@@ -39,8 +42,8 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
     end 
          
 
-%RO(RO>180) = -180+(RO(RO>180)-180);
-%RO(RO<-180) = 180+(RO(RO<-180)+180);
+RO(RO>180) = -180+(RO(RO>180)-180);
+RO(RO<-180) = 180+(RO(RO<-180)+180);
 
        figure;
        scatter (RO, err);
