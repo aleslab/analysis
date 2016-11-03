@@ -10,7 +10,7 @@ stimOri = [sortedData(iCond).trialData(:).stimOri];
 
 RO_initial_time_point=0;
 
-    for i=  1:length(respOri);
+    for i=  2:length(respOri);
         %respOri(i)=stimOri(i);
         
         %err(i) = minAngleDiff(respOri, stimOri);
@@ -57,11 +57,6 @@ sem=std(data)/sqrt(length(data));
 xlabel('relative orientation of previous trial'); % x-axis label
 ylabel('error on current trial (deg)'); % y-axis label
 
-% figure
-% xlabel('relative orientation of trial'); % x-axis label
-% ylabel('resp on current trial (deg)'); % y-axis label
-% 
-% 
 
 
 
