@@ -4,7 +4,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 
-iCond = 3; %When you have only 1 condition
+iCond = 1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -46,8 +46,10 @@ RO_initial_time_point=0;
     end 
          
 
-% RO(RO>180) = -180+(RO(RO>180)-180);
-% RO(RO<-180) = 180+(RO(RO<-180)+180);
+data=respOri;
+sem=std(data)/sqrt(length(data));
+
+
 
        figure;
        scatter (RO, err);
