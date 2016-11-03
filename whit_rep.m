@@ -4,7 +4,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 
-iCond = 1; %When you have only 1 condition
+iCond = 3; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -14,13 +14,16 @@ RO_initial_time_point=0;
         %respOri(i)=stimOri(i);
         
         %err(i) = minAngleDiff(respOri, stimOri);
-        err = minAngleDiff(respOri, stimOri);
-        RO(i) =(stimOri(i-1) - stimOri(i));
-        
-        
-       
-%         if RO > 180;
-%         RO = RO - 360*sign(RO);
+        err(i) = minAngleDiff(respOri(i), stimOri(i));
+        RO(i) = minAngleDiff(stimOri(i-1), stimOri(i));
+%         if abs (RO(i)) > 180;
+%             RO(i)=360+RO(i);
+%         else
+%             
+%             RO(i)=360-RO(i);
+%         end
+%         %RO = RO - 360*sign(RO);
+%         %end
 %         elseif RO<180
 %             RO = RO + 360*sign(RO);
 %         end;
@@ -43,8 +46,8 @@ RO_initial_time_point=0;
     end 
          
 
-RO(RO>180) = -180+(RO(RO>180)-180);
-RO(RO<-180) = 180+(RO(RO<-180)+180);
+% RO(RO>180) = -180+(RO(RO>180)-180);
+% RO(RO<-180) = 180+(RO(RO<-180)+180);
 
        figure;
        scatter (RO, err);
