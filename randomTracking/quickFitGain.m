@@ -11,7 +11,7 @@ idx =1;
 
 timePerFrame = sessionInfo.expInfo.frameDur;
 for iCond = 1:nCond,
-    iCond
+    iCond=1;
     nTrial = length(sortedTrialData(iCond).trialData);
     for iTrial = 1:nTrial,
         
