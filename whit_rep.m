@@ -4,7 +4,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 
-iCond = 3; %When you have only 1 condition
+iCond = 2; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -52,6 +52,8 @@ data=respOri;
 sem=std(data)/sqrt(length(data));
 std(err)
 
+Var_err=var(err);
+
 
        figure;
        scatter (RO, err);
@@ -59,7 +61,7 @@ std(err)
 xlabel('relative orientation of previous trial'); % x-axis label
 ylabel('error on current trial (deg)'); % y-axis label
 
-
+%V = var(A)
 
 
 
