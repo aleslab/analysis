@@ -4,7 +4,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 
-iCond = 2; %When you have only 1 condition
+iCond = 3; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -25,11 +25,12 @@ data=respOri; %calculation to get standard error of the mean for the amount of e
 sem=std(data)/sqrt(length(data));% stimOri and respOri
 std(err)
 
-Var_err=var(err); % amount of variance in the error
-
-resp_time=(sortedData(2).trialData.responseTime); % mean response times for each con
+var_prox=var(err); % amount of variance in the error
+var_dist=var(stimOri); %variance in the stimOri
+gain=var_prox / (var_prox + var_dist);
+resp_time=(sortedData(3).trialData.responseTime); % mean response times for each con
 MT=mean(resp_time);% NEED TO CHANGE THE NUMBER OF SORTED DATA EACH TIME YOU RUN
-% FOR EXAMPLE sortedData(?) 
+% FOR EXAMPLE sortedData(?) to match the condition number
 
 
        figure; % RESIDUAL ERROR PLOT.

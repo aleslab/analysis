@@ -25,14 +25,15 @@ data=respOri; %calculation to get standard error of the mean for the amount of e
 sem=std(data)/sqrt(length(data));% stimOri and respOri
 std(err)
 
-Var_err=var(err); % amount of variance in the error
-
+var_prox=var(err); % amount of variance in the error
+var_dist=var(stimOri); %variance in the stimOri
+gain=var_prox / (var_prox + vardist);
 resp_time=(sortedData(2).trialData.responseTime); % mean response times for each con
 MT=mean(resp_time);% NEED TO CHANGE THE NUMBER OF SORTED DATA EACH TIME YOU RUN
+% FOR EXAMPLE sortedData(?) to match the condition number
 
 
-
-       figure;
+       figure; % RESIDUAL ERROR PLOT.
        scatter (RO, err);
        
        
@@ -40,7 +41,6 @@ MT=mean(resp_time);% NEED TO CHANGE THE NUMBER OF SORTED DATA EACH TIME YOU RUN
 xlabel('relative orientation of previous trial'); % x-axis label
 ylabel('error on current trial (deg)'); % y-axis label
 
-%V = var(A)
 
 
 
