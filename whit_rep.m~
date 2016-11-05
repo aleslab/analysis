@@ -29,10 +29,10 @@ Var_err=var(err); % amount of variance in the error
 
 resp_time=(sortedData(2).trialData.responseTime); % mean response times for each con
 MT=mean(resp_time);% NEED TO CHANGE THE NUMBER OF SORTED DATA EACH TIME YOU RUN
-% FOR EXAMPLE sortedData(?) 
 
 
-       figure; % RESIDUAL ERROR PLOT.
+
+       figure;
        scatter (RO, err);
        
        
@@ -40,6 +40,7 @@ MT=mean(resp_time);% NEED TO CHANGE THE NUMBER OF SORTED DATA EACH TIME YOU RUN
 xlabel('relative orientation of previous trial'); % x-axis label
 ylabel('error on current trial (deg)'); % y-axis label
 
+%V = var(A)
 
 
 
