@@ -113,6 +113,10 @@ allChangepointData = [[participantData(1).psychData(3).data(:,1)] [participantDa
     [participantData(7).psychData(3).data(:,1)] [participantData(8).psychData(3).data(:,1)] ...
     [participantData(9).psychData(3).data(:,1)] [participantData(10).psychData(3).data(:,1)]];
 
+allChangepointDataTable = array2table(allChangepointData);
+
+writetable(allChangepointDataTable, 'allChangePointThresholds.csv');
+
 %all individual conditions
 cADM = allChangepointData(1,:); %ALL ADM for changepoint
 cADS = allChangepointData(2,:);
@@ -219,6 +223,10 @@ allStartEndData = [[participantData(1).psychData(5).data(:,1)] [participantData(
     [participantData(5).psychData(5).data(:,1)] [participantData(6).psychData(5).data(:,1)] ...
     [participantData(7).psychData(5).data(:,1)] [participantData(8).psychData(5).data(:,1)] ...
     [participantData(9).psychData(5).data(:,1)] [participantData(10).psychData(5).data(:,1)]];
+
+allStartEndDataTable = array2table(allStartEndData);
+
+writetable(allStartEndDataTable, 'allStartEndThresholds.csv');
 
 %all individual conditions
 seADM = allStartEndData(1,:); %ALL ADM for changepoint
