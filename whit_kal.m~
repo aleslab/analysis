@@ -6,7 +6,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 %iCond =2; %When you have only 1 condition
 %respOri = [sortedData(iCond).trialData(:).respOri];
 %stimOri = [sortedData(iCond).trialData(:).stimOri];
-iCond = 2;
+iCond = 1;
 respOri=[sortedData(1).trialData.respOri];
 stimOri=[sortedData(1).trialData.stimOri];
 
