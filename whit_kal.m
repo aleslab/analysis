@@ -17,6 +17,10 @@ distal_initial_time_point = 1;
 distal = 100;
 proximal = 120;
 
+% var_prox=var(err); % amount of variance in the error
+% var_dist=var(stimOri); %variance in the stimOri
+% gain=var_dist / (var_dist + var_prox);
+
 gain = distal / (distal +proximal);
 estimate = estimate+gain*value - estimate;
 
