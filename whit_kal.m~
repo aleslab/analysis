@@ -1,12 +1,17 @@
 
 
-fileToLoad = uigetfile; load(fileToLoad);
-[sortedData] = organizeData(sessionInfo,experimentData);
+%Choose and load a data file:
+[filename pathname] = uigetfile()
+%load data
 
+load(fullfile(pathname,filename))
+[sortedTrialData] = organizeData(sessionInfo,experimentData)
 
-iCond =2; %When you have only 1 condition
-respOri = [sortedData(iCond).trialData(:).respOri];
-stimOri = [sortedData(iCond).trialData(:).stimOri];
+opts = optimoptions(@lsqnonlin,'display','off');
+
+nCond = length(sortedTrialData);
+chunkTime = 15; % in seconds
+chunkSize = round(chunkTime*sessionInfo.expInfo.monRefresh);
 
 
 
