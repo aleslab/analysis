@@ -3,11 +3,18 @@
 fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
+%iCond =2; %When you have only 1 condition
+%respOri = [sortedData(iCond).trialData(:).respOri];
+%stimOri = [sortedData(iCond).trialData(:).stimOri];
+iCond = 1;
+respOri=[sortedData(1).trialData.respOri];
+stimOri=[sortedData(1).trialData.stimOri];
 
-iCond =2; %When you have only 1 condition
-respOri = [sortedData(iCond).trialData(:).respOri];
-stimOri = [sortedData(iCond).trialData(:).stimOri];
-
+respOri_Initial_time_point=0;
+Pinitial=1;
+R=var(err); % amount of variance in the error
+P=var(stimOri); %variance in the stimOri
+gain= P / (P + R);
 
 
 Xinitial_time_point=0;

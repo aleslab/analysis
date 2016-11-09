@@ -1,18 +1,20 @@
 
 
-%Choose and load a data file:
-[filename pathname] = uigetfile()
-%load data
+fileToLoad = uigetfile; load(fileToLoad);
+[sortedData] = organizeData(sessionInfo,experimentData);
 
-load(fullfile(pathname,filename))
-[sortedTrialData] = organizeData(sessionInfo,experimentData)
+%iCond =2; %When you have only 1 condition
+%respOri = [sortedData(iCond).trialData(:).respOri];
+%stimOri = [sortedData(iCond).trialData(:).stimOri];
+iCond = 2;
+respOri=[sortedData(1).trialData.respOri];
+stimOri=[sortedData(1).trialData.stimOri];
 
-opts = optimoptions(@lsqnonlin,'display','off');
-
-nCond = length(sortedTrialData);
-chunkTime = 15; % in seconds
-chunkSize = round(chunkTime*sessionInfo.expInfo.monRefresh);
-
+respOri_Initial_time_point=0;
+Pinitial=1;
+R=var(err); % amount of variance in the error
+P=var(stimOri); %variance in the stimOri
+gain= P / (P + R);
 
 
 Xinitial_time_point=0;
