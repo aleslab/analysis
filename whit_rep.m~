@@ -35,20 +35,15 @@ MT=mean(resp_time);% NEED TO CHANGE THE NUMBER OF SORTED DATA EACH TIME YOU RUN
 
        figure; % RESIDUAL ERROR PLOT.
        scatter (RO, err);
+       figure
+       plot (var_dis, 'r');
+       hold on
+       plot (var_prox, 'g');
+       hold on 
        
        
 xlabel('relative orientation of previous trial'); % x-axis label
 ylabel('error on current trial (deg)'); % y-axis label
-
-
-% figure
-%        plot (var_dist, 'r');
-%        hold on
-%        plot (var_prox, 'g');
-%        hold on 
-%        plot (gain, 'b');
-%        
-
 
 filename={'P1_whit_com.mat'};
 save('P1_whit_com.mat');
