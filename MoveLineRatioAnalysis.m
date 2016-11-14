@@ -14,6 +14,10 @@ for iParticipant = 1:length(data);
     
 end
 
+allRatios = [AMratio; ASratio; CRSMratio; CRSSratio];
+allRatiosTable = array2table(allRatios);
+writetable(allRatiosTable, 'allRatios.csv');
+
 meanAMratio = mean(AMratio);
 meanASratio = mean(ASratio);
 meanCRSMratio = mean(CRSMratio);

@@ -7,13 +7,14 @@ analysisType = {'arcmin' ...
     'speed_change_changepoint_less',...
     'speed_change_start_end', ...
     'speed_change_start_end_less'};
+    
 
 % conditionList = {'MoveLine_accelerating_depth_midspeed'; ...
 %     'MoveLine_accelerating_depth_slow'; 'MoveLine_accelerating_lateral_midspeed'; ...
 %     'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
 %     'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
 
-shortenedCondList = {'ADM' 'ADS' 'ALM' 'ALS' 'CRSDM' 'CRSDS' 'CRSLM' 'CRSLS'};
+shortenedCondList = {'ADF' 'ADS' 'ALF' 'ALS' 'CRSDF' 'CRSDS' 'CRSLF' 'CRSLS'};
 
 for iParticipant = 1:length(participantCodes)
     currParticipantCode = cell2mat(participantCodes(iParticipant));
@@ -103,9 +104,8 @@ for iParticipant = 1:length(participantCodes)
 end
 
 close all;
-%% summary of every participant together in each analysis type
 
-%all speed_change_changepoint values from each participant
+%% all speed_change_changepoint values from each participant
 
 allChangepointData = [[participantData(1).psychData(3).data(:,1)] [participantData(2).psychData(3).data(:,1)] ...
     [participantData(3).psychData(3).data(:,1)] [participantData(4).psychData(3).data(:,1)] ...
@@ -156,127 +156,184 @@ allChangepointSEMs = [semcADM semcADS semcALM semcALS semcCRSDM semcCRSDS semcCR
 
 figure
 hold on
-bar(allChangepointAverages, 'g');
+bar(allChangepointAverages, 'r');
 errorbar(allChangepointAverages, allChangepointSEMs, '.k');
 set(gca, 'XTick', 1:1:8);
 set(gca, 'XTickLabel', shortenedCondList);
 set(gca, 'fontsize',13);
 ylim([0 0.8]);
 xlabel('Condition');
-ylabel('Mean threshold across participants (% change at point of change)');
+ylabel('Mean threshold across participants (proportion change)');
 
 figFileName = 'Average_speed_change_changepoint_Thresholds';
 fig = gcf;
 fig.PaperUnits = 'inches';
 fig.PaperPosition = [0 4 8.5 5.5];
-print(figFileName,'-dpdf','-r0')
-
-%ratios
-AMratio = avecALM/avecADM;
-ASratio = avecALS/avecADS;
-CRSMratio = avecCRSLM/avecCRSDM;
-CRSSratio = avecCRSLS/avecCRSDS;
+print(figFileName,'-dpdf','-r0');
 
 hold off 
 
-figure
-bar([AMratio ASratio], 'r');
-set(gca, 'XTick',1:1:2);
-set(gca, 'XTickLabel', {'Accel Midspeed' 'Accel Slow'});
-set(gca, 'fontsize',13);
-ylim([0 1]);
-xlabel('Condition');
-ylabel('ratio of average depth and lateral thresholds');
-title('Accelerating')
+%means of means in groupings from 3RMANOVA
+meanAllCRS = mean([avecCRSDM avecCRSDS avecCRSLM avecCRSLS]);
 
-figFileName = 'Accel_ratios';
-fig = gcf;
-fig.PaperUnits = 'inches';
-fig.PaperPosition = [0 4 8.5 5.5];
-print(figFileName,'-dpdf','-r0');
+meanAllAccel = mean([avecADM avecADS avecALM avecALS]);
 
-figure
-bar([CRSMratio CRSSratio], 'b');
-set(gca, 'XTick',1:1:2);
-set(gca, 'XTickLabel', {'CRS Midspeed' 'CRS Slow'});
-set(gca, 'fontsize',13);
-ylim([0 1]);
-xlabel('Condition');
-ylabel('ratio of average depth and lateral thresholds');
-title('Constant retinal speed');
+meanAllDepth = mean([avecCRSDM avecCRSDS avecADM avecADS]);
 
-figFileName = 'CRS_ratios';
-fig = gcf;
-fig.PaperUnits = 'inches';
-fig.PaperPosition = [0 4 8.5 5.5];
-print(figFileName,'-dpdf','-r0');
+meanAllLateral = mean([avecCRSLM avecCRSLS avecALM avecALS]);
 
-% figure(2)
-% hold on
-% bar([avecADM avecALM], 'r');
-% errorbar([avecADM avecALM], [semcADM semcALM], '.k');
+meanAllFast = mean([avecCRSDM avecCRSLM avecADM avecALM]);
 
-%adding all speed_change_start_end values from each participant
+meanAllSlow = mean([avecCRSDS avecCRSLS avecADS avecALS]);
 
-allStartEndData = [[participantData(1).psychData(5).data(:,1)] [participantData(2).psychData(5).data(:,1)] ...
-    [participantData(3).psychData(5).data(:,1)] [participantData(4).psychData(5).data(:,1)] ...
-    [participantData(5).psychData(5).data(:,1)] [participantData(6).psychData(5).data(:,1)] ...
-    [participantData(7).psychData(5).data(:,1)] [participantData(8).psychData(5).data(:,1)] ...
-    [participantData(9).psychData(5).data(:,1)] [participantData(10).psychData(5).data(:,1)]];
+%sems of means of groupings from 3RMANOVA
+semAllCRS = std([avecCRSDM avecCRSDS avecCRSLM avecCRSLS])/sqrt(length([avecCRSDM avecCRSDS avecCRSLM avecCRSLS]));
 
-allStartEndDataTable = array2table(allStartEndData);
+semAllAccel = std([avecADM avecADS avecALM avecALS])/sqrt(length([avecADM avecADS avecALM avecALS]));
 
-writetable(allStartEndDataTable, 'allStartEndThresholds.csv');
+semAllDepth = std([avecCRSDM avecCRSDS avecADM avecADS])/sqrt(length([avecCRSDM avecCRSDS avecADM avecADS]));
 
-%all individual conditions
-seADM = allStartEndData(1,:); %ALL ADM for changepoint
-seADS = allStartEndData(2,:);
-seALM = allStartEndData(3,:);
-seALS = allStartEndData(4,:);
-seCRSDM = allStartEndData(5,:);
-seCRSDS = allStartEndData(6,:);
-seCRSLM = allStartEndData(7,:);
-seCRSLS = allStartEndData(8,:);
+semAllLateral = std([avecCRSLM avecCRSLS avecALM avecALS])/sqrt(length([avecCRSLM avecCRSLS avecALM avecALS]));
 
-%averages
-aveseADM = mean(seADM); %ALL ADM means for changepoint
-aveseADS = mean(seADS);
-aveseALM = mean(seALM);
-aveseALS = mean(seALS);
-aveseCRSDM = mean(seCRSDM);
-aveseCRSDS = mean(seCRSDS);
-aveseCRSLM = mean(seCRSLM);
-aveseCRSLS = mean(seCRSLS);
+semAllFast = std([avecCRSDM avecCRSLM avecADM avecALM])/sqrt(length([avecCRSDM avecCRSLM avecADM avecALM]));
 
-allSEAverages = [aveseADM aveseADS aveseALM aveseALS aveseCRSDM aveseCRSDS aveseCRSLM aveseCRSLS];
+semAllSlow = std([avecCRSDS avecCRSLS avecADS avecALS])/sqrt(length([avecCRSDS avecCRSLS avecADS avecALS]));
 
-%sems
-
-semseADM = std(seADM)/sqrt(length(seADM));
-semseADS = std(seADS)/sqrt(length(seADS));
-semseALM = std(seALM)/sqrt(length(seALM));
-semseALS = std(seALS)/sqrt(length(seALS));
-semseCRSDM = std(seCRSDM)/sqrt(length(seCRSDM));
-semseCRSDS = std(seCRSDS)/sqrt(length(seCRSDS));
-semseCRSLM = std(seCRSLM)/sqrt(length(seCRSLM));
-semseCRSLS = std(seCRSLS)/sqrt(length(seCRSLS));
-
-allSESEMs = [semcADM semcADS semcALM semcALS semcCRSDM semcCRSDS semcCRSLM semcCRSLS];
+%AvC
+AvCmeans = [meanAllAccel meanAllCRS];
+AvCsems = [semAllAccel semAllCRS];
 
 figure
 hold on
-bar(allSEAverages, 'g');
-errorbar(allSEAverages, allSESEMs, '.k');
-set(gca, 'XTick', 1:1:8);
-set(gca, 'XTickLabel', shortenedCondList);
-set(gca, 'fontsize',13);
-ylim([0 0.8]);
-xlabel('Condition');
-ylabel('Mean threshold across participants (% change over full interval)');
+bar(AvCmeans, 'r');
+errorbar(AvCmeans, AvCsems, '.k');
 
-figFileName = 'Average_speed_change_start_end_Thresholds';
+set(gca, 'XTick', 1:1:2);
+set(gca, 'XTickLabel', {'Accelerating' 'Constant retinal speed'});
+set(gca, 'fontsize',13);
+ylim([0 0.4]);
+xlabel('group');
+ylabel('Mean threshold across group conditions (proportion change)');
+
+figFileName = 'AvC_graph';
 fig = gcf;
 fig.PaperUnits = 'inches';
 fig.PaperPosition = [0 4 8.5 5.5];
-print(figFileName,'-dpdf','-r0')
+print(figFileName,'-dpdf','-r0');
 
+hold off
+
+%DvL
+
+DvLmeans = [meanAllDepth meanAllLateral];
+DvLsems = [semAllDepth semAllLateral];
+
+figure
+hold on
+bar(DvLmeans, 'r');
+errorbar(DvLmeans, DvLsems, '.k');
+
+set(gca, 'XTick', 1:1:2);
+set(gca, 'XTickLabel', {'Depth' 'Lateral'});
+set(gca, 'fontsize',13);
+ylim([0 0.4]);
+xlabel('Group');
+ylabel('Mean threshold across group conditions (proportion change)');
+
+figFileName = 'DvL_graph';
+fig = gcf;
+fig.PaperUnits = 'inches';
+fig.PaperPosition = [0 4 8.5 5.5];
+print(figFileName,'-dpdf','-r0');
+
+hold off
+
+%FvS
+
+FvSmeans = [meanAllFast meanAllSlow];
+FvSsems = [semAllFast semAllSlow];
+
+figure
+hold on
+bar(FvSmeans, 'r');
+errorbar(FvSmeans, FvSsems, '.k');
+
+set(gca, 'XTick', 1:1:2);
+set(gca, 'XTickLabel', {'Fast speed' 'Slow speed'});
+set(gca, 'fontsize',13);
+ylim([0 0.4]);
+xlabel('Group');
+ylabel('Mean threshold across group conditions (proportion change)');
+
+figFileName = 'FvS_graph';
+fig = gcf;
+fig.PaperUnits = 'inches';
+fig.PaperPosition = [0 4 8.5 5.5];
+print(figFileName,'-dpdf','-r0');
+
+hold off
+
+%% adding all speed_change_start_end values from each participant
+% 
+% allStartEndData = [[participantData(1).psychData(5).data(:,1)] [participantData(2).psychData(5).data(:,1)] ...
+%     [participantData(3).psychData(5).data(:,1)] [participantData(4).psychData(5).data(:,1)] ...
+%     [participantData(5).psychData(5).data(:,1)] [participantData(6).psychData(5).data(:,1)] ...
+%     [participantData(7).psychData(5).data(:,1)] [participantData(8).psychData(5).data(:,1)] ...
+%     [participantData(9).psychData(5).data(:,1)] [participantData(10).psychData(5).data(:,1)]];
+% 
+% allStartEndDataTable = array2table(allStartEndData);
+% 
+% writetable(allStartEndDataTable, 'allStartEndThresholds.csv');
+% 
+% %all individual conditions
+% seADM = allStartEndData(1,:); %ALL ADM for changepoint
+% seADS = allStartEndData(2,:);
+% seALM = allStartEndData(3,:);
+% seALS = allStartEndData(4,:);
+% seCRSDM = allStartEndData(5,:);
+% seCRSDS = allStartEndData(6,:);
+% seCRSLM = allStartEndData(7,:);
+% seCRSLS = allStartEndData(8,:);
+% 
+% %averages
+% aveseADM = mean(seADM); %ALL ADM means for changepoint
+% aveseADS = mean(seADS);
+% aveseALM = mean(seALM);
+% aveseALS = mean(seALS);
+% aveseCRSDM = mean(seCRSDM);
+% aveseCRSDS = mean(seCRSDS);
+% aveseCRSLM = mean(seCRSLM);
+% aveseCRSLS = mean(seCRSLS);
+% 
+% allSEAverages = [aveseADM aveseADS aveseALM aveseALS aveseCRSDM aveseCRSDS aveseCRSLM aveseCRSLS];
+% 
+% %sems
+% 
+% semseADM = std(seADM)/sqrt(length(seADM));
+% semseADS = std(seADS)/sqrt(length(seADS));
+% semseALM = std(seALM)/sqrt(length(seALM));
+% semseALS = std(seALS)/sqrt(length(seALS));
+% semseCRSDM = std(seCRSDM)/sqrt(length(seCRSDM));
+% semseCRSDS = std(seCRSDS)/sqrt(length(seCRSDS));
+% semseCRSLM = std(seCRSLM)/sqrt(length(seCRSLM));
+% semseCRSLS = std(seCRSLS)/sqrt(length(seCRSLS));
+% 
+% allSESEMs = [semcADM semcADS semcALM semcALS semcCRSDM semcCRSDS semcCRSLM semcCRSLS];
+% 
+% figure
+% hold on
+% bar(allSEAverages, 'g');
+% errorbar(allSEAverages, allSESEMs, '.k');
+% set(gca, 'XTick', 1:1:8);
+% set(gca, 'XTickLabel', shortenedCondList);
+% set(gca, 'fontsize',13);
+% ylim([0 0.8]);
+% xlabel('Condition');
+% ylabel('Mean threshold across participants (% change over full interval)');
+% 
+% figFileName = 'Average_speed_change_start_end_Thresholds';
+% fig = gcf;
+% fig.PaperUnits = 'inches';
+% fig.PaperPosition = [0 4 8.5 5.5];
+% print(figFileName,'-dpdf','-r0')
+% 
