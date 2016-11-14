@@ -4,13 +4,13 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 
-iCond =3; %When you have only 1 condition
+iCond =1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
 
 
-    for i=  3:length(respOri);
+    for i=  2:length(respOri);
         
         
        

@@ -21,8 +21,8 @@ estimate_initial_time_point = 0;%define value for first Xhat
 
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
-distal = 1142;
-proximal = 136.14;
+distal = var_dist;
+proximal = var_prox;
 
 % var_prox=var(err); % amount of variance in the error
 % var_dist=var(stimOri); %variance in the stimOri
