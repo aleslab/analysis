@@ -4,20 +4,20 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 
-iCond =2; %When you have only 1 condition
+iCond =3; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
 
 
-    for i=  2:length(respOri);
+    for i=  3:length(respOri);
         
         
        
         err(i) = minAngleDiff(respOri(i), stimOri(i));
         RO(i) = minAngleDiff(stimOri(i-1), stimOri(i));
 
-         
+        
     end 
          
 
@@ -31,6 +31,8 @@ gain=var_dist / (var_dist + var_prox);
 resp_time=(sortedData(3).trialData.responseTime); % mean response times for each con
 MT=mean(resp_time);% NEED TO CHANGE THE NUMBER OF SORTED DATA EACH TIME YOU RUN
 % FOR EXAMPLE sortedData(?) to match the condition number
+
+%cor=(corrcoef(respOri(i),stimOri(i-1));
 
 
        figure; % RESIDUAL ERROR PLOT.
@@ -50,9 +52,9 @@ ylabel('error on current trial (deg)'); % y-axis label
 %        
 
 
-filename={'P1_whit_com.mat'};
-save('P1_whit_com.mat');
-
+% filename={'P1_whit_com.mat'};
+% save('P1_whit_com.mat');
+% 
 
     
 
