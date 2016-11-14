@@ -21,8 +21,8 @@ estimate_initial_time_point = 0;%define value for first Xhat
 
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
-distal = ;
-proximal = 66.22;
+distal = 1142;
+proximal = 136.14;
 
 % var_prox=var(err); % amount of variance in the error
 % var_dist=var(stimOri); %variance in the stimOri
@@ -40,14 +40,20 @@ for i= 1:length (value);
     
 end
 
-plot (value);
+%plot (value);
 
 % plot (gain, 'r');
 % hold on
 
 
 
-
+% plot (p_response,'g');
+% hold on
+% plot (value, 'b');
+% plot (estimate, 'c*');
+% legend ('p_response', 'actual_stimOri', 'modelled kalman resposne given calibrated gain')
+% %legend('Stim movement', 'how the kalman tracks stim', 'how partcipant tracks ') 
+% % 
 
 
 
