@@ -127,6 +127,7 @@ cCRSDS = allChangepointData(6,:);
 cCRSLM = allChangepointData(7,:);
 cCRSLS = allChangepointData(8,:);
 
+%for every condition main graph
 %averages
 avecADM = mean(cADM); %ALL ADM means for changepoint
 avecADS = mean(cADS);
@@ -161,7 +162,7 @@ errorbar(allChangepointAverages, allChangepointSEMs, '.k');
 set(gca, 'XTick', 1:1:8);
 set(gca, 'XTickLabel', shortenedCondList);
 set(gca, 'fontsize',13);
-ylim([0 0.8]);
+ylim([0 0.5]);
 xlabel('Condition');
 ylabel('Mean threshold across participants (proportion change)');
 
@@ -173,31 +174,40 @@ print(figFileName,'-dpdf','-r0');
 
 hold off 
 
-%means of means in groupings from 3RMANOVA
-meanAllCRS = mean([avecCRSDM avecCRSDS avecCRSLM avecCRSLS]);
+%for main effect graphs from 3RMANOVA
+allAccel = horzcat(cADM, cADS, cALM, cALS);
+allCRS = horzcat(cCRSDM, cCRSDS, cCRSLM, cCRSLS);
+allDepth = horzcat(cADM, cADS, cCRSDM, cCRSDS);
+allLateral = horzcat(cALM, cALS, cCRSLM, cCRSLS);
+allFast = horzcat(cADM, cALM, cCRSDM, cCRSLM);
+allSlow = horzcat(cADS, cALS, cCRSDS, cCRSLS);
 
-meanAllAccel = mean([avecADM avecADS avecALM avecALS]);
 
-meanAllDepth = mean([avecCRSDM avecCRSDS avecADM avecADS]);
+%means of groupings from 3RMANOVA
+meanAllCRS = mean(allCRS);
 
-meanAllLateral = mean([avecCRSLM avecCRSLS avecALM avecALS]);
+meanAllAccel = mean(allAccel);
 
-meanAllFast = mean([avecCRSDM avecCRSLM avecADM avecALM]);
+meanAllDepth = mean(allDepth);
 
-meanAllSlow = mean([avecCRSDS avecCRSLS avecADS avecALS]);
+meanAllLateral = mean(allLateral);
 
-%sems of means of groupings from 3RMANOVA
-semAllCRS = std([avecCRSDM avecCRSDS avecCRSLM avecCRSLS])/sqrt(length([avecCRSDM avecCRSDS avecCRSLM avecCRSLS]));
+meanAllFast = mean(allFast);
 
-semAllAccel = std([avecADM avecADS avecALM avecALS])/sqrt(length([avecADM avecADS avecALM avecALS]));
+meanAllSlow = mean(allSlow);
 
-semAllDepth = std([avecCRSDM avecCRSDS avecADM avecADS])/sqrt(length([avecCRSDM avecCRSDS avecADM avecADS]));
+%sems of groupings from 3RMANOVA
+semAllCRS = std(allCRS)/sqrt(length(allCRS));
 
-semAllLateral = std([avecCRSLM avecCRSLS avecALM avecALS])/sqrt(length([avecCRSLM avecCRSLS avecALM avecALS]));
+semAllAccel = std(allAccel)/sqrt(length(allAccel));
 
-semAllFast = std([avecCRSDM avecCRSLM avecADM avecALM])/sqrt(length([avecCRSDM avecCRSLM avecADM avecALM]));
+semAllDepth = std(allDepth)/sqrt(length(allDepth));
 
-semAllSlow = std([avecCRSDS avecCRSLS avecADS avecALS])/sqrt(length([avecCRSDS avecCRSLS avecADS avecALS]));
+semAllLateral = std(allLateral)/sqrt(length(allLateral));
+
+semAllFast = std(allFast)/sqrt(length(allFast));
+
+semAllSlow = std(allSlow)/sqrt(length(allSlow));
 
 %AvC
 AvCmeans = [meanAllAccel meanAllCRS];
@@ -211,7 +221,7 @@ errorbar(AvCmeans, AvCsems, '.k');
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Accelerating' 'Constant retinal speed'});
 set(gca, 'fontsize',13);
-ylim([0 0.4]);
+ylim([0 0.5]);
 xlabel('group');
 ylabel('Mean threshold across group conditions (proportion change)');
 
@@ -236,7 +246,7 @@ errorbar(DvLmeans, DvLsems, '.k');
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Depth' 'Lateral'});
 set(gca, 'fontsize',13);
-ylim([0 0.4]);
+ylim([0 0.5]);
 xlabel('Group');
 ylabel('Mean threshold across group conditions (proportion change)');
 
@@ -261,11 +271,80 @@ errorbar(FvSmeans, FvSsems, '.k');
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Fast speed' 'Slow speed'});
 set(gca, 'fontsize',13);
-ylim([0 0.4]);
+ylim([0 0.5]);
 xlabel('Group');
 ylabel('Mean threshold across group conditions (proportion change)');
 
 figFileName = 'FvS_graph';
+fig = gcf;
+fig.PaperUnits = 'inches';
+fig.PaperPosition = [0 4 8.5 5.5];
+print(figFileName,'-dpdf','-r0');
+
+hold off
+
+%interaction effects from 3RMANOVA
+
+bothDepthSlow = horzcat(cADS, cCRSDS);
+bothDepthFast = horzcat(cADM, cCRSDM);
+bothLateralSlow = horzcat(cALS, cCRSLS);
+bothLateralFast = horzcat(cALM, cCRSLM);
+
+meanDepthSlow = mean(bothDepthSlow);
+meanDepthFast = mean(bothDepthFast);
+meanLateralSlow = mean(bothLateralSlow);
+meanLateralFast = mean(bothLateralFast);
+
+semDepthSlow = std(bothDepthSlow)/sqrt(length(bothDepthSlow));
+semDepthFast = std(bothDepthFast)/sqrt(length(bothDepthFast));
+semLateralSlow = std(bothLateralSlow)/sqrt(length(bothLateralSlow));
+semLateralFast = std(bothLateralFast)/sqrt(length(bothLateralFast));
+
+%slow-fast on axis
+sfMeanDepth = [meanDepthSlow, meanDepthFast];
+sfMeanLateral = [meanLateralSlow, meanLateralFast];
+sfSEMDepth = [semDepthSlow, semDepthFast];
+sfSEMLateral = [semLateralSlow, semLateralFast];
+
+figure
+hold on
+errorbar(sfMeanDepth, sfSEMDepth, '-xk');
+errorbar(sfMeanLateral, sfSEMLateral, '-xb');
+legend({'Depth', 'Lateral'});
+set(gca, 'XTick', 1:1:2);
+set(gca, 'XTickLabel', {'Slow' 'Fast'});
+set(gca, 'fontsize',13);
+ylim([0 0.5]);
+xlabel('Speed');
+ylabel('Mean threshold across group conditions (proportion change)');
+
+figFileName = 'slowfast_interaction_graph';
+fig = gcf;
+fig.PaperUnits = 'inches';
+fig.PaperPosition = [0 4 8.5 5.5];
+print(figFileName,'-dpdf','-r0');
+
+hold off
+
+%depth-Lateral on axis
+dlMeanSlow = [meanDepthSlow, meanLateralSlow];
+dlMeanFast = [meanDepthFast, meanLateralFast];
+dlSEMSlow = [semDepthSlow semLateralSlow];
+dlSEMFast = [semDepthFast semLateralFast];
+
+figure
+hold on
+errorbar(dlMeanSlow, dlSEMSlow, '-xk');
+errorbar(dlMeanFast, dlSEMFast, '-xb');
+legend({'Slow', 'Fast'});
+set(gca, 'XTick', 1:1:2);
+set(gca, 'XTickLabel', {'Depth' 'Lateral'});
+set(gca, 'fontsize',13);
+ylim([0 0.5]);
+xlabel('Dimension');
+ylabel('Mean threshold across group conditions (proportion change)');
+
+figFileName = 'depthlateral_interaction_graph';
 fig = gcf;
 fig.PaperUnits = 'inches';
 fig.PaperPosition = [0 4 8.5 5.5];
