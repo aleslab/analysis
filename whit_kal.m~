@@ -7,7 +7,6 @@ clc;
 
 value=(stimOri);
 p_response = (respOri);
-clear estimate;
 % % value=(respOri);
 % % actual=(stimOri);
 % fileToLoad = uigetfile; load(fileToLoad);
@@ -29,8 +28,8 @@ proximal = var_prox;
 % var_dist=var(stimOri); %variance in the stimOri
 % gain=var_dist / (var_dist + var_prox);
 
-gain = .99999;distal / (distal +proximal);
-%estimate = estimate+gain*value - estimate;
+gain = ;distal / (distal +proximal);
+estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
 RO(1)  = 0;
