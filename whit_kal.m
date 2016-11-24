@@ -1,12 +1,16 @@
 
-clc;
-
+%clc;
+clear all;
 
 %value = [0.39	0.50	0.48	0.29	0.25	0.32	0.34	0.48	0.41	0.45]; % value = actual stim ori
 
+stimOri = wrapTo90(360*rand(200,1));
 
-value=(stimOri);
-p_response = (respOri);
+%This line is to simulate proximal noise from the observer. 
+%value=(stimOri+randn(size(stimOri))*sqrt(var_prox));
+value = stimOri;
+
+p_response = stimOri;%(respOri);
 clear estimate;
 % % value=(respOri);
 % % actual=(stimOri);
@@ -22,36 +26,36 @@ estimate_initial_time_point = 0;%define value for first Xhat
 
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
-distal = var_dist;
-proximal = var_prox;
+% distal = var_dist;
+% proximal = var_prox;
 
 % var_prox=var(err); % amount of variance in the error
 % var_dist=var(stimOri); %variance in the stimOri
 % gain=var_dist / (var_dist + var_prox);
 
-gain = .99999;distal / (distal +proximal);
+gain = .9;%distal / (distal +proximal);
 %estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
 RO(1)  = 0;
 for i= 2:length (value);
-    estimate(i)=estimate(i-1);
+    %estimate(i)=estimate(i-1);
 
-    estimate(i)=estimate(i-1) + gain*(value(i)-estimate(i));
+    estimate(i)=estimate(i-1) + gain*minAngleDiff(value(i),estimate(i-1));
+    estimate(i) = wrapTo90(estimate(i));
     %gain(i)=(1-gain*(distal(i)));
     
-     err(i) = minAngleDiff(estimate(i), value(i));
-     RO(i)=  minAngleDiff (value(i-1),value(i));
-  
+     err(i) = minAngleDiff(estimate(i), stimOri(i));
+     RO(i)=  minAngleDiff (stimOri(i-1),stimOri(i));
     
 end
-
 %plot (value);
 
 % plot (gain, 'r');
 % hold on
 
 
+figure(101);
 clf;
 plot (p_response,'.');
 
@@ -76,6 +80,7 @@ legend ('p_response', 'actual_stimOri', 'modelled kalman resposne given calibrat
 % grid on
  
 
-figure;
+figure(102);clf;
 scatter (RO, err);
-    
+
+
