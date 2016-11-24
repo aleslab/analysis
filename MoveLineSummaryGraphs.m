@@ -161,10 +161,10 @@ bar(allChangepointAverages, 'r');
 errorbar(allChangepointAverages, allChangepointSEMs, '.k');
 set(gca, 'XTick', 1:1:8);
 set(gca, 'XTickLabel', shortenedCondList);
-set(gca, 'fontsize',13);
+set(gca, 'fontsize',14);
 ylim([0 0.5]);
 xlabel('Condition');
-ylabel('Mean threshold across participants (proportion change)');
+ylabel('Mean thresholds (proportion)');
 
 figFileName = 'Average_speed_change_changepoint_Thresholds';
 fig = gcf;
@@ -214,20 +214,19 @@ AvCmeans = [meanAllAccel meanAllCRS];
 
 figure
 hold on
-bar(AvCmeans, 'r');
+bar(AvCmeans, 0.5, 'r');
 errorbar(AvCmeans, [CIaddValue, CIaddValue], '.k');
 
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Accelerating' 'Constant retinal speed'});
-set(gca, 'fontsize',13);
+set(gca, 'fontsize',17);
 ylim([0 0.5]);
-xlabel('Group');
-ylabel('Mean threshold across group conditions (proportion change)');
+ylabel('Mean thresholds (proportion)');
 
 figFileName = 'AvC_graph';
 fig = gcf;
 fig.PaperUnits = 'inches';
-fig.PaperPosition = [0 4 8.5 5.5];
+fig.PaperPosition = [0 4 5.5 5.5];
 print(figFileName,'-dpdf','-r0');
 
 hold off
@@ -238,20 +237,19 @@ DvLmeans = [meanAllDepth meanAllLateral];
 
 figure
 hold on
-bar(DvLmeans, 'r');
+bar(DvLmeans, 0.5, 'r');
 errorbar(DvLmeans, [CIaddValue, CIaddValue], '.k');
 
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Depth' 'Lateral'});
-set(gca, 'fontsize',13);
+set(gca, 'fontsize',17);
 ylim([0 0.5]);
-xlabel('Group');
-ylabel('Mean threshold across group conditions (proportion change)');
+ylabel('Mean thresholds (proportion)');
 
 figFileName = 'DvL_graph';
 fig = gcf;
 fig.PaperUnits = 'inches';
-fig.PaperPosition = [0 4 8.5 5.5];
+fig.PaperPosition = [0 4 5.5 5.5];
 print(figFileName,'-dpdf','-r0');
 
 hold off
@@ -262,20 +260,19 @@ FvSmeans = [meanAllFast meanAllSlow];
 
 figure
 hold on
-bar(FvSmeans, 'r');
+bar(FvSmeans, 0.5, 'r');
 errorbar(FvSmeans, [CIaddValue, CIaddValue], '.k');
 
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Fast speed' 'Slow speed'});
-set(gca, 'fontsize',13);
+set(gca, 'fontsize',17);
 ylim([0 0.5]);
-xlabel('Group');
-ylabel('Mean threshold across group conditions (proportion change)');
+ylabel('Mean thresholds (proportion)');
 
 figFileName = 'FvS_graph';
 fig = gcf;
 fig.PaperUnits = 'inches';
-fig.PaperPosition = [0 4 8.5 5.5];
+fig.PaperPosition = [0 4 5.5 5.5];
 print(figFileName,'-dpdf','-r0');
 
 hold off
@@ -303,15 +300,14 @@ errorbar(sfMeanLateral, [CIaddValue, CIaddValue], '-xb');
 legend({'Depth', 'Lateral'});
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Slow' 'Fast'});
-set(gca, 'fontsize',13);
+set(gca, 'fontsize',17);
 ylim([0 0.5]);
-xlabel('Speed');
-ylabel('Mean threshold across group conditions (proportion change)');
+ylabel('Mean thresholds (proportion)');
 
 figFileName = 'slowfast_interaction_graph';
 fig = gcf;
 fig.PaperUnits = 'inches';
-fig.PaperPosition = [0 4 8.5 5.5];
+fig.PaperPosition = [0 4 5.5 5.5];
 print(figFileName,'-dpdf','-r0');
 
 hold off
@@ -327,15 +323,14 @@ errorbar(dlMeanFast, [CIaddValue, CIaddValue], '-xb');
 legend({'Slow', 'Fast'});
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Depth' 'Lateral'});
-set(gca, 'fontsize',13);
+set(gca, 'fontsize',17);
 ylim([0 0.5]);
-xlabel('Dimension');
-ylabel('Mean threshold across group conditions (proportion change)');
+ylabel('Mean thresholds (proportion)');
 
 figFileName = 'depthlateral_interaction_graph';
 fig = gcf;
 fig.PaperUnits = 'inches';
-fig.PaperPosition = [0 4 8.5 5.5];
+fig.PaperPosition = [0 4 5.5 5.5];
 print(figFileName,'-dpdf','-r0');
 
 hold off
