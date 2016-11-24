@@ -174,6 +174,7 @@ print(figFileName,'-dpdf','-r0');
 
 hold off 
 
+%% 3 way repeated measures anova graph
 %for main effect graphs from 3RMANOVA
 allAccel = horzcat(cADM, cADS, cALM, cALS);
 allCRS = horzcat(cCRSDM, cCRSDS, cCRSLM, cCRSLS);
@@ -181,7 +182,6 @@ allDepth = horzcat(cADM, cADS, cCRSDM, cCRSDS);
 allLateral = horzcat(cALM, cALS, cCRSLM, cCRSLS);
 allFast = horzcat(cADM, cALM, cCRSDM, cCRSLM);
 allSlow = horzcat(cADS, cALS, cCRSDS, cCRSLS);
-
 
 %means of groupings from 3RMANOVA
 meanAllCRS = mean(allCRS);
@@ -196,33 +196,32 @@ meanAllFast = mean(allFast);
 
 meanAllSlow = mean(allSlow);
 
-%sems of groupings from 3RMANOVA
-semAllCRS = std(allCRS)/sqrt(length(allCRS));
+allNames = {'Accel'; 'CRS'; 'Depth'; 'Lateral'; 'Fast'; 'Slow'};
+allMeans = [meanAllAccel; meanAllCRS; meanAllDepth; meanAllLateral; meanAllFast; meanAllSlow];
 
-semAllAccel = std(allAccel)/sqrt(length(allAccel));
+%confidence interval calculations
 
-semAllDepth = std(allDepth)/sqrt(length(allDepth));
+MSw = (0.187 + 0.182 + 0.025 + 0.092 + 0.067 + 0.013 +0.012)/63; 
+%sum of all type III sum of square errors divided by the sum of their degrees of freedom
 
-semAllLateral = std(allLateral)/sqrt(length(allLateral));
+tValue = tinv(0.975, 63); % the value from the t distribution to use for getting repeated measures confidence intervals
 
-semAllFast = std(allFast)/sqrt(length(allFast));
+CIaddValue = (sqrt(MSw/10)).*tValue; %final confidence interval values are the mean +/- this value
 
-semAllSlow = std(allSlow)/sqrt(length(allSlow));
 
 %AvC
 AvCmeans = [meanAllAccel meanAllCRS];
-AvCsems = [semAllAccel semAllCRS];
 
 figure
 hold on
 bar(AvCmeans, 'r');
-errorbar(AvCmeans, AvCsems, '.k');
+errorbar(AvCmeans, [CIaddValue, CIaddValue], '.k');
 
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Accelerating' 'Constant retinal speed'});
 set(gca, 'fontsize',13);
 ylim([0 0.5]);
-xlabel('group');
+xlabel('Group');
 ylabel('Mean threshold across group conditions (proportion change)');
 
 figFileName = 'AvC_graph';
@@ -236,12 +235,11 @@ hold off
 %DvL
 
 DvLmeans = [meanAllDepth meanAllLateral];
-DvLsems = [semAllDepth semAllLateral];
 
 figure
 hold on
 bar(DvLmeans, 'r');
-errorbar(DvLmeans, DvLsems, '.k');
+errorbar(DvLmeans, [CIaddValue, CIaddValue], '.k');
 
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Depth' 'Lateral'});
@@ -261,12 +259,11 @@ hold off
 %FvS
 
 FvSmeans = [meanAllFast meanAllSlow];
-FvSsems = [semAllFast semAllSlow];
 
 figure
 hold on
 bar(FvSmeans, 'r');
-errorbar(FvSmeans, FvSsems, '.k');
+errorbar(FvSmeans, [CIaddValue, CIaddValue], '.k');
 
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Fast speed' 'Slow speed'});
@@ -295,21 +292,14 @@ meanDepthFast = mean(bothDepthFast);
 meanLateralSlow = mean(bothLateralSlow);
 meanLateralFast = mean(bothLateralFast);
 
-semDepthSlow = std(bothDepthSlow)/sqrt(length(bothDepthSlow));
-semDepthFast = std(bothDepthFast)/sqrt(length(bothDepthFast));
-semLateralSlow = std(bothLateralSlow)/sqrt(length(bothLateralSlow));
-semLateralFast = std(bothLateralFast)/sqrt(length(bothLateralFast));
-
 %slow-fast on axis
 sfMeanDepth = [meanDepthSlow, meanDepthFast];
 sfMeanLateral = [meanLateralSlow, meanLateralFast];
-sfSEMDepth = [semDepthSlow, semDepthFast];
-sfSEMLateral = [semLateralSlow, semLateralFast];
 
 figure
 hold on
-errorbar(sfMeanDepth, sfSEMDepth, '-xk');
-errorbar(sfMeanLateral, sfSEMLateral, '-xb');
+errorbar(sfMeanDepth, [CIaddValue, CIaddValue], '-xk');
+errorbar(sfMeanLateral, [CIaddValue, CIaddValue], '-xb');
 legend({'Depth', 'Lateral'});
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Slow' 'Fast'});
@@ -329,13 +319,11 @@ hold off
 %depth-Lateral on axis
 dlMeanSlow = [meanDepthSlow, meanLateralSlow];
 dlMeanFast = [meanDepthFast, meanLateralFast];
-dlSEMSlow = [semDepthSlow semLateralSlow];
-dlSEMFast = [semDepthFast semLateralFast];
 
 figure
 hold on
-errorbar(dlMeanSlow, dlSEMSlow, '-xk');
-errorbar(dlMeanFast, dlSEMFast, '-xb');
+errorbar(dlMeanSlow, [CIaddValue, CIaddValue], '-xk');
+errorbar(dlMeanFast, [CIaddValue, CIaddValue], '-xb');
 legend({'Slow', 'Fast'});
 set(gca, 'XTick', 1:1:2);
 set(gca, 'XTickLabel', {'Depth' 'Lateral'});
