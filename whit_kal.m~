@@ -33,7 +33,7 @@ distal_initial_time_point = 1;
 % var_dist=var(stimOri); %variance in the stimOri
 % gain=var_dist / (var_dist + var_prox);
 
-gain = 0.9;%var_dist / (var_dist + var_prox);
+gain = 0.9%var_dist / (var_dist + var_prox);
 %estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
@@ -49,8 +49,10 @@ for i= 2:length (value);
      RO(i)=  minAngleDiff (stimOri(i-1),stimOri(i));
     
 end
+%plot (value);
 
-[R,P]=corrcoef(err,RO);
+% plot (gain, 'r');
+% hold on
 
 
 figure(101);
