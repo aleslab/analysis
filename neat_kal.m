@@ -1,24 +1,12 @@
-%27014471509;-57.3335435238649;-51.1634861330904;-150.364066752811;-47.8948887608929;27.1291776387804;137.057547347594;-140.530117657153;-36.5066023797064];
-%Z=[0.39	0.50	0.48	0.29	0.25	0.32	0.34	0.48	0.41	0.45];
-%B= [ 0.45 0.53 0.53 0.38 0.25 0.38 0.50 0.46 0.49];
-% [sortedData] = organizeData(sessionInfo, experimentData);
-% %[sortedData] = organizeData(experimentData);
-% 
-% 
-% iCond =1; %When you have only 1 condition
-% Z = [sortedData(iCond).trialData(:).respOri];
-% B = [sortedData(iCond).trialData(:).stimOri];
 
-% Z=(stimOri);
-% B= (respOri);
 
 fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 
 iCond =2; %When you have only 1 condition
-Z = [sortedData(iCond).trialData(:).respOri];
-B = [sortedData(iCond).trialData(:).stimOri];
+B = [sortedData(iCond).trialData(:).respOri];
+Z = [sortedData(iCond).trialData(:).stimOri];
 
 Xinitial_time_point=0;
 Pinitial=1;
