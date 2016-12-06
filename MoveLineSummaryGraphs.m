@@ -1,19 +1,23 @@
 
-participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'J' 'K'}; % 
+participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'J' 'K'}; 
 
-analysisType = {'arcmin' ...
-    'arcmin_less',...
-    'speed_change_changepoint', ...
-    'speed_change_changepoint_less',...
-    'speed_change_start_end', ...
-    'speed_change_start_end_less'};
+analysisType = {'speed_change_changepoint', 'speed_change_changepoint_arcmin', ...
+    'speed_change_full', 'speed_change_full_arcmin', 'start_arcmin', 'end_arcmin'};
+
+%for the code to work properly later, these need to be in the order:
+%1. 'speed_change_changepoint'
+%2. 'speed_change_changepoint_arcmin'
+%3. 'speed_change_full'
+%4. 'speed_change_full_arcmin'
+%5. 'start_arcmin'
+%6. 'end_arcmin'
     
-
 % conditionList = {'MoveLine_accelerating_depth_midspeed'; ...
 %     'MoveLine_accelerating_depth_slow'; 'MoveLine_accelerating_lateral_midspeed'; ...
 %     'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
 %     'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
 
+%these conditions are abbreviated here:
 shortenedCondList = {'ADF' 'ADS' 'ALF' 'ALS' 'CRSDF' 'CRSDS' 'CRSLF' 'CRSLS'};
 
 for iParticipant = 1:length(participantCodes)
@@ -25,10 +29,8 @@ for iParticipant = 1:length(participantCodes)
             currAnalysisType,'_', currParticipantCode, '.csv');
         
         allPsychData = csvread(filename, 1, 1);
-        usefulPsychData = allPsychData(:, 1:8); %all rows giving all
-        %conditions, then only rows 1-8, giving only the threshold, slope,
-        %CIs for the threshold, CIs for the slope, SE for the threshold and
-        %SE for the slope.
+        usefulPsychData = allPsychData(:, 1:7); %Currently only interested 
+        %in what's in columns 1, 3, 4 and 7. These information about the thresholds.
         
         %threshold information
         thresholds = usefulPsychData(:,1);
@@ -38,63 +40,34 @@ for iParticipant = 1:length(participantCodes)
         thresholdUpperCIsize = thresholdUpperCI - thresholds;
         thresholdSE = usefulPsychData(:,7);
         
-        %slope information
-        slopes = usefulPsychData(:,2);
-        slopeLowerCI = usefulPsychData(:,5);
-        slopeUpperCI = usefulPsychData(:,6);
-        slopeLowerCIsize = slopes - slopeLowerCI;
-        slopeUpperCIsize = slopeUpperCI - slopes;
-        slopeSE = usefulPsychData(:,8);
+        figure
+        hold on
+        bar(thresholds, 'r');
+        errorbar(1:1:8, thresholds, thresholdLowerCIsize, thresholdUpperCIsize, '.k');
+        grid on
+        set(gca, 'XTick', 1:1:8);
+        set(gca, 'XTickLabel', shortenedCondList);
+        set(gca, 'fontsize',13);
+        xlabel('Condition');
+        ylabel('75% threshold');
+        thresholdTitle = strcat('Threshold_', currAnalysisType, '_', currParticipantCode);
+        title(thresholdTitle, 'interpreter', 'none');
         
-%         figure
-%         hold on
-%         bar(thresholds, 'r');
-%         errorbar(1:1:8, thresholds, thresholdLowerCIsize, thresholdUpperCIsize, '.k');
-%         grid on
-%         set(gca, 'XTick', 1:1:8);
-%         set(gca, 'XTickLabel', shortenedCondList);
-%         set(gca, 'fontsize',13);
-%         xlabel('Condition');
-%         ylabel('75% threshold');
-%         thresholdTitle = strcat('Threshold_', currAnalysisType, '_', currParticipantCode);
-%         title(thresholdTitle, 'interpreter', 'none');
-%         
-%         thresholdfigFileName = strcat('threshold_summary_graph_', currAnalysisType, '_', currParticipantCode, '.pdf');
-%         fig = gcf;
-%         fig.PaperUnits = 'inches';
-%         fig.PaperPosition = [0 5 8.5 5.5];
-%         print(thresholdfigFileName,'-dpdf','-r0')
-%         
-%         hold off
-%         
-%         figure
-%         hold on
-%         bar(slopes, 'b');
-%         errorbar(1:1:8, slopes, slopeLowerCIsize, slopeUpperCIsize, '.k');
-%         grid on %this puts a grid in the background of your graph to make
-%         %it a bit clearer to look at
-%         set(gca, 'XTick', 1:1:8);
-%         set(gca, 'XTickLabel', shortenedCondList);
-%         set(gca, 'fontsize',13);
-%         xlabel('Condition');
-%         ylabel('Slope at 75% correct');
-%         slopeTitle = strcat('Slope_', currAnalysisType, '_', currParticipantCode);
-%         title(slopeTitle,'interpreter', 'none');
-%         
-%         slopesfigFileName = strcat('slopes_summary_graph_', currAnalysisType, '_', currParticipantCode, '.pdf');
-%         
-%         %this allows you to specify the size that the figure will be
-%         %printed as in a pdf, rather than just the default.
-%         fig = gcf; %you say fig is the current figure handle
-%         fig.PaperUnits = 'inches'; %say the paper units are inches
-%         fig.PaperPosition = [0 5 8.5 5.5]; %you then specify the x and y
-%         %starting coordinates of the graph on the paper followed by the
-%         %size in inches of the graph
-%         print(slopesfigFileName,'-dpdf','-r0') %this prints the current
-%         %figure with the specified size to the name in slopesfigFileName as
-%         %a pdf.
-%         
-%         hold off
+        thresholdfigFileName = strcat('threshold_summary_graph_', currAnalysisType, '_', currParticipantCode, '.pdf');
+        
+        %this allows you to specify the size that the figure will be
+        %printed as in a pdf, rather than just the default.
+        fig = gcf; %you say fig is the current figure handle
+        fig.PaperUnits = 'inches'; %say the paper units are inches
+        fig.PaperPosition = [0 5 8.5 5.5]; %you then specify the x and y
+        %starting coordinates of the graph on the paper followed by the
+        %size in inches of the graph
+        print(thresholdfigFileName,'-dpdf','-r0') %this prints the current
+        %figure with the specified size to the name in slopesfigFileName as
+        %a pdf.
+        
+        hold off
+       
         
         psychData(iAnalysis).data = usefulPsychData;
         
@@ -103,15 +76,15 @@ for iParticipant = 1:length(participantCodes)
     participantData(iParticipant).psychData = psychData;
 end
 
-close all;
+%close all;
 
-%% all speed_change_changepoint values from each participant
+%% speed_change_changepoint (proportion) analysis
 
-allChangepointData = [[participantData(1).psychData(3).data(:,1)] [participantData(2).psychData(3).data(:,1)] ...
-    [participantData(3).psychData(3).data(:,1)] [participantData(4).psychData(3).data(:,1)] ...
-    [participantData(5).psychData(3).data(:,1)] [participantData(6).psychData(3).data(:,1)] ...
-    [participantData(7).psychData(3).data(:,1)] [participantData(8).psychData(3).data(:,1)] ...
-    [participantData(9).psychData(3).data(:,1)] [participantData(10).psychData(3).data(:,1)]];
+allChangepointData = [[participantData(1).psychData(1).data(:,1)] [participantData(2).psychData(1).data(:,1)] ...
+    [participantData(3).psychData(1).data(:,1)] [participantData(4).psychData(1).data(:,1)] ...
+    [participantData(5).psychData(1).data(:,1)] [participantData(6).psychData(1).data(:,1)] ...
+    [participantData(7).psychData(1).data(:,1)] [participantData(8).psychData(1).data(:,1)] ...
+    [participantData(9).psychData(1).data(:,1)] [participantData(10).psychData(1).data(:,1)]];
 
 allChangepointDataTable = array2table(allChangepointData);
 
@@ -174,7 +147,7 @@ print(figFileName,'-dpdf','-r0');
 
 hold off 
 
-%% 3 way repeated measures anova graph
+% 3 way repeated measures anova graph for changepoint proportion
 %for main effect graphs from 3RMANOVA
 allAccel = horzcat(cADM, cADS, cALM, cALS);
 allCRS = horzcat(cCRSDM, cCRSDS, cCRSLM, cCRSLS);
@@ -335,67 +308,4 @@ print(figFileName,'-dpdf','-r0');
 
 hold off
 
-%% adding all speed_change_start_end values from each participant
-% 
-% allStartEndData = [[participantData(1).psychData(5).data(:,1)] [participantData(2).psychData(5).data(:,1)] ...
-%     [participantData(3).psychData(5).data(:,1)] [participantData(4).psychData(5).data(:,1)] ...
-%     [participantData(5).psychData(5).data(:,1)] [participantData(6).psychData(5).data(:,1)] ...
-%     [participantData(7).psychData(5).data(:,1)] [participantData(8).psychData(5).data(:,1)] ...
-%     [participantData(9).psychData(5).data(:,1)] [participantData(10).psychData(5).data(:,1)]];
-% 
-% allStartEndDataTable = array2table(allStartEndData);
-% 
-% writetable(allStartEndDataTable, 'allStartEndThresholds.csv');
-% 
-% %all individual conditions
-% seADM = allStartEndData(1,:); %ALL ADM for changepoint
-% seADS = allStartEndData(2,:);
-% seALM = allStartEndData(3,:);
-% seALS = allStartEndData(4,:);
-% seCRSDM = allStartEndData(5,:);
-% seCRSDS = allStartEndData(6,:);
-% seCRSLM = allStartEndData(7,:);
-% seCRSLS = allStartEndData(8,:);
-% 
-% %averages
-% aveseADM = mean(seADM); %ALL ADM means for changepoint
-% aveseADS = mean(seADS);
-% aveseALM = mean(seALM);
-% aveseALS = mean(seALS);
-% aveseCRSDM = mean(seCRSDM);
-% aveseCRSDS = mean(seCRSDS);
-% aveseCRSLM = mean(seCRSLM);
-% aveseCRSLS = mean(seCRSLS);
-% 
-% allSEAverages = [aveseADM aveseADS aveseALM aveseALS aveseCRSDM aveseCRSDS aveseCRSLM aveseCRSLS];
-% 
-% %sems
-% 
-% semseADM = std(seADM)/sqrt(length(seADM));
-% semseADS = std(seADS)/sqrt(length(seADS));
-% semseALM = std(seALM)/sqrt(length(seALM));
-% semseALS = std(seALS)/sqrt(length(seALS));
-% semseCRSDM = std(seCRSDM)/sqrt(length(seCRSDM));
-% semseCRSDS = std(seCRSDS)/sqrt(length(seCRSDS));
-% semseCRSLM = std(seCRSLM)/sqrt(length(seCRSLM));
-% semseCRSLS = std(seCRSLS)/sqrt(length(seCRSLS));
-% 
-% allSESEMs = [semcADM semcADS semcALM semcALS semcCRSDM semcCRSDS semcCRSLM semcCRSLS];
-% 
-% figure
-% hold on
-% bar(allSEAverages, 'g');
-% errorbar(allSEAverages, allSESEMs, '.k');
-% set(gca, 'XTick', 1:1:8);
-% set(gca, 'XTickLabel', shortenedCondList);
-% set(gca, 'fontsize',13);
-% ylim([0 0.8]);
-% xlabel('Condition');
-% ylabel('Mean threshold across participants (% change over full interval)');
-% 
-% figFileName = 'Average_speed_change_start_end_Thresholds';
-% fig = gcf;
-% fig.PaperUnits = 'inches';
-% fig.PaperPosition = [0 4 8.5 5.5];
-% print(figFileName,'-dpdf','-r0')
-% 
+%% speed_change_changepoint_arcmin analysis
