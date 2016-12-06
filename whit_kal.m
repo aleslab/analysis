@@ -2,15 +2,15 @@
 %clc;
 clear all;
 
-%value = [0.39	0.50	0.48	0.29	0.25	0.32	0.34	0.48	0.41	0.45]; % value = actual stim ori
 
 stimOri = wrapTo90(360*rand(200,1));
 
 %This line is to simulate proximal noise from the observer. 
 %value=(stimOri+randn(size(stimOri))*sqrt(var_prox));
 value = stimOri;
+%stimOri = value;
 
-p_response = stimOri;%(respOri);
+p_response = stimOri;
 clear estimate;
 % % value=(respOri);
 % % actual=(stimOri);
@@ -33,52 +33,60 @@ distal_initial_time_point = 1;
 % var_dist=var(stimOri); %variance in the stimOri
 % gain=var_dist / (var_dist + var_prox);
 
-gain = 0.9;%var_dist / (var_dist + var_prox);
+gain = .1;%var_dist / (var_dist + var_prox);
 %estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
 RO(1)  = 0;
+
 for i= 2:length (value);
     %estimate(i)=estimate(i-1);
 
+    %
     estimate(i)=estimate(i-1) + gain*minAngleDiff(value(i),estimate(i-1));
+    
+    
     estimate(i) = wrapTo90(estimate(i));
     %gain(i)=(1-gain*(distal(i)));
     
      err(i) = minAngleDiff(estimate(i), stimOri(i));
+     
      RO(i)=  minAngleDiff (stimOri(i-1),stimOri(i));
+     
+     
+     PE(i) = minAngleDiff(stimOri(i),p_response(i-1));
+    
     
 end
 
 [R,P]=corrcoef(err,RO);
 
 
+
 figure(101);
 clf;
-plot (p_response,'.');
+plot (p_response);
 
 hold on
-plot (value, 'bx');
+plot (stimOri, 'x');
 plot (estimate, 'c*');
 legend ('p_response', 'actual_stimOri', 'modelled kalman resposne given calibrated gain')
 %legend('Stim movement', 'how the kalman tracks stim', 'how partcipant tracks ') 
 % 
-
-
-
-
-
-
-% plot(Z,'m')
-% hold on;
-% plot(Xhat,'c')
-% plot(B, 'k')
-% legend('Stim movement', 'how the kalman tracks stim', 'how partcipant tracks ') 
 % 
-% grid on
- 
+% 
+% 
+% 
+% 
+% 
 
+%  
+% 
 figure(102);clf;
 scatter (RO, err);
 
+figure (103);clf;
+scatter (RO, PE);
 
+
+% 
