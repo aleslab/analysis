@@ -56,7 +56,7 @@ for i= 2:length (value);
      
      err(i) = minAngleDiff(estimate (i), stimOri(i));%whitney
      RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
-     PE(i) = minAngleDiff(stimOri(i),estimate(i-1));%PE
+     PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
     
     
 end
