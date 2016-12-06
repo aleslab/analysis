@@ -50,13 +50,13 @@ for i= 2:length (value);
     estimate(i) = wrapTo90(estimate(i));
     %gain(i)=(1-gain*(distal(i)));
     
-    % err(i) = minAngleDiff(estimate(i), stimOri(i));
+     err(i) = minAngleDiff(estimate(i), stimOri(i));
      
-     %RO(i)=  minAngleDiff (stimOri(i-1),stimOri(i));
+     RO(i)=  minAngleDiff (stimOri(i-1),stimOri(i));
      
-     err(i) = minAngleDiff(estimate (i), stimOri(i));%whitney
-     RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
-     PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
+     err(i) = minAngleDiff(respOri(i), stimOri(i));
+        RO(i)=  minAngleDiff (respOri(i-1),respOri (i));
+     PE(i) = minAngleDiff(stimOri(i),p_response(i-1));
     
     
 end
