@@ -33,7 +33,7 @@ distal_initial_time_point = 1;
 % var_dist=var(stimOri); %variance in the stimOri
 % gain=var_dist / (var_dist + var_prox);
 
-gain = .99;%var_dist / (var_dist + var_prox);
+gain = .1;%var_dist / (var_dist + var_prox);
 %estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
