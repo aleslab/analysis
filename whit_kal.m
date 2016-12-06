@@ -10,8 +10,8 @@ stimOri = wrapTo90(360*rand(200,1));
 value = stimOri;
 %stimOri = value;
 
-p_response = stimOri;
-clear estimate;
+p_response = wrapTo90(360*rand(200,1));
+%clear estimate;
 % % value=(respOri);
 % % actual=(stimOri);
 % fileToLoad = uigetfile; load(fileToLoad);
@@ -33,7 +33,7 @@ distal_initial_time_point = 1;
 % var_dist=var(stimOri); %variance in the stimOri
 % gain=var_dist / (var_dist + var_prox);
 
-gain = .99;%var_dist / (var_dist + var_prox);
+gain = .4;%var_dist / (var_dist + var_prox);
 %estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
