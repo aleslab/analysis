@@ -4,13 +4,13 @@ clear all;
 
 
 stimOri = wrapTo90(360*rand(200,1));
+var_prox = 100;
 
 %This line is to simulate proximal noise from the observer. 
-%value=(stimOri+randn(size(stimOri))*sqrt(var_prox));
-value = stimOri;
+value=stimOri+randn(size(stimOri))*sqrt(var_prox);
+%value = stimOri;
 %stimOri = value;
 
-p_response = stimOri;
 clear estimate;
 % % value=(respOri);
 % % actual=(stimOri);
@@ -33,12 +33,13 @@ distal_initial_time_point = 1;
 % var_dist=var(stimOri); %variance in the stimOri
 % gain=var_dist / (var_dist + var_prox);
 
-gain = .1;%var_dist / (var_dist + var_prox);
+gain = .95;%var_dist / (var_dist + var_prox);
 %estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
 RO(1)  = 0;
-
+estimateUpdate(1) = 0;
+sdEstimate(1) = 0;
 for i= 2:length (value);
     
     estimate(i)=estimate(i-1);
@@ -46,7 +47,9 @@ for i= 2:length (value);
     
     estimate(i)=estimate(i-1) + gain*minAngleDiff(value(i),estimate(i-1));
     
-    
+%    sdEstimate(i) = gain*value(i) + (1-gain)*value(i-1);
+    sdEstimate(i)  = value(i-1) + gain*minAngleDiff(value(i),value(i-1));
+
     estimate(i) = wrapTo90(estimate(i));
     %gain(i)=(1-gain*(distal(i)));
     
@@ -57,7 +60,10 @@ for i= 2:length (value);
      err(i) = minAngleDiff(estimate (i), stimOri(i));%whitney
      RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
      PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
-    
+     estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
+     
+     sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
+     
     
 end
 
@@ -67,7 +73,7 @@ end
 
 figure(101);
 clf;
-plot (p_response);
+%plot (p_response);
 
 hold on
 plot (stimOri, 'x');
@@ -82,5 +88,13 @@ figure (103);clf;
 scatter (RO, PE);
 legend ('prediction error');
 
+figure (104);clf;
+scatter (estimateUpdate, PE);
+legend ('responseUpdate');
+
+
+figure(105);clf;
+scatter (RO, sdErr);
+legend ('whitney_sdErr')
 
 
