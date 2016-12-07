@@ -11,6 +11,10 @@ value=stimOri+randn(size(stimOri))*sqrt(var_prox);
 %value = stimOri;
 %stimOri = value;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 clear estimate;
 % % value=(respOri);
 % % actual=(stimOri);
@@ -66,7 +70,7 @@ for i= 2:length (value);
      
     
 end
-
+p_response = estimate; 
 [R,P]=corrcoef(err,RO);
 
 
