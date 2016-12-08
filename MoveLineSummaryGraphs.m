@@ -86,7 +86,7 @@ for iAnalysis = 1:length(analysisType)
     
     allDataTable = array2table(allData);
     
-    filename = strcat('all_', currAnalysisType, '_thresholds.csv');
+    filename = char(strcat('all_', currAnalysisType, '_thresholds.csv'));
     writetable(allDataTable, filename);
     
     %all individual conditions
@@ -125,6 +125,7 @@ for iAnalysis = 1:length(analysisType)
     
     allSEMs = [semADM semADS semALM semALS semCRSDM semCRSDS semCRSLM semCRSLS];
     
+    
     figure
     hold on
     bar(allAverages, 'r');
@@ -132,11 +133,28 @@ for iAnalysis = 1:length(analysisType)
     set(gca, 'XTick', 1:1:8);
     set(gca, 'XTickLabel', shortenedCondList);
     set(gca, 'fontsize',14);
-    ylim([0 0.5]);
     xlabel('Condition');
-    ylabel('Mean thresholds (proportion)');
     
-    figFileName = strcat('means_', currAnalysisType, '_thresholds.csv');
+    if strcmp(currAnalysisType, 'speed_change_changepoint') || strcmp(currAnalysisType, 'speed_change_full');
+        
+        ylabel('Mean thresholds (proportion)');
+        ylim([0 0.5])
+        
+    elseif strcmp(currAnalysisType, 'speed_change_changepoint_arcmin') || strcmp(currAnalysisType, 'speed_change_full_arcmin');
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 30])
+        
+    else
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 100])
+        
+    end
+    
+    title(currAnalysisType, 'interpreter', 'none');
+    
+    figFileName = char(strcat('means_', currAnalysisType, '_thresholds'));
     fig = gcf;
     fig.PaperUnits = 'inches';
     fig.PaperPosition = [0 4 8.5 5.5];
