@@ -84,20 +84,22 @@ ylabel ('orientation');
 
 
 figure(102);clf;
-scatter (RO, err);
-legend ('whitney')
+scatter (RO, err,'r','filled');
+legend ('error on trial')
 xlabel('RO');
 ylabel('error');
+% hold on
+% lsline(ax1);
 
 figure (103);clf;
-scatter (RO, PE);
+scatter (RO, PE,'b','filled');
 legend ('prediction error');
 xlabel ('RO');
 ylabel('amount of prediciton error');
 
 
 figure (104);clf;
-scatter (estimateUpdate, PE);
+scatter (estimateUpdate, PE,'b','filled');
 legend ('responseUpdate');
 xlabel('how much the estimate updates');
 ylabel ('amount of prediction error');
@@ -105,7 +107,7 @@ ylabel ('amount of prediction error');
 
 
 figure(105);clf;
-scatter (RO, sdErr);
+scatter (RO, sdErr,'g','filled');
 legend ('whitney_sdErr')
 
 
