@@ -87,21 +87,15 @@ figure(102);clf;
 scatter (RO, err);
 legend ('whitney')
 xlabel('RO');
-ylabel('error');
+
 
 figure (103);clf;
 scatter (RO, PE);
 legend ('prediction error');
-xlabel ('RO');
-ylabel('amount of prediciton error');
-
 
 figure (104);clf;
 scatter (estimateUpdate, PE);
 legend ('responseUpdate');
-xlabel('how much the estimate updates');
-ylabel ('amount of prediction error');
-
 
 
 figure(105);clf;
