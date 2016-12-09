@@ -6,10 +6,10 @@ fileToLoad = uigetfile; load(fileToLoad);
 
 % iCond =2; %When you have only 1 condition % 
 % respOri = [sortedData(iCond).trialData(:).respOri];
-% stimOri = [sortedData(iCond).trialData(:).stimOri]; % when we have 3 cons
+% stimOri = [sortedData(iCond).trialData(:).stimOri]; % 
 
 
-respOri = [sortedData.trialData(:).respOri];% when we have one condition
+respOri = [sortedData.trialData(:).respOri];
 stimOri = [sortedData.trialData(:).stimOri];
 
 
@@ -23,8 +23,6 @@ stimOri = [sortedData.trialData(:).stimOri];
         RO(i) = minAngleDiff(stimOri(i-1), stimOri(i));
         
     end 
-    
-    
          
 
 data=respOri; %calculation to get standard error of the mean for the amount of error between
