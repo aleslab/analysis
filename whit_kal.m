@@ -33,7 +33,7 @@ distal_initial_time_point = 1;
 % var_dist=var(stimOri); %variance in the stimOri
 % gain=var_dist / (var_dist + var_prox);
 
-gain = .95;%var_dist / (var_dist + var_prox);
+gain = .6;%var_dist / (var_dist + var_prox);
 %estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
@@ -46,17 +46,9 @@ for i= 2:length (value);
 
     
     estimate(i)=estimate(i-1) + gain*minAngleDiff(value(i),estimate(i-1));
-    
-%    sdEstimate(i) = gain*value(i) + (1-gain)*value(i-1);
     sdEstimate(i)  = value(i-1) + gain*minAngleDiff(value(i),value(i-1));
-
     estimate(i) = wrapTo90(estimate(i));
-    %gain(i)=(1-gain*(distal(i)));
     
-    % err(i) = minAngleDiff(estimate(i), stimOri(i));
-     
-     %RO(i)=  minAngleDiff (stimOri(i-1),stimOri(i));
-     
      err(i) = minAngleDiff(estimate (i), stimOri(i));%whitney
      RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
      PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
@@ -67,8 +59,8 @@ for i= 2:length (value);
     
 end
 
-[R,P]=corrcoef(err,RO);
-
+[R,P]=corrcoef(PE,RO);
+average= mean(PE);
 
 
 figure(101);
