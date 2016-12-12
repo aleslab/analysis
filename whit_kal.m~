@@ -6,7 +6,6 @@ clear all;
 stimOri = wrapTo90(360*rand(200,1));
 var_prox = 100;
 
-
 %This line is to simulate proximal noise from the observer. 
 value=stimOri+randn(size(stimOri))*sqrt(var_prox);
 %value = stimOri;
