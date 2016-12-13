@@ -3,13 +3,13 @@
 clear all;
 
 
-stimOri = wrapTo90(360*rand(200,1));
+stimOri = wrapTo90(360*rand(40,1));
 var_prox = 100;
 
 
 %This line is to simulate proximal noise from the observer. 
-value=stimOri+randn(size(stimOri))*sqrt(var_prox);
-%value = stimOri;
+%value=stimOri+randn(size(stimOri))*sqrt(var_prox);
+value = stimOri+ randn*10;
 %stimOri = value;
 
 clear estimate;
@@ -34,7 +34,7 @@ distal_initial_time_point = 1;
 % var_dist=var(stimOri); %variance in the stimOri
 % gain=var_dist / (var_dist + var_prox);
 
-gain = .6;%var_dist / (var_dist + var_prox);
+gain = .9;%var_dist / (var_dist + var_prox);
 %estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
@@ -68,19 +68,19 @@ figure(101);
 clf;
 %plot (p_response);
 
-hold on
-plot (stimOri, 'x');
-plot (estimate, 'c*');
-legend ('p_response', 'actual_stimOri', 'modelled kalman resposne given calibrated gain')
-xlabel('trial number')
-ylabel ('orientation');
+% hold on
+% plot (stimOri, 'x');
+% plot (estimate, 'c*');
+% legend ('p_response', 'actual_stimOri', 'modelled kalman resposne given calibrated gain')
+% xlabel('trial number')
+% ylabel ('orientation');
+% 
 
-
-figure(102);clf;
-scatter (RO, err,'r','filled');
-legend ('error on trial')
-xlabel('RO');
-ylabel('error');
+% figure(102);clf;
+% scatter (RO, err,'r','filled');
+% legend ('error on trial')
+% xlabel('RO');
+% ylabel('error');
 % hold on
 % lsline(ax1);
 
@@ -91,16 +91,16 @@ xlabel ('RO');
 ylabel('amount of prediciton error');
 
 
-figure (104);clf;
-scatter (estimateUpdate, PE,'b','filled');
-legend ('responseUpdate');
-xlabel('how much the estimate updates');
-ylabel ('amount of prediction error');
-
-
-
-figure(105);clf;
-scatter (RO, sdErr,'g','filled');
-legend ('whitney_sdErr')
+% figure (104);clf;
+% scatter (estimateUpdate, PE,'b','filled');
+% legend ('responseUpdate');
+% xlabel('how much the estimate updates');
+% ylabel ('amount of prediction error');
+% 
+% 
+% 
+% figure(105);clf;
+% scatter (RO, sdErr,'g','filled');
+% legend ('whitney_sdErr')
 
 
