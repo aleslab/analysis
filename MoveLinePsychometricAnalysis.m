@@ -13,8 +13,7 @@ for iParticipant = 1:length(participantCodes)
         'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
     
-    analysisType = {'speed_change_changepoint_arcmin', 'speed_change_full',...
-        'speed_change_full_arcmin', 'start_arcmin', 'end_arcmin'}; %'speed_change_changepoint'
+    analysisType = {'speed_change_full_arcmin'}; %'speed_change_changepoint' , 'start_arcmin', 'end_arcmin' 'speed_change_changepoint_arcmin', 'speed_change_full',...
     
     for iAnalysis = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(iAnalysis));
@@ -214,7 +213,7 @@ for iParticipant = 1:length(participantCodes)
                     %slow accelerating conditions
                 elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
                     
-                    speedDiff = [0 4.9 10.6 16.2 21.9 27.5 33.2];
+                    speedDiff = [0 5.6 11.3 16.9 22.6 28.2 33.9];
                     
                 elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
 
