@@ -1,9 +1,8 @@
 
 participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'J' 'K'};
 
-analysisType = {'speed_change_changepoint', 'speed_change_changepoint_arcmin', ...
-    'speed_change_full', 'speed_change_full_arcmin', 'end_arcmin'}; %'start_arcmin' currently problems with the start one
-
+analysisType = {'speed_change_changepoint', 'speed_change_changepoint_arcmin', ... %'start_arcmin' 'end_arcmin' currently problems with the start one
+    'speed_change_full', 'speed_change_full_arcmin'};
 %for the code to work properly later, these need to be in the order:
 %1. 'speed_change_changepoint'
 %2. 'speed_change_changepoint_arcmin'
@@ -21,8 +20,8 @@ shortenedCondList = {'ADF' 'ADS' 'ALF' 'ALS' 'CRSDF' 'CRSDS' 'CRSLF' 'CRSLS'};
 
 for iParticipant = 1:length(participantCodes)
     currParticipantCode = cell2mat(participantCodes(iParticipant));
-    for iAnalysis = 1:length(analysisType)
-        currAnalysisType = cell2mat(analysisType(iAnalysis));
+    for iAnalysis2 = 1:length(analysisType)
+        currAnalysisType = cell2mat(analysisType(iAnalysis2));
         filename = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 1/Participant_', ...
             currParticipantCode, '/Analysis/', currAnalysisType,'/psychometric_data_',...
             currAnalysisType,'_', currParticipantCode, '.csv');
@@ -67,17 +66,17 @@ for iParticipant = 1:length(participantCodes)
         %
         %         hold off
         
-        psychData(iAnalysis).data = usefulPsychData;
+        psychData(iAnalysis2).data = usefulPsychData;
         
     end
     
     participantData(iParticipant).psychData = psychData;
+    
 end
 
-%close all;
-
 for iAnalysis = 1:length(analysisType)
-    currAnalysisType = analysisType(iAnalysis);
+    currAnalysisType = cell2mat(analysisType(iAnalysis));
+    
     allData = [[participantData(1).psychData(iAnalysis).data(:,1)] [participantData(2).psychData(iAnalysis).data(:,1)] ...
         [participantData(3).psychData(iAnalysis).data(:,1)] [participantData(4).psychData(iAnalysis).data(:,1)] ...
         [participantData(5).psychData(iAnalysis).data(:,1)] [participantData(6).psychData(iAnalysis).data(:,1)] ...
@@ -162,182 +161,255 @@ for iAnalysis = 1:length(analysisType)
     
     hold off
     
+    %for main effect graphs from 3RMANOVA
+    allAccel = horzcat(ADM, ADS, ALM, ALS);
+    allCRS = horzcat(CRSDM, CRSDS, CRSLM, CRSLS);
+    allDepth = horzcat(ADM, ADS, CRSDM, CRSDS);
+    allLateral = horzcat(ALM, ALS, CRSLM, CRSLS);
+    allFast = horzcat(ADM, ALM, CRSDM, CRSLM);
+    allSlow = horzcat(ADS, ALS, CRSDS, CRSLS);
+    
+    % means of groupings from 3RMANOVA on speed_change_changepoint (proportion)
+    meanAllCRS = mean(allCRS);
+    
+    meanAllAccel = mean(allAccel);
+    
+    meanAllDepth = mean(allDepth);
+    
+    meanAllLateral = mean(allLateral);
+    
+    meanAllFast = mean(allFast);
+    
+    meanAllSlow = mean(allSlow);
+    
+    allNames = {'Accel'; 'CRS'; 'Depth'; 'Lateral'; 'Fast'; 'Slow'};
+    allMeans = [meanAllAccel; meanAllCRS; meanAllDepth; meanAllLateral; meanAllFast; meanAllSlow];
+    mainEffectMeansTable = table(allNames, allMeans);
+    
+       filename = char(strcat('all_', currAnalysisType, '_main_effect_means.csv'));
+    writetable(mainEffectMeansTable, filename);
+    
+    %confidence interval calculations
+    
+    MSw = [((0.187 + 0.182 + 0.025 + 0.092 + 0.067 + 0.013 +0.012)/63),... %changepoint proportion
+        ((413.338 + 409.460 + 206.729 + 228.219 + 215.405 + 53.635 + 67.380)/63), ... %changepoint arcmin/s
+        ((0.130 + 0.137 + 0.020 + 0.068 + 0.059 + 0.012 + 0.010)/63), ... %full interval proportion
+        ((699.458 + 641.066 + 349.107 + 394.647 + 334.756 + 82.853 + 113.736)/63)]; %full interval arcmin/s
+    %sum of all type III sum of square errors divided by the sum of their degrees of freedom
+    
+    tValue = tinv(0.975, 63); % the value from the t distribution to use for getting repeated measures confidence intervals
+    
+    CIaddValue = (sqrt(MSw(iAnalysis)/10)).*tValue; %final confidence interval values are the mean +/- this value
+    
+    
+    %AvC
+    AvCmeans = [meanAllAccel meanAllCRS];
+    
+    figure
+    hold on
+    bar(AvCmeans, 0.5, 'r');
+    errorbar(AvCmeans, [CIaddValue, CIaddValue], '.k');
+    
+    set(gca, 'XTick', 1:1:2);
+    set(gca, 'XTickLabel', {'Accelerating' 'Constant retinal speed'});
+    set(gca, 'fontsize',17);
+    
+    if strcmp(currAnalysisType, 'speed_change_changepoint') || strcmp(currAnalysisType, 'speed_change_full');
+        
+        ylabel('Mean thresholds (proportion)');
+        ylim([0 0.5])
+        
+    elseif strcmp(currAnalysisType, 'speed_change_changepoint_arcmin') || strcmp(currAnalysisType, 'speed_change_full_arcmin');
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 30])
+        
+    else
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 100])
+        
+    end
+    
+    title(currAnalysisType, 'interpreter', 'none');
+    
+    figFileName = char(strcat(currAnalysisType, 'AvC_graph'));
+    fig = gcf;
+    fig.PaperUnits = 'inches';
+    fig.PaperPosition = [0 4 5.5 5.5];
+    print(figFileName,'-dpdf','-r0');
+    
+    hold off
+    
+    %DvL
+    
+    DvLmeans = [meanAllDepth meanAllLateral];
+    
+    figure
+    hold on
+    bar(DvLmeans, 0.5, 'r');
+    errorbar(DvLmeans, [CIaddValue, CIaddValue], '.k');
+    
+    set(gca, 'XTick', 1:1:2);
+    set(gca, 'XTickLabel', {'Depth' 'Lateral'});
+    set(gca, 'fontsize',17);
+    if strcmp(currAnalysisType, 'speed_change_changepoint') || strcmp(currAnalysisType, 'speed_change_full');
+        
+        ylabel('Mean thresholds (proportion)');
+        ylim([0 0.5])
+        
+    elseif strcmp(currAnalysisType, 'speed_change_changepoint_arcmin') || strcmp(currAnalysisType, 'speed_change_full_arcmin');
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 30])
+        
+    else
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 100])
+        
+    end
+    
+    title(currAnalysisType, 'interpreter', 'none');
+    
+    figFileName = char(strcat(currAnalysisType, 'DvL_graph'));
+    fig = gcf;
+    fig.PaperUnits = 'inches';
+    fig.PaperPosition = [0 4 5.5 5.5];
+    print(figFileName,'-dpdf','-r0');
+    
+    hold off
+    
+    %FvS
+    
+    FvSmeans = [meanAllFast meanAllSlow];
+    
+    figure
+    hold on
+    bar(FvSmeans, 0.5, 'r');
+    errorbar(FvSmeans, [CIaddValue, CIaddValue], '.k');
+    
+    set(gca, 'XTick', 1:1:2);
+    set(gca, 'XTickLabel', {'Fast speed' 'Slow speed'});
+    set(gca, 'fontsize',17);
+    if strcmp(currAnalysisType, 'speed_change_changepoint') || strcmp(currAnalysisType, 'speed_change_full');
+        
+        ylabel('Mean thresholds (proportion)');
+        ylim([0 0.5])
+        
+    elseif strcmp(currAnalysisType, 'speed_change_changepoint_arcmin') || strcmp(currAnalysisType, 'speed_change_full_arcmin');
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 30])
+        
+    else
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 100])
+        
+    end
+    
+    
+    title(currAnalysisType, 'interpreter', 'none');
+    
+    figFileName = char(strcat(currAnalysisType, 'FvS_graph'));
+    fig = gcf;
+    fig.PaperUnits = 'inches';
+    fig.PaperPosition = [0 4 5.5 5.5];
+    print(figFileName,'-dpdf','-r0');
+    
+    hold off
+    
+    %interaction effects from 3RMANOVA
+    
+    bothDepthSlow = horzcat(ADS, CRSDS);
+    bothDepthFast = horzcat(ADM, CRSDM);
+    bothLateralSlow = horzcat(ALS, CRSLS);
+    bothLateralFast = horzcat(ALM, CRSLM);
+    
+    meanDepthSlow = mean(bothDepthSlow);
+    meanDepthFast = mean(bothDepthFast);
+    meanLateralSlow = mean(bothLateralSlow);
+    meanLateralFast = mean(bothLateralFast);
+    
+    %slow-fast on axis
+    sfMeanDepth = [meanDepthSlow, meanDepthFast];
+    sfMeanLateral = [meanLateralSlow, meanLateralFast];
+    
+    figure
+    hold on
+    errorbar(sfMeanDepth, [CIaddValue, CIaddValue], '-xk');
+    errorbar(sfMeanLateral, [CIaddValue, CIaddValue], '-xb');
+    legend({'Depth', 'Lateral'});
+    set(gca, 'XTick', 1:1:2);
+    set(gca, 'XTickLabel', {'Slow' 'Fast'});
+    set(gca, 'fontsize',17);
+    
+    if strcmp(currAnalysisType, 'speed_change_changepoint') || strcmp(currAnalysisType, 'speed_change_full');
+        
+        ylabel('Mean thresholds (proportion)');
+        ylim([0 0.5])
+        
+    elseif strcmp(currAnalysisType, 'speed_change_changepoint_arcmin') || strcmp(currAnalysisType, 'speed_change_full_arcmin');
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 30])
+        
+    else
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 100])
+        
+    end
+    
+    title(currAnalysisType, 'interpreter', 'none');
+    
+    figFileName = char(strcat(currAnalysisType, 'slowfast_interaction_graph'));
+    fig = gcf;
+    fig.PaperUnits = 'inches';
+    fig.PaperPosition = [0 4 5.5 5.5];
+    print(figFileName,'-dpdf','-r0');
+    
+    hold off
+    
+    %depth-Lateral on axis
+    dlMeanSlow = [meanDepthSlow, meanLateralSlow];
+    dlMeanFast = [meanDepthFast, meanLateralFast];
+    
+    figure
+    hold on
+    errorbar(dlMeanSlow, [CIaddValue, CIaddValue], '-xk');
+    errorbar(dlMeanFast, [CIaddValue, CIaddValue], '-xb');
+    legend({'Slow', 'Fast'});
+    set(gca, 'XTick', 1:1:2);
+    set(gca, 'XTickLabel', {'Depth' 'Lateral'});
+    set(gca, 'fontsize',17);
+    
+    if strcmp(currAnalysisType, 'speed_change_changepoint') || strcmp(currAnalysisType, 'speed_change_full');
+        
+        ylabel('Mean thresholds (proportion)');
+        ylim([0 0.5])
+        
+    elseif strcmp(currAnalysisType, 'speed_change_changepoint_arcmin') || strcmp(currAnalysisType, 'speed_change_full_arcmin');
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 30])
+        
+    else
+        
+        ylabel('Mean thresholds (arcmin/s)');
+        ylim([0 100])
+        
+    end
+    
+    title(currAnalysisType, 'interpreter', 'none');
+    
+    figFileName = char(strcat(currAnalysisType, 'depthlateral_interaction_graph'));
+    
+    fig = gcf;
+    fig.PaperUnits = 'inches';
+    fig.PaperPosition = [0 4 5.5 5.5];
+    print(figFileName,'-dpdf','-r0');
+    
+    hold off
 end
-%% 3 way repeated measures anova graph for changepoint (proportion)
-%
-% allData = [[participantData(1).psychData(1).data(:,1)] [participantData(2).psychData(1).data(:,1)] ...
-%     [participantData(3).psychData(1).data(:,1)] [participantData(4).psychData(1).data(:,1)] ...
-%     [participantData(5).psychData(1).data(:,1)] [participantData(6).psychData(1).data(:,1)] ...
-%     [participantData(7).psychData(1).data(:,1)] [participantData(8).psychData(1).data(:,1)] ...
-%     [participantData(9).psychData(1).data(:,1)] [participantData(10).psychData(1).data(:,1)]];
-%
-% %all individual conditions
-% ADM = allData(1,:); %ALL ADM for changepoint
-% ADS = allData(2,:);
-% ALM = allData(3,:);
-% ALS = allData(4,:);
-% CRSDM = allData(5,:);
-% CRSDS = allData(6,:);
-% CRSLM = allData(7,:);
-% CRSLS = allData(8,:);
-%
-% %for main effect graphs from 3RMANOVA
-% allAccel = horzcat(ADM, ADS, ALM, ALS);
-% allCRS = horzcat(CRSDM, CRSDS, CRSLM, CRSLS);
-% allDepth = horzcat(ADM, ADS, CRSDM, CRSDS);
-% allLateral = horzcat(ALM, ALS, CRSLM, CRSLS);
-% allFast = horzcat(ADM, ALM, CRSDM, CRSLM);
-% allSlow = horzcat(ADS, ALS, CRSDS, CRSLS);
-%
-% % means of groupings from 3RMANOVA on speed_change_changepoint (proportion)
-% meanAllCRS = mean(allCRS);
-%
-% meanAllAccel = mean(allAccel);
-%
-% meanAllDepth = mean(allDepth);
-%
-% meanAllLateral = mean(allLateral);
-%
-% meanAllFast = mean(allFast);
-%
-% meanAllSlow = mean(allSlow);
-%
-% allNames = {'Accel'; 'CRS'; 'Depth'; 'Lateral'; 'Fast'; 'Slow'};
-% allMeans = [meanAllAccel; meanAllCRS; meanAllDepth; meanAllLateral; meanAllFast; meanAllSlow];
-%
-% %confidence interval calculations
-%
-% MSw = (0.187 + 0.182 + 0.025 + 0.092 + 0.067 + 0.013 +0.012)/63;
-% %sum of all type III sum of square errors divided by the sum of their degrees of freedom
-%
-% tValue = tinv(0.975, 63); % the value from the t distribution to use for getting repeated measures confidence intervals
-%
-% CIaddValue = (sqrt(MSw/10)).*tValue; %final confidence interval values are the mean +/- this value
-%
-%
-% %AvC
-% AvCmeans = [meanAllAccel meanAllCRS];
-%
-% figure
-% hold on
-% bar(AvCmeans, 0.5, 'r');
-% errorbar(AvCmeans, [CIaddValue, CIaddValue], '.k');
-%
-% set(gca, 'XTick', 1:1:2);
-% set(gca, 'XTickLabel', {'Accelerating' 'Constant retinal speed'});
-% set(gca, 'fontsize',17);
-% ylim([0 0.5]);
-% ylabel('Mean thresholds (proportion)');
-%
-% figFileName = 'AvC_graph';
-% fig = gcf;
-% fig.PaperUnits = 'inches';
-% fig.PaperPosition = [0 4 5.5 5.5];
-% print(figFileName,'-dpdf','-r0');
-%
-% hold off
-%
-% %DvL
-%
-% DvLmeans = [meanAllDepth meanAllLateral];
-%
-% figure
-% hold on
-% bar(DvLmeans, 0.5, 'r');
-% errorbar(DvLmeans, [CIaddValue, CIaddValue], '.k');
-%
-% set(gca, 'XTick', 1:1:2);
-% set(gca, 'XTickLabel', {'Depth' 'Lateral'});
-% set(gca, 'fontsize',17);
-% ylim([0 0.5]);
-% ylabel('Mean thresholds (proportion)');
-%
-% figFileName = 'DvL_graph';
-% fig = gcf;
-% fig.PaperUnits = 'inches';
-% fig.PaperPosition = [0 4 5.5 5.5];
-% print(figFileName,'-dpdf','-r0');
-%
-% hold off
-%
-% %FvS
-%
-% FvSmeans = [meanAllFast meanAllSlow];
-%
-% figure
-% hold on
-% bar(FvSmeans, 0.5, 'r');
-% errorbar(FvSmeans, [CIaddValue, CIaddValue], '.k');
-%
-% set(gca, 'XTick', 1:1:2);
-% set(gca, 'XTickLabel', {'Fast speed' 'Slow speed'});
-% set(gca, 'fontsize',17);
-% ylim([0 0.5]);
-% ylabel('Mean thresholds (proportion)');
-%
-% figFileName = 'FvS_graph';
-% fig = gcf;
-% fig.PaperUnits = 'inches';
-% fig.PaperPosition = [0 4 5.5 5.5];
-% print(figFileName,'-dpdf','-r0');
-%
-% hold off
-%
-% %interaction effects from 3RMANOVA
-%
-% bothDepthSlow = horzcat(ADS, CRSDS);
-% bothDepthFast = horzcat(ADM, CRSDM);
-% bothLateralSlow = horzcat(ALS, CRSLS);
-% bothLateralFast = horzcat(ALM, CRSLM);
-%
-% meanDepthSlow = mean(bothDepthSlow);
-% meanDepthFast = mean(bothDepthFast);
-% meanLateralSlow = mean(bothLateralSlow);
-% meanLateralFast = mean(bothLateralFast);
-%
-% %slow-fast on axis
-% sfMeanDepth = [meanDepthSlow, meanDepthFast];
-% sfMeanLateral = [meanLateralSlow, meanLateralFast];
-%
-% figure
-% hold on
-% errorbar(sfMeanDepth, [CIaddValue, CIaddValue], '-xk');
-% errorbar(sfMeanLateral, [CIaddValue, CIaddValue], '-xb');
-% legend({'Depth', 'Lateral'});
-% set(gca, 'XTick', 1:1:2);
-% set(gca, 'XTickLabel', {'Slow' 'Fast'});
-% set(gca, 'fontsize',17);
-% ylim([0 0.5]);
-% ylabel('Mean thresholds (proportion)');
-%
-% figFileName = 'slowfast_interaction_graph';
-% fig = gcf;
-% fig.PaperUnits = 'inches';
-% fig.PaperPosition = [0 4 5.5 5.5];
-% print(figFileName,'-dpdf','-r0');
-%
-% hold off
-%
-% %depth-Lateral on axis
-% dlMeanSlow = [meanDepthSlow, meanLateralSlow];
-% dlMeanFast = [meanDepthFast, meanLateralFast];
-%
-% figure
-% hold on
-% errorbar(dlMeanSlow, [CIaddValue, CIaddValue], '-xk');
-% errorbar(dlMeanFast, [CIaddValue, CIaddValue], '-xb');
-% legend({'Slow', 'Fast'});
-% set(gca, 'XTick', 1:1:2);
-% set(gca, 'XTickLabel', {'Depth' 'Lateral'});
-% set(gca, 'fontsize',17);
-% ylim([0 0.5]);
-% ylabel('Mean thresholds (proportion)');
-%
-% figFileName = 'depthlateral_interaction_graph';
-% fig = gcf;
-% fig.PaperUnits = 'inches';
-% fig.PaperPosition = [0 4 5.5 5.5];
-% print(figFileName,'-dpdf','-r0');
-%
-% hold off
-%
