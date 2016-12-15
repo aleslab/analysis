@@ -43,26 +43,22 @@ sdEstimate(1) = 0;
 for i= 2:length (value);
     
     estimate(i)=estimate(i-1);
-
     
     estimate(i)=estimate(i-1) + gain*minAngleDiff(value(i),estimate(i-1));
     
-%    sdEstimate(i) = gain*value(i) + (1-gain)*value(i-1);
     sdEstimate(i)  = value(i-1) + gain*minAngleDiff(value(i),value(i-1));
-
-    estimate(i) = wrapTo90(estimate(i));
-    %gain(i)=(1-gain*(distal(i)));
     
-    % err(i) = minAngleDiff(estimate(i), stimOri(i));
-     
-     %RO(i)=  minAngleDiff (stimOri(i-1),stimOri(i));
-     
-     err(i) = minAngleDiff(estimate (i), stimOri(i));%whitney
-     RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
-     PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
-     estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
-     
-     sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
+    estimate(i) = wrapTo90(estimate(i));
+    
+    err(i) = minAngleDiff(estimate (i), stimOri(i));%whitney
+    
+    RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
+    
+    PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
+    
+    estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
+    
+    sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
      
     
 end
