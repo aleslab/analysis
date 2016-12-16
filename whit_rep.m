@@ -4,13 +4,13 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 
-% iCond =2; %When you have only 1 condition % 
-% respOri = [sortedData(iCond).trialData(:).respOri];
-% stimOri = [sortedData(iCond).trialData(:).stimOri]; % when we have 3 cons
+iCond =2; %When you have only 1 condition % 
+respOri = [sortedData(iCond).trialData(:).respOri];
+stimOri = [sortedData(iCond).trialData(:).stimOri]; % when we have 3 cons
 
 
-respOri = [sortedData.trialData(:).respOri];% when we have one condition
-stimOri = [sortedData.trialData(:).stimOri];
+% respOri = [sortedData.trialData(:).respOri];% when we have one condition
+% stimOri = [sortedData.trialData(:).stimOri];
 
 
 
@@ -36,7 +36,7 @@ var_dist=var(stimOri); %variance in the stimOri
 gain=var_dist / (var_dist + var_prox);
 
 
-[R,P]=corrcoef(err,RO);
+%[r,p]=corrcoef(err,RO);
 
        figure; % RESIDUAL ERROR PLOT.
        scatter (RO, err);
