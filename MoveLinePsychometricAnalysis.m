@@ -12,8 +12,15 @@ for iParticipant = 1:length(participantCodes)
         'MoveLine_accelerating_depth_slow'; 'MoveLine_accelerating_lateral_midspeed'; ...
         'MoveLine_accelerating_lateral_slow'; 'MoveLine_CRS_depth_midspeed'; ...
         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
+    %these are the conditions for experiment 1
+    %for experiment 2, want accelerating depth slow and midspeed as well as:
+    %'MoveLine_accelerating_looming_midspeed';
+    %'MoveLine_accelerating_looming_slow; ...
+    %'MoveLine_accelerating_cd_midspeed';
+    %''MoveLine_accelerating_cd_slow'
     
-    analysisType = {'speed_change_full_arcmin'}; %'speed_change_changepoint' , 'start_arcmin', 'end_arcmin' 'speed_change_changepoint_arcmin', 'speed_change_full',...
+    analysisType = {'speed_change_changepoint' , 'speed_change_changepoint_arcmin', ...
+        'speed_change_full', 'speed_change_full_arcmin'}; %'real_world_change'
     
     for iAnalysis = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(iAnalysis));
@@ -22,6 +29,8 @@ for iParticipant = 1:length(participantCodes)
             condAndParticipant = strcat(currCondition, '_', currParticipantCode);
             
             fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 1/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
+            % fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 2/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
+            
             filenames = dir(fileDir);
             filenames = {filenames.name}; %makes a cell of filenames from the same
             %participant and condition to be loaded together
@@ -64,6 +73,10 @@ for iParticipant = 1:length(participantCodes)
             
             %% Specifying what the levels were in different types of analysis
             
+            %may also need to add to this section for experiment 2. May
+            %need to do analysis for experiment 2 in terms of world speed
+            %and retinal speed? As looming retinal speed is a lot slower?
+            
             %PROPORTION SPEED CHANGE AT POINT OF CHANGE
             
             if strcmp(currAnalysisType, 'speed_change_changepoint');
@@ -71,12 +84,18 @@ for iParticipant = 1:length(participantCodes)
                 xLabelTitle  = 'Proportion speed change at changepoint';
                 
                 %midspeed accelerating conditions
-                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed')...
+                        || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed')...
+                        || strcmp(currCondition, 'MoveLine_accelerating_cd_midspeed') ...
+                        || strcmp(currCondition, 'MoveLine_accelerating_looming_midspeed');
                     
                     speedDiff = [0 0.22 0.40 0.55 0.67 0.77 0.86]; %2dp
                     
                     %slow accelerating conditions
-                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
+                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow')...
+                        || strcmp(currCondition,'MoveLine_accelerating_lateral_slow')...
+                        || strcmp(currCondition, 'MoveLine_accelerating_cd_slow')...
+                        || strcmp(currCondition, 'MoveLine_accelerating_looming_slow');
                     
                     speedDiff = [0 0.22 0.40 0.54 0.67 0.77 0.86]; %2dp
                     
@@ -101,32 +120,44 @@ for iParticipant = 1:length(participantCodes)
                 end
                 
                 
-            %ARCMIN SPEED CHANGE AT POINT OF CHANGE
+                %ARCMIN SPEED CHANGE AT POINT OF CHANGE
                 
             elseif strcmp(currAnalysisType, 'speed_change_changepoint_arcmin');
                 
                 xLabelTitle  = 'Speed change at changepoint (arcmin/s)';
                 
                 %midspeed accelerating conditions
-                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed')...
+                        || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed')...
+                        || strcmp(currCondition, 'MoveLine_accelerating_cd_midspeed');
                     
                     speedDiff = [0 10.5 19.9 28.4 36.1 43.0 49.4];
                     
                     %slow accelerating conditions
-                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
+                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow')...
+                        || strcmp(currCondition,'MoveLine_accelerating_lateral_slow')...
+                        || strcmp(currCondition, 'MoveLine_accelerating_cd_slow');
                     
                     speedDiff = [0 5.3 10.4 15.2 19.8 24.1 28.4];
                     
-                %CRS depth conditions
+                elseif strcmp(currCondition, 'MoveLine_accelerating_looming_midspeed');
+                    
+                    speedDiff = [0 7.0 13.3 18.9 24.0 28.7 32.9];
+                    
+                elseif strcmp(currCondition, 'MoveLine_accelerating_looming_slow');
+                    
+                    speedDiff = [0 3.5 7.0 10.1 13.2 16.2 18.8];
+                    
+                    %CRS depth conditions
                 elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
-
+                    
                     speedDiff = [0 31.6 42.4 52.8 62.4 71.2 79.8];
                     
                 elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
                     
                     speedDiff = [0 10.2 15.4 20.6 25.8 30.6 35.4];
                     
-                %CRS lateral conditions    
+                    %CRS lateral conditions
                 elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
                     
                     speedDiff = [0 31.6 42.4 52.6 62.2 71.3 79.8];
@@ -137,14 +168,16 @@ for iParticipant = 1:length(participantCodes)
                     
                 end
                 
-            %PROPORTION SPEED CHANGE OVER ENTIRE INTERVAL, FACTORING OUT
-            %ACCELERATION OF NULL
+                %PROPORTION SPEED CHANGE OVER ENTIRE INTERVAL, FACTORING OUT
+                %ACCELERATION OF NULL
             elseif strcmp(currAnalysisType, 'speed_change_full');
                 
                 xLabelTitle  = 'Proportion speed change over full interval';
                 
                 %midspeed accelerating conditions
-                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed')...
+                        || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed')...
+                        || strcmp(currCondition, 'MoveLine_accelerating_cd_midspeed');
                     
                     AFastnull = 69.5;
                     BFastnull = 30.1;
@@ -161,7 +194,9 @@ for iParticipant = 1:length(participantCodes)
                     speedDiff = fullFastIntervalChange;
                     
                     %slow accelerating conditions
-                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
+                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow')...
+                        || strcmp(currCondition,'MoveLine_accelerating_lateral_slow')...
+                        || strcmp(currCondition, 'MoveLine_accelerating_cd_slow');
                     
                     ASlownull = 27.2;
                     BSlownull = 18.0;
@@ -176,6 +211,14 @@ for iParticipant = 1:length(participantCodes)
                     end
                     
                     speedDiff = fullSlowIntervalChange;
+                    
+                elseif strcmp(currCondition, 'MoveLine_accelerating_looming_midspeed');
+                    
+                    speedDiff = [];
+                    
+                elseif strcmp(currCondition, 'MoveLine_accelerating_looming_slow');
+                    
+                    speedDiff = [];
                     
                     %CRS depth conditions
                 elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
@@ -194,36 +237,48 @@ for iParticipant = 1:length(participantCodes)
                 elseif strcmp(currCondition, 'MoveLine_CRS_lateral_slow');
                     
                     speedDiff = [0 0.37 0.51 0.63 0.73 0.81 0.89]; %2dp
-              
+                    
                 end
                 
                 
-            %ARCMIN SPEED CHANGE OVER ENTIRE INTERVAL FACTORING OUT
-            %ACCELERATION OF NULL
+                %ARCMIN SPEED CHANGE OVER ENTIRE INTERVAL FACTORING OUT
+                %ACCELERATION OF NULL
                 
             elseif strcmp(currAnalysisType, 'speed_change_full_arcmin');
                 
                 xLabelTitle  = 'Speed change over full interval (arcmin/s)';
                 
                 %midspeed accelerating conditions
-                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed')...
+                        || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed')...
+                        || strcmp(currCondition, 'MoveLine_accelerating_cd_midspeed');
                     
                     speedDiff = [0 12.3 24.8 37.3 49.6 62.1 74.5];
                     
                     %slow accelerating conditions
-                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
+                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow')...
+                        || strcmp(currCondition,'MoveLine_accelerating_lateral_slow')...
+                        || strcmp(currCondition, 'MoveLine_accelerating_cd_slow');
                     
                     speedDiff = [0 5.6 11.3 16.9 22.6 28.2 33.9];
                     
+                elseif strcmp(currCondition, 'MoveLine_accelerating_looming_midspeed');
+                    
+                    speedDiff = [];
+                    
+                elseif strcmp(currCondition, 'MoveLine_accelerating_looming_slow');
+                    
+                    speedDiff = [];
+                    
                 elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
-
+                    
                     speedDiff = [0 31.6 42.4 52.8 62.4 71.2 79.8];
                     
                 elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
                     
                     speedDiff = [0 10.2 15.4 20.6 25.8 30.6 35.4];
                     
-                %CRS lateral conditions    
+                    %CRS lateral conditions
                 elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
                     
                     speedDiff = [0 31.6 42.4 52.6 62.2 71.3 79.8];
@@ -233,76 +288,17 @@ for iParticipant = 1:length(participantCodes)
                     speedDiff = [0 10.1 15.5 20.7 25.7 30.7 35.5];
                     
                 end
+            elseif strcmp(currAnalysisType, 'real_world_change');
                 
-            %ARCMIN SPEED AT START
+                xLabelTitle  = 'Speed change in the world (cm/s)';
                 
-            elseif strcmp(currAnalysisType, 'start_arcmin');
-                
-                xLabelTitle  = 'Initial speed of interval (arcmin/s)';
-                
-                %midspeed accelerating conditions
-                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
+                if strfind(currCondition, 'midspeed')
                     
-                    speedDiff = [30.1 26.4 22.6 18.8 15.1 11.3 7.5];
+                    speedDiff = [0 10 20 30 40 50 60];
                     
-                    %slow accelerating conditions
-                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
+                elseif strfind(currCondition, 'slow')
                     
-                    speedDiff = [18.0 15.8 13.5 11.3 9.01 6.76 4.50];
-                    
-                %CRS depth conditions
-                elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
-
-                    speedDiff = [47.6 31.8 26.4 21.2 16.4 12.0 7.6];
-                    
-                elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
-                    
-                    speedDiff = [22.3 17.2 14.6 12.0 9.4 7.0 4.6];
-                    
-                %CRS lateral conditions    
-                elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
-                    
-                    speedDiff = [47.6 31.8 26.4 21.3 16.5 11.9 7.7];
-                    
-                elseif strcmp(currCondition, 'MoveLine_CRS_lateral_slow');
-                    
-                    speedDiff = [22.3 17.3 14.6 12.0 9.5 7.0 4.6];
-                    
-                end
-                
-            %ARCMIN SPEED AT END
-                
-            elseif strcmp(currAnalysisType, 'end_arcmin');
-                
-                 xLabelTitle  = 'Final speed of interval (arcmin/s)';
-                
-                %midspeed accelerating conditions
-                if strcmp(currCondition, 'MoveLine_accelerating_depth_midspeed') || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed');
-                    
-                    speedDiff = [69.5 78.1 86.8 95.5 104.1 112.8 121.4];
-                    
-                    %slow accelerating conditions
-                elseif strcmp(currCondition, 'MoveLine_accelerating_depth_slow') || strcmp(currCondition,'MoveLine_accelerating_lateral_slow');
-                    
-                    speedDiff = [27.2 30.6 34.0 37.4 40.8 44.2 47.6];
-                    
-                %CRS depth conditions
-                elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
-
-                    speedDiff = [47.6 63.4 68.8 74.0 78.8 83.2 87.4];
-                    
-                elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
-                    
-                    speedDiff = [22.3 27.4 30.0 32.6 35.2 37.6 40.0];
-                    
-                %CRS lateral conditions    
-                elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
-                    
-                    speedDiff = [47.6 63.4 68.8 73.9 78.7 83.2 87.5];
-                    
-                elseif strcmp(currCondition, 'MoveLine_CRS_lateral_slow');
-                    
-                    speedDiff = [22.3 27.4 30.1 32.7 35.2 37.7 40.1];
+                    speedDiff = [0 5 10 15 20 25 30];
                     
                 end
                 
