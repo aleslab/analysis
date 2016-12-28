@@ -2,8 +2,8 @@
 %clc;
 clear all;
 
-
-stimOri = wrapTo90(360*rand(20,1));
+stimOri=360*rand(20,1);
+%stimOri = wrapTo90(360*rand(20,1));
 var_prox = 100;
 
 %This line is to simulate proximal noise from the observer. 
@@ -37,9 +37,9 @@ for i= 2:length (value);
     
     estimate(i)=estimate(i-1);
     
-    estimate(i)=estimate(i-1) + gain*minAngleDiff(value(i),estimate(i-1));
-    
-    sdEstimate(i)  = value(i-1) + gain*minAngleDiff(value(i),value(i-1));
+   % estimate(i)=estimate(i-1) + gain*minAngleDiff(value(i),estimate(i-1));
+    estimate(i)=estimate(i-1) + gain*(stimOri(i)-estimate(i-1));
+    sdEstimate(i)  = stimOri(i-1) + gain*minAngleDiff(stimOri(i),stimOri(i-1));
     
     estimate(i) = wrapTo90(estimate(i));
     
