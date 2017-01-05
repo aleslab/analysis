@@ -2,8 +2,8 @@
 %clc;
 clear all;
 
-stimOri=360*rand(20,1);
-%stimOri = wrapTo90(360*rand(20,1));
+%stimOri=360*rand(20,1);
+stimOri = wrapTo90(360*rand(20,1));
 var_prox = 100;
 
 %This line is to simulate proximal noise from the observer. 
