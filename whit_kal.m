@@ -2,9 +2,9 @@
 %clc;
 clear all;
 
-%stimOri=360*rand(20,1);
-stimOri = wrapTo90(360*rand(20,1));
-var_prox = 100;
+stimOri=360*rand(20,1);
+%stimOri = wrapTo90(360*rand(30,1));
+%var_prox = 100;
 
 %This line is to simulate proximal noise from the observer. 
 value=stimOri+randn(size(stimOri))*sqrt(var_prox);
@@ -27,13 +27,13 @@ estimate_initial_time_point = 0;%define value for first Xhat
 
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
-gain = .9;%distal / (distal +proximal);
+gain = .5;%distal / (distal +proximal);
 
 err(1) = 0;
 RO(1)  = 0;
 estimateUpdate(1) = 0;
 sdEstimate(1) = 0;
-for i= 2:length (value);
+for i= 2:length (stimOri);
     
     estimate(i)=estimate(i-1);
     
@@ -66,28 +66,28 @@ set (gca,'fontsize', 22);
 %plot (p_response);
 
 hold on
-plot (stimOri,'g', 'Linewidth',2);
+plot (stimOri,'g', 'Linewidth',3);
 hold on
-plot (estimate,'k','Linewidth',2);
-legend ('Kalman prediction of blades given gain of 0.5', 'Actual blade orientaton');
+plot (estimate,'k','Linewidth',3);
+legend ('Actual blade orientaton','Kalman prediction of blades given gain of 0.5');
 xlabel('Time recorded');
 ylabel ('Orientation of turbine blades in degrees');
 
-% 
-% figure(102);clf;
-% scatter (RO, err,'r','filled');
-% legend ('error on trial')
-% xlabel('RO');
-% ylabel('error');
-% 
-% figure (103);clf;
-% set (gca,'fontsize', 22);
-% scatter (RO, PE,'b','filled');
-% legend ('prediction error');
-% xlabel ('RO');
-% ylabel('amount of prediciton error');
-% 
-% 
+
+figure(102);clf;
+scatter (RO, err,'r','filled');
+legend ('error on trial')
+xlabel('RO');
+ylabel('error');
+
+figure (103);clf;
+set (gca,'fontsize', 22);
+scatter (RO, PE,'b','filled');
+legend ('prediction error');
+xlabel ('RO');
+ylabel('amount of prediciton error');
+
+
 figure (104);
 clf;
 set (gca,'fontsize', 22);
@@ -96,11 +96,11 @@ scatter (estimateUpdate, PE,'b','filled');
 legend ('responseUpdate');
 xlabel('how much the estimate updates');
 ylabel ('amount of prediction error');
-% 
-% 
-% 
-% figure(105);clf;
-% scatter (RO, sdErr,'g','filled');
-% legend ('whitney_sdErr')
-% 
+
+
+
+figure(105);clf;
+scatter (RO, sdErr,'g','filled');
+legend ('whitney_sdErr')
+
 % 
