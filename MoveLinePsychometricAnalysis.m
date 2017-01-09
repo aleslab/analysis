@@ -179,15 +179,18 @@ for iParticipant = 1:length(participantCodes)
                         || strcmp(currCondition,'MoveLine_accelerating_lateral_midspeed')...
                         || strcmp(currCondition, 'MoveLine_accelerating_cd_midspeed');
                     
-                    AFastnull = 69.5;
-                    BFastnull = 30.1;
+                    Bs = 69.5;
+                    As = 30.1;
                     
-                    AFasttest = [69.5 78.1 86.8 95.5 104.1 112.8 121.4];
-                    BFasttest = [30.1 26.4 22.6 18.8 15.1 11.3 7.53];
+                    Bt = [69.5 78.1 86.8 95.5 104.1 112.8 121.4];
+                    At = [30.1 26.4 22.6 18.8 15.1 11.3 7.53];
                     
-                    for iFast = 1:length(AFasttest)
+                    B = [47.6 63.4 68.8 74 78.8 83.2 87.4];
+                    
+                    
+                    for iFast = 1:length(Bt)
                         
-                        fullFastIntervalChange(iFast) = ((AFasttest(iFast) - BFasttest(iFast)) - (AFastnull - BFastnull))/AFasttest(iFast);
+                        fullFastIntervalChange(iFast) = ((Bt(iFast) - At(iFast)) - (Bs - As))/((Bt(iFast)+B(iFast))/2);
                         
                     end
                     
@@ -198,45 +201,89 @@ for iParticipant = 1:length(participantCodes)
                         || strcmp(currCondition,'MoveLine_accelerating_lateral_slow')...
                         || strcmp(currCondition, 'MoveLine_accelerating_cd_slow');
                     
-                    ASlownull = 27.2;
-                    BSlownull = 18.0;
+                    Bs = 27.2;
+                    As = 18.0;
                     
-                    ASlowtest = [27.2 30.6 34.0 37.4 40.8 44.2 47.6];
-                    BSlowtest = [18.0 15.8 13.5 11.3 9.01 6.76 4.50];
+                    Bt = [27.2 30.6 34.0 37.4 40.8 44.2 47.6];
+                    At = [18.0 15.8 13.5 11.3 9.01 6.76 4.50];
                     
-                    for iSlow = 1:length(ASlowtest)
+                    B = [22.3 27.4 30.0 32.6 35.2 37.6 40.0]; 
+                    
+               
+                    for iSlow = 1:length(Bt)
                         
-                        fullSlowIntervalChange(iSlow) = ((ASlowtest(iSlow) - BSlowtest(iSlow)) - (ASlownull - BSlownull))/ASlowtest(iSlow);
+                        fullSlowIntervalChange(iSlow) = ((Bt(iSlow) - At(iSlow)) - (Bs - As))/((Bt(iSlow)+B(iSlow))/2);
                         
                     end
                     
                     speedDiff = fullSlowIntervalChange;
                     
-                elseif strcmp(currCondition, 'MoveLine_accelerating_looming_midspeed');
-                    
-                    speedDiff = [];
-                    
-                elseif strcmp(currCondition, 'MoveLine_accelerating_looming_slow');
-                    
-                    speedDiff = [];
+%                 elseif strcmp(currCondition, 'MoveLine_accelerating_looming_midspeed');
+%                     
+%                     speedDiff = [];
+%                     
+%                 elseif strcmp(currCondition, 'MoveLine_accelerating_looming_CRSDM');
+%                     
+%                     speedDiff = [];
                     
                     %CRS depth conditions
                 elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
                     
-                    speedDiff = [0 0.50 0.62 0.71 0.79 0.86 0.91]; %2dp
+                    B = [47.6 63.4 68.8 74.0 78.8 83.2 87.4];
+                    A = [47.6 31.8 26.4 21.2 16.4 12.0 7.6];
+                    Bt = [69.5 78.1 86.8 95.5 104.1 112.8 121.4];
+
+                    for iCRSDM = 1:length(Bt)
+                        
+                        fullCRSDMIntervalChange(iCRSDM) = ((B(iCRSDM) - A(iCRSDM))/((Bt(iCRSDM)+B(iCRSDM))/2);
+                        
+                    end
+                    
+                    speedDiff = fullCRSDMIntervalChange;
+
                     
                     %slow and midspeed CRS lateral conditions
                 elseif strcmp(currCondition, 'MoveLine_CRS_depth_slow');
                     
-                    speedDiff = [0 0.37 0.51 0.63 0.73 0.81 0.88]; %2dp
+                    B = [22.3 27.4 30.0 32.6 35.2 37.6 40.0];
+                    A = [22.3 17.2 14.6 12.0 9.4 7.0 4.6];
+                    Bt = [27.2 30.6 34.0 37.4 40.8 44.2 47.6];
+
+                    for iCRSDS = 1:length(Bt)
+                        
+                        fullCRSDSIntervalChange(iCRSDS) = ((B(iCRSDS) - A(iCRSDS))/((Bt(iCRSDS)+B(iCRSDS))/2);
+                        
+                    end
+                    
+                    speedDiff = fullCRSDSIntervalChange;
                     
                 elseif strcmp(currCondition, 'MoveLine_CRS_lateral_midspeed');
                     
-                    speedDiff = [0 0.50 0.62 0.71 0.79 0.86 0.91]; %2dp
+                    B = [47.6 63.4 68.8 73.9 78.7 83.2 87.5];
+                    A = [47.6 31.8 26.4 21.3 16.5 11.9 7.7];
+                    Bt = [69.5 78.1 86.8 95.5 104.1 112.8 121.4];
+
+                    for iCRSLM = 1:length(Bt)
+                        
+                        fullCRSLMIntervalChange(iCRSLM) = ((B(iCRSLM) - A(iCRSLM))/((Bt(iCRSLM)+B(iCRSLM))/2);
+                        
+                    end
+                    
+                    speedDiff = fullCRSLMIntervalChange;
                     
                 elseif strcmp(currCondition, 'MoveLine_CRS_lateral_slow');
                     
-                    speedDiff = [0 0.37 0.51 0.63 0.73 0.81 0.89]; %2dp
+                    B = [22.3 27.4 30.1 32.7 35.2 37.7 40.1];
+                    A = [22.3 17.3 14.6 12.0 9.5 7.0 4.6];
+                    Bt = [27.2 30.6 34.0 37.4 40.8 44.2 47.6];
+
+                    for iCRSLS = 1:length(Bt)
+                        
+                        fullCRSLSIntervalChange(iCRSLS) = ((B(iCRSLS) - A(iCRSLS))/((Bt(iCRSLS)+B(iCRSLS))/2);
+                        
+                    end
+                    
+                    speedDiff = fullCRSLSIntervalChange;
                     
                 end
                 
@@ -264,11 +311,11 @@ for iParticipant = 1:length(participantCodes)
                     
                 elseif strcmp(currCondition, 'MoveLine_accelerating_looming_midspeed');
                     
-                    speedDiff = [];
+                    speedDiff = [0 8.3 16.6 24.8 33.2 41.5 49.7];
                     
                 elseif strcmp(currCondition, 'MoveLine_accelerating_looming_slow');
                     
-                    speedDiff = [];
+                    speedDiff = [0 3.7 7.5 11.3 15.0 18.8 22.6];
                     
                 elseif strcmp(currCondition, 'MoveLine_CRS_depth_midspeed');
                     
