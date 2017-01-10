@@ -235,7 +235,7 @@ for iParticipant = 1:length(participantCodes)
 
                     for iCRSDM = 1:length(Bt)
                         
-                        fullCRSDMIntervalChange(iCRSDM) = ((B(iCRSDM) - A(iCRSDM))/((Bt(iCRSDM)+B(iCRSDM))/2);
+                        fullCRSDMIntervalChange(iCRSDM) = (B(iCRSDM) - A(iCRSDM))/((Bt(iCRSDM)+B(iCRSDM))/2);
                         
                     end
                     
@@ -251,7 +251,7 @@ for iParticipant = 1:length(participantCodes)
 
                     for iCRSDS = 1:length(Bt)
                         
-                        fullCRSDSIntervalChange(iCRSDS) = ((B(iCRSDS) - A(iCRSDS))/((Bt(iCRSDS)+B(iCRSDS))/2);
+                        fullCRSDSIntervalChange(iCRSDS) = (B(iCRSDS) - A(iCRSDS))/((Bt(iCRSDS)+B(iCRSDS))/2);
                         
                     end
                     
@@ -265,7 +265,7 @@ for iParticipant = 1:length(participantCodes)
 
                     for iCRSLM = 1:length(Bt)
                         
-                        fullCRSLMIntervalChange(iCRSLM) = ((B(iCRSLM) - A(iCRSLM))/((Bt(iCRSLM)+B(iCRSLM))/2);
+                        fullCRSLMIntervalChange(iCRSLM) = (B(iCRSLM) - A(iCRSLM))/((Bt(iCRSLM)+B(iCRSLM))/2);
                         
                     end
                     
@@ -279,7 +279,7 @@ for iParticipant = 1:length(participantCodes)
 
                     for iCRSLS = 1:length(Bt)
                         
-                        fullCRSLSIntervalChange(iCRSLS) = ((B(iCRSLS) - A(iCRSLS))/((Bt(iCRSLS)+B(iCRSLS))/2);
+                        fullCRSLSIntervalChange(iCRSLS) = (B(iCRSLS) - A(iCRSLS))/((Bt(iCRSLS)+B(iCRSLS))/2);
                         
                     end
                     
