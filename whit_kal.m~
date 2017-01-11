@@ -28,7 +28,7 @@ estimate_initial_time_point = 0;%define value for first Xhat
 
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
-gain = .2;%distal / (distal +proximal);
+gain = .9;%distal / (distal +proximal);
 
 err(1) = 0;
 RO(1)  = 0;
@@ -78,37 +78,32 @@ ylabel ('Movement of car');
 figure(102);
 clf;
 set(gca,'fontsize', 22);
-hold on
 scatter (RO, err,200,'k','filled');
-legend ('error on trial');
+legend ('error on trial')
 xlabel('RO');
 ylabel('error');
 
-figure (103);
-clf;
+figure (103);clf;
 set (gca,'fontsize', 22);
-hold on
-scatter (RO, PE,200,'k','filled');
-legend ('prediction error made in predicion of error');
+scatter (RO, PE,'b','filled');
+legend ('prediction error');
 xlabel ('RO');
-ylabel('amount of prediciton error made in prediction of position');
+ylabel('amount of prediciton error');
 
 
 figure (104);
 clf;
 set (gca,'fontsize', 22);
 hold on
-scatter (estimateUpdate, PE,200,'b','filled');
+scatter (estimateUpdate, PE,'b','filled');
 legend ('responseUpdate');
 xlabel('how much the estimate updates');
 ylabel ('amount of prediction error');
 
 
 
-figure(105);
-clf;
-set(gca,'fontsize', 22);
-scatter (RO, sdErr,200,'g','filled');
+figure(105);clf;
+scatter (RO, sdErr,'g','filled');
 legend ('whitney_sdErr')
 
 % 
