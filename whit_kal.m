@@ -3,7 +3,7 @@
 clear all;
 
 %stimOri=360*rand(20,1);
-stimOri = wrapTo90 (360*rand(100,1));
+stimOri = wrapTo90 (360*rand(70,1));
 var_prox = 100;
 stimOri = stimOri+randn(size(stimOri))*sqrt(var_prox);
 
@@ -16,7 +16,7 @@ clear estimate;
 estimate_initial_time_point = 0;%define value for first Xhat
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
-gain = .2;%distal / (distal +proximal);
+gain = .9;%distal / (distal +proximal);
 
 err(1) = 0;
 RO(1)  = 0;
@@ -53,7 +53,7 @@ end
 figure(101);
 clf;
 set (gca,'fontsize', 22);
-plot (p_response);
+%plot (p_response);
 
 hold on
 %kalman track figure
@@ -70,10 +70,10 @@ figure(102);
 clf;
 set(gca,'fontsize', 22);
 hold on
-scatter (err, RO, 200,'k','filled');
-legend ('error on trial');
-xlabel('RO');
-ylabel('error');
+scatter (RO, err, 200,'k','filled');
+legend ('Whitney type plot');
+xlabel('Relative position ');
+ylabel('error in meters');
 
 % figure (103);
 % %precition error to RO figure
