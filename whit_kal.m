@@ -3,7 +3,7 @@
 clear all;
 
 %stimOri=360*rand(20,1);
-stimOri = wrapTo90(20*rand(30,1));
+stimOri = wrapTo90 (360*rand(50,1));
 
 %var_prox = 100;
 
@@ -28,7 +28,7 @@ estimate_initial_time_point = 0;%define value for first Xhat
 
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
-gain = .2;%distal / (distal +proximal);
+gain = .5;%distal / (distal +proximal);
 
 err(1) = 0;
 RO(1)  = 0;
@@ -39,7 +39,7 @@ for i= 2:length (stimOri);
     estimate(i)=estimate(i-1);
     
     estimate(i)=estimate(i-1) + gain*minAngleDiff(stimOri(i),estimate(i-1));
-    %estimate(i)=estimate(i-1) + gain*(stimOri(i)-estimate(i-1));
+    
     sdEstimate(i)  = stimOri(i-1) + gain*minAngleDiff(stimOri(i),stimOri(i-1));
     
     estimate(i) = wrapTo90(estimate(i));
@@ -71,7 +71,7 @@ plot (stimOri,'g', 'Linewidth',3);
 hold on
 plot (estimate,'k','Linewidth',3);
 legend ('Actual posistion of car','Kalman prediction');
-xlabel('Time recorded');
+xlabel('Time in secs');
 ylabel ('Movement of car');
 
 
@@ -89,9 +89,9 @@ clf;
 set (gca,'fontsize', 22);
 hold on
 scatter (RO, PE,200,'k','filled');
-legend ('prediction error made in predicion of error');
+legend ('Serial dependence');
 xlabel ('RO');
-ylabel('amount of prediciton error made in prediction of position');
+ylabel('error made in prediction of position');
 
 
 figure (104);
@@ -100,15 +100,15 @@ set (gca,'fontsize', 22);
 hold on
 scatter (estimateUpdate, PE,200,'b','filled');
 legend ('responseUpdate');
-xlabel('how much the estimate updates');
+xlabel('how much the kalman updates');
 ylabel ('amount of prediction error');
 
 
 
-figure(105);
-clf;
-set(gca,'fontsize', 22);
-scatter (RO, sdErr,200,'g','filled');
-legend ('whitney_sdErr')
+% figure(105);
+% clf;
+% set(gca,'fontsize', 22);
+% scatter (RO, sdErr,200,'g','filled');
+% legend ('whitney_sdErr')
 
 % 

@@ -26,49 +26,85 @@ gain = .9;%distal / (distal +proximal);
 err(1) = 0;
 RO(1)  = 0;
 for i= 2:length (respOri);
-    %estimate(i)=estimate(i-1);
-
-    estimate(i)=estimate(i-1) + gain*minAngleDiff(respOri(i),estimate(i-1));
+    
+    estimate(i)=estimate(i-1);
+    
+    estimate(i)=estimate(i-1) + gain*minAngleDiff(stimOri(i),estimate(i-1));
+    
+    sdEstimate(i)  = stimOri(i-1) + gain*minAngleDiff(stimOri(i),stimOri(i-1));
+    
     estimate(i) = wrapTo90(estimate(i));
-    %gain(i)=(1-gain*(distal(i)));
     
-     err(i) = minAngleDiff(estimate(i), stimOri(i));
-     RO(i)=  minAngleDiff (stimOri(i-1),stimOri(i));
+    err(i) = minAngleDiff(respOri(i), stimOri(i));%whitney
     
-end
-%plot (value);
-
+    RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
+    
+    PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
+    
+    estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
+    
+    sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
+     
+    
 % plot (gain, 'r');
 % hold on
 
 
+end
+[R,P]=corrcoef(err,RO);
+
+
+
 figure(101);
+clf
+set (gca,'fontsize', 22);
+hold on
+plot (respOri);
+hold on
+plot (stimOri,'g', 'Linewidth',3);
+hold on
+plot (estimate,'k','Linewidth',3);
+legend ('Actual stimOri','Presponse','Kalman prediction');
+xlabel('Time');
+ylabel ('orientation');
+
+
+figure(102);
 clf;
-plot (stimOri);
-
+set(gca,'fontsize', 22);
 hold on
-plot (respOri, 'bx');
+scatter (RO, err,50,'k','filled');
+legend ('error on trial');
+xlabel('RO');
+ylabel('error');
+
+figure (103);
+clf;
+set (gca,'fontsize', 22);
 hold on
-plot (estimate, 'c*');
-legend ('p_response', 'actual_stimOri', 'modelled kalman resposne given calibrated gain')
-%legend('Stim movement', 'how the kalman tracks stim', 'how partcipant tracks ') 
-% 
+scatter (RO, PE,50,'k','filled');
+legend ('Serial dependence');
+xlabel ('RO');
+ylabel('error made in prediction of position');
+
+
+figure (104);
+clf;
+set (gca,'fontsize', 22);
+hold on
+scatter (estimateUpdate, PE,50,'b','filled');
+legend ('responseUpdate');
+xlabel('how much the kalman updates');
+ylabel ('amount of prediction error');
 
 
 
+figure(105);
+clf;
+set(gca,'fontsize', 22);
+hold on
+scatter (RO, sdErr,50,'g','filled');
+legend ('whitney_sdErr')
 
-
-
-% plot(Z,'m')
-% hold on;
-% plot(Xhat,'c')
-% plot(B, 'k')
-% legend('Stim movement', 'how the kalman tracks stim', 'how partcipant tracks ') 
-% 
-% grid on
- 
-
-figure(102);clf;
-scatter (RO, err);
 
 
