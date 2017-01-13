@@ -193,7 +193,7 @@ for iAnalysis = 1:length(analysisType)
     
     MSw = [((0.187 + 0.182 + 0.025 + 0.092 + 0.067 + 0.013 +0.012)/63),... %changepoint proportion
         ((413.338 + 409.460 + 206.729 + 228.219 + 215.405 + 53.635 + 67.380)/63), ... %changepoint arcmin/s
-        ((0.130 + 0.137 + 0.020 + 0.068 + 0.059 + 0.012 + 0.010)/63), ... %full interval proportion
+        ((0.140 + 0.143 + 0.017 + 0.072 + 0.054 + 0.010 +0.010)/63), ... %full interval proportion
         ((699.458 + 641.066 + 349.107 + 394.647 + 334.756 + 82.853 + 113.736)/63)]; %full interval arcmin/s
     %sum of all type III sum of square errors divided by the sum of their degrees of freedom
     
