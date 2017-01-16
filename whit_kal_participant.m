@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =2; %When you have only 1 condition
+iCond =3; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -83,8 +83,9 @@ clf;
 set(gca,'fontsize', 26);
 hold on
 scatter (RO, err,70,'k','filled');
+hold on
 legend ('Error on trial');
-xlabel('Reltaive Orientation');
+xlabel('Relative Orientation');
 ylabel('Error in degrees');
 
 % figure (103);
@@ -101,29 +102,30 @@ figure (104);
 clf;
 set (gca,'fontsize', 22);
 hold on
-scatter (estimateUpdate, PE,50,'b','filled');
+scatter (estimateUpdate, PE,80,'b','filled');
+hold on
 legend ('Response Update');
 xlabel('How much the kalman updates');
 ylabel ('Amount of prediction error');
 
-
-
-% figure(105);
-% clf;
-% set(gca,'fontsize', 22);
-% hold on
-% scatter (RO, sdErr,50,'g','filled');
-% legend ('whitney_sdErr')
-
+% 
+% 
+% % figure(105);
+% % clf;
+% % set(gca,'fontsize', 22);
+% % hold on
+% % scatter (RO, sdErr,50,'g','filled');
+% % legend ('whitney_sdErr')
+% 
 figure(106);
 clf;
 set(gca,'fontsize', 22);
 hold on
-scatter (partcipantupdate, PE,50,'k','filled');
+scatter (partcipantupdate, PE,80,'k','filled');
 xlabel('How much the participant updates');
 ylabel ('Amount of prediction error');
 legend ('PE');
 
-
-
-
+% 
+% 
+% 
