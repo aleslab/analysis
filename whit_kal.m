@@ -3,8 +3,10 @@
 clear all;
 
 %stimOri=360*rand(20,1);
-stimOri = wrapTo90 (360*rand(70,1));
-var_prox = 100;
+
+
+stimOri = wrapTo90(360*rand(200,1));
+var_prox = 525;
 stimOri = stimOri+randn(size(stimOri))*sqrt(var_prox);
 
 %This line is to simulate proximal noise from the observer. 
@@ -16,7 +18,7 @@ clear estimate;
 estimate_initial_time_point = 0;%define value for first Xhat
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
-gain = .9;%distal / (distal +proximal);
+gain = .2;%distal / (distal +proximal);
 
 err(1) = 0;
 RO(1)  = 0;
@@ -50,30 +52,30 @@ end
 
 
 
-figure(101);
-clf;
-set (gca,'fontsize', 22);
-%plot (p_response);
-
-hold on
-%kalman track figure
-plot (stimOri,'g', 'Linewidth',3);
-hold on
-plot (estimate,'k','Linewidth',3);
-legend ('Actual posistion of car','Kalman prediction');
-xlabel('Time in secs');
-ylabel ('Movement of car');
+% figure(101);
+% clf;
+% set (gca,'fontsize', 22);
+% %plot (p_response);
+% 
+% hold on
+% %kalman track figure
+% plot (stimOri,'r', 'Linewidth',4);
+% hold on
+% plot (estimate,'k','Linewidth',4);
+% legend ('Recorded orientation ','Kalman prediction');
+% xlabel('Time in secs');
+% ylabel ('Movement of blades');
 
 
 figure(102);
 %whitney figure
 clf;
-set(gca,'fontsize', 22);
+set(gca,'fontsize', 25);
 hold on
 scatter (RO, err, 200,'k','filled');
-legend ('Whitney type plot');
-xlabel('Relative position ');
-ylabel('error in meters');
+
+xlabel('Relative orientation ');
+ylabel('Error');
 
 % figure (103);
 % %precition error to RO figure
@@ -89,20 +91,20 @@ ylabel('error in meters');
 figure (104);
 clf;
 %response update figure
-set (gca,'fontsize', 22);
+set (gca,'fontsize', 25);
 hold on
 scatter (estimateUpdate, PE,200,'b','filled');
-legend ('responseUpdate');
-xlabel('how much the kalman updates');
-ylabel ('amount of prediction error');
+legend (' Prediction Update');
+xlabel('How much the kalman updates');
+ylabel ('Amount of prediction error');
 
 
 
-% figure(105);
+figure(105);
 %standard error figure
-% clf;
-% set(gca,'fontsize', 22);
-% scatter (RO, sdErr,200,'g','filled');
-% legend ('whitney_sdErr')
+clf;
+set(gca,'fontsize', 22);
+scatter (RO, sdErr,200,'g','filled');
+legend ('whitney_sdErr')
 
-% 
+
