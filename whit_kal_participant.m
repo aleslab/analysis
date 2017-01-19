@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =3; %When you have only 1 condition
+iCond =1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -56,6 +56,7 @@ for i= 2:length (respOri);
 
 end
 [R,P]=corrcoef(err,RO);
+p=polyfit(sdErr,RO,1);
 var_prox=var(err); % amount of variance in the error
 var_dist=var(stimOri); %variance in the stimOri
 
@@ -63,19 +64,19 @@ var_dist=var(stimOri); %variance in the stimOri
 
 
 
-
-figure(101);
-clf
-set (gca,'fontsize', 26);
-hold on
-plot (respOri,'r', 'Linewidth',3);
+% 
+% figure(101);
+% clf
+% set (gca,'fontsize', 26);
 % hold on
-% plot (stimOri,'r', 'Linewidth',2);
-% hold on
-plot (estimate,'k','Linewidth',3);
-legend ('Response','Kalman');
-xlabel('Time');
-ylabel ('Orientation in degrees');
+% plot (respOri,'r', 'Linewidth',3);
+% % hold on
+% % plot (stimOri,'r', 'Linewidth',2);
+% % hold on
+% plot (estimate,'k','Linewidth',3);
+% legend ('Response','Kalman');
+% xlabel('Time');
+% ylabel ('Orientation in degrees');
 
 
 figure(102);
@@ -98,34 +99,34 @@ ylabel('Error in degrees');
 % ylabel('error made in prediction of position');
 
 
-figure (104);
-clf;
-set (gca,'fontsize', 22);
-hold on
-scatter (estimateUpdate, PE,80,'b','filled');
-hold on
-legend ('Response Update');
-xlabel('How much the kalman updates');
-ylabel ('Amount of prediction error');
-
+% figure (104);
+% clf;
+% set (gca,'fontsize', 22);
+% hold on
+% scatter (estimateUpdate, PE,80,'b','filled');
+% hold on
+% legend ('Response Update');
+% xlabel('How much the kalman updates');
+% ylabel ('Amount of prediction error');
 % 
+% % 
+% % 
+% figure(105);
+% clf;
+% set(gca,'fontsize', 22);
+% hold on
+% scatter (RO, sdErr,50,'g','filled');
+% legend ('whitney_sdErr')
+% % 
+% figure(106);
+% clf;
+% set(gca,'fontsize', 22);
+% hold on
+% scatter (partcipantupdate, PE,80,'k','filled');
+% xlabel('How much the participant updates');
+% ylabel ('Amount of prediction error');
+% legend ('PE');
 % 
-% % figure(105);
-% % clf;
-% % set(gca,'fontsize', 22);
-% % hold on
-% % scatter (RO, sdErr,50,'g','filled');
-% % legend ('whitney_sdErr')
-% 
-figure(106);
-clf;
-set(gca,'fontsize', 22);
-hold on
-scatter (partcipantupdate, PE,80,'k','filled');
-xlabel('How much the participant updates');
-ylabel ('Amount of prediction error');
-legend ('PE');
-
-% 
-% 
-% 
+% % 
+% % 
+% % 
