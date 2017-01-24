@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =1; %When you have only 1 condition
+iCond =3; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -20,7 +20,7 @@ estimate_initial_time_point = 0;%define value for first Xhat
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
 
-gain = .95;%distal / (distal +proximal);
+gain = .9;%distal / (distal +proximal);
 %estimate = estimate+gain*value - estimate;
 
 err(1) = 0;
@@ -45,8 +45,9 @@ for i= 2:length (respOri);
     
     partcipantupdate(i) = minAngleDiff(respOri(i), respOri(i-1));
     
-    sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
-     
+    %sdEstimate_err(i)= minAngleDiff(sdEstimate(i),stimOri(i-1));
+    
+    
     
 % plot (gain, 'r');
 % hold on
@@ -68,65 +69,87 @@ p=polyfit(err,RO,1);
 
 % figure(101);
 % clf
-% set (gca,'fontsize', 26);
+% set (gca,'fontsize', 24);
 % hold on
 % plot (respOri,'r', 'Linewidth',3);
 % % hold on
-% % plot (stimOri,'r', 'Linewidth',2);
-% % hold on
+% % plot (stimOri,'g', 'Linewidth',2);
+% hold on
 % plot (estimate,'k','Linewidth',3);
-% legend ('Response','Kalman');
-% xlabel('Time');
-% ylabel ('Orientation in degrees');
+% legend ('Participant response','Kalman Prediction');
+% xlabel('Trial number');
+% ylabel ('Orientation (degs)');
 
 
 figure(102);
 clf;
-set(gca,'fontsize', 26);
+%whitey plot
+set(gca,'fontsize', 24);
 hold on
-scatter (RO, err,70,'k','filled');
-axis([-60,60,-60,60]);
+scatter (RO, err,80,'k','filled');
+axis([-70,70,-70,70]);
 hold on
-xlabel('Relative orientation of current trial compared to previous trial(deg) ');
+legend ('Error (deg) vs relative orientation(deg)');
+xlabel('Relative orientation of current trial compared to previous trial(deg)');
 ylabel('Error on current trial (deg)');
-% figure (103);
-% clf;
-% set (gca,'fontsize', 22);
-% hold on
-% scatter (RO, PE,90,'k','filled');
-% legend ('Serial dependence');
-% xlabel ('RO');
-% ylabel('error made in prediction of position');
+
+figure (103);
+clf;
+%RO vs PE plot
+set (gca,'fontsize', 24);
+hold on
+scatter (RO, PE,90,'k','filled');
+axis([-70,70,-70,70]);
+legend ('Prediction error (deg) vs relative orientation(deg)');
+xlabel ('Relative orientation of current trial compared to previous trial(deg)');
+ylabel('Amount of prediction error on current trial (deg)');
 
 
-% figure (104);
+figure (104);
+clf;
+%kal estimate vs PE 
+set (gca,'fontsize', 24);
+hold on
+scatter (estimateUpdate, PE,80,'k','filled');
+axis([-100,100,-100,100]);
+hold on
+legend ('Prediction error (deg) vs Kalman predicition update(deg)');
+xlabel('How much the Kalman updates its next prediction');
+ylabel ('Prediction error on  current prediction');
+
+
+
+figure(105);
+clf;
+set(gca,'fontsize', 24);
+hold on
+scatter (RO, sdEstimate,80,'k','filled');
+axis([-60,60,-60,60]);
+legend ('Naive estimate vs Relative orientation');
+xlabel ('Relative orientation of current trial compared to previous trial(deg)');
+ylabel('Naive estimate error on current trial (deg)');
+
+
+
+figure(106);
+clf;
+set(gca,'fontsize', 24);
+hold on
+scatter (partcipantupdate, PE,80,'k','filled');
+legend ('Prediction error (deg) vs partcipant predicition update(deg)');
+xlabel('How much the participant updates the next response (deg)');
+ylabel ('prediction error on current trial (deg)');
+
+% figure(107);
 % clf;
-% set (gca,'fontsize', 22);
+% set(gca,'fontsize', 24);
 % hold on
-% scatter (estimateUpdate, PE,80,'b','filled');
-% hold on
-% legend ('Response Update');
-% xlabel('How much the kalman updates');
-% ylabel ('Amount of prediction error');
+% scatter (sdEstimate, PE,80,'k','filled');
+% legend ('Prediction error (deg) vs sdUpdate(deg)');
+% xlabel('How much the sd updates the next response (deg)');
+% ylabel ('prediction error on current trial (deg)');
 % 
-% % 
-% % 
-% figure(105);
-% clf;
-% set(gca,'fontsize', 22);
-% hold on
-% scatter (RO, sdErr,50,'g','filled');
-% legend ('whitney_sdErr')
-% % 
-% figure(106);
-% clf;
-% set(gca,'fontsize', 22);
-% hold on
-% scatter (partcipantupdate, PE,80,'k','filled');
-% xlabel('How much the participant updates');
-% ylabel ('Amount of prediction error');
-% legend ('PE');
-% 
-% % 
-% % 
-% % 
+
+
+
+
