@@ -124,7 +124,9 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         xlabel('Relative orientation of current trial compared to previous trial(deg)');
         ylabel('Error on current trial (deg)');
         end
-        thisFilename = ['fischer_SD_' thisLabel];
+        thisFilename = [ptbCorgiData.paradigmName ...
+            '_' thisParticipantId '_fischerSD'];
+
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
     
@@ -164,7 +166,9 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             ylabel('Amount of prediction error on current trial (deg)');
             
         end
-        thisFilename = ['ROPE_' thisLabel];
+        thisFilename = [ptbCorgiData.paradigmName ...
+            '_' thisParticipantId '_ROPE'];
+        
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
  
@@ -202,7 +206,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             ylabel('participantUpdate (deg)');
             
         end
-        thisFilename = ['PEPU_' thisLabel];
+        thisFilename = [ptbCorgiData.paradigmName ... 
+            '_' thisParticipantId '_PEPU'];
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
 

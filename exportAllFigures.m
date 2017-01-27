@@ -12,7 +12,8 @@ for iFig = figList';
 
     
     if ~isempty(get(iFig,'filename'))
-        [dir name ext] = fileparts(get(iFig,'filename'));
+        %[dir name ext] = fileparts(get(iFig,'filename'));
+        name = get(iFig,'filename');
     else
         continue;
     end
