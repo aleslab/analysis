@@ -180,7 +180,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         end
         subplot(1,ptbCorgiData.nConditions,iCond)
 
-        %RO vs PE plot
+        %PE vs participantUpdate
         set (gca,'fontsize', 16);
         hold on
         scatter (PE,participantUpdate,40,'k','filled');
@@ -190,7 +190,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         lsline;
         
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(RO, PE);
+        [r p ]= corrcoef(PE, participantUpdate);
         pePu(iParticipant,iCond).r = r(1,2);
         pePu(iParticipant,iCond).p = p(1,2);
         %Now get 
