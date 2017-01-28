@@ -17,7 +17,7 @@ stimOri=wrapTo90(stimOri);
 
 estimate_initial_time_point = 0;%define value for first Xhat
 
-estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
+kal_predict(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
 
 gain = .5;
@@ -28,21 +28,21 @@ parterr(1) = 0;
 RO(1)  = 0;
 for i= 2:length (respOri);
     
-    estimate(i)=estimate(i-1);
+    kal_predict(i)=kal_predict(i-1);
     
-    estimate(i)=estimate(i-1) + gain*minAngleDiff(stimOri(i),estimate(i-1));
+    kal_predict(i)=kal_predict(i-1) + gain*minAngleDiff(stimOri(i),kal_predict(i-1));
     
     naive_Estimate(i)  = stimOri(i-1) + estgain*minAngleDiff(stimOri(i),stimOri(i-1));
     
-    estimate(i) = wrapTo90(estimate(i));
+    kal_predict(i) = wrapTo90(kal_predict(i));
     
     parterr(i) = minAngleDiff(respOri(i), stimOri(i));%whitney
     
     RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
     
-    KalPE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
+    KalPE(i) = minAngleDiff(stimOri(i),kal_predict (i-1));%PE
     
-    estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
+    estimateUpdate(i) =  minAngleDiff(kal_predict(i),kal_predict (i-1));
     
     partcipantupdate(i) = minAngleDiff(respOri(i), respOri(i-1));
     
@@ -78,7 +78,7 @@ plot (respOri,'r', 'Linewidth',3);
 % hold on
 % plot (stimOri,'g', 'Linewidth',2);
 hold on
-plot (estimate,'k','Linewidth',3);
+plot (kal_predict,'k','Linewidth',3);
 legend ('Participant response','Kalman Prediction');
 xlabel('Trial number');
 ylabel ('Orientation (degs)');
