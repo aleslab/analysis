@@ -153,6 +153,17 @@ xlabel('How much the naive estimate  updates the next response (deg)');
 ylabel ('Naive estimate error on current trial (deg)');
 
 
-
+figure(108);
+clf
+set (gca,'fontsize', 24);
+hold on
+plot (respOri,'r', 'Linewidth',3);
+% hold on
+% plot (stimOri,'g', 'Linewidth',2);
+hold on
+plot (naive_estimate,'g','Linewidth',3);
+legend ('Participant response','Naive estimate gain of 0.85');
+xlabel('Trial number');
+ylabel ('Orientation (degs)');
 
 
