@@ -32,7 +32,7 @@ for i= 2:length (respOri);
     
     estimate(i)=estimate(i-1) + gain*minAngleDiff(stimOri(i),estimate(i-1));
     
-    sdEstimate(i)  = stimOri(i-1) + estgain*minAngleDiff(stimOri(i),stimOri(i-1));
+    naive_Estimate(i)  = stimOri(i-1) + estgain*minAngleDiff(stimOri(i),stimOri(i-1));
     
     estimate(i) = wrapTo90(estimate(i));
     
@@ -46,7 +46,7 @@ for i= 2:length (respOri);
     
     partcipantupdate(i) = minAngleDiff(respOri(i), respOri(i-1));
     
-    naive_err(i)= minAngleDiff(stimOri(i),sdEstimate(i-1));
+    naive_err(i)= minAngleDiff(stimOri(i),naive_Estimate(i-1));
     
     
     
@@ -126,7 +126,7 @@ figure(105);
 clf;
 set(gca,'fontsize', 24);
 hold on
-scatter (RO, sdEstimate,80,'k','filled');
+scatter (RO, naive_Estimate,80,'k','filled');
 axis([-60,60,-60,60]);
 legend ('Naive estimate vs Relative orientation');
 xlabel ('Relative orientation of current trial compared to previous trial(deg)');
@@ -147,7 +147,7 @@ figure(107);
 clf;
 set(gca,'fontsize', 24);
 hold on
-scatter (sdEstimate, naive_err,80,'k','filled');
+scatter (naive_Estimate, naive_err,80,'k','filled');
 legend ('Naive estimate  error (deg) vs How much the estmate updates(deg)');
 xlabel('How much the naive estimate  updates the next response (deg)');
 ylabel ('Naive estimate error on current trial (deg)');
