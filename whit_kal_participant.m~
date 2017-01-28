@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =3; %When you have only 1 condition
+iCond =2; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -24,7 +24,7 @@ gain = .5;
 estgain=0.85;%distal / (distal +proximal);
 %estimate = estimate+gain*value - estimate;
 
-parterr(1) = 0;
+err(1) = 0;
 RO(1)  = 0;
 for i= 2:length (respOri);
     
@@ -36,17 +36,17 @@ for i= 2:length (respOri);
     
     estimate(i) = wrapTo90(estimate(i));
     
-    parterr(i) = minAngleDiff(respOri(i), stimOri(i));%whitney
+    err(i) = minAngleDiff(respOri(i), stimOri(i));%whitney
     
     RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
     
-    KalPE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
+    PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
     
     estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
     
     partcipantupdate(i) = minAngleDiff(respOri(i), respOri(i-1));
     
-    naive_err(i)= minAngleDiff(stimOri(i),sdEstimate(i-1));
+    sdEstimate_err(i)= minAngleDiff(stimOri(i,sdEstimate(i));
     
     
     
@@ -59,12 +59,12 @@ for i= 2:length (respOri);
 
 
 end
-[R,P]=corrcoef(parterr,RO);
+[R,P]=corrcoef(err,RO);
 %p=polyfit(sdErr,RO,1);
-var_prox=var(parterr); % amount of variance in the error
+var_prox=var(err); % amount of variance in the error
 var_dist=var(stimOri); %variance in the stimOri
 
-p=polyfit(parterr,RO,1);
+p=polyfit(err,RO,1);
 
 
 
@@ -89,7 +89,7 @@ clf;
 %whitey plot
 set(gca,'fontsize', 24);
 hold on
-scatter (RO, parterr,80,'k','filled');
+scatter (RO, err,80,'k','filled');
 axis([-70,70,-70,70]);
 hold on
 legend ('Participant error (deg) vs relative orientation(deg)');
@@ -101,7 +101,7 @@ clf;
 %RO vs PE plot
 set (gca,'fontsize', 24);
 hold on
-scatter (RO, KalPE,90,'k','filled');
+scatter (RO, PE,90,'k','filled');
 axis([-70,70,-70,70]);
 legend ('Kalman Prediction error (deg) vs relative orientation(deg)');
 xlabel ('Relative orientation of current trial compared to previous trial(deg)');
@@ -113,10 +113,10 @@ clf;
 %kal estimate vs PE 
 set (gca,'fontsize', 24);
 hold on
-scatter (estimateUpdate, KalPE,80,'k','filled');
+scatter (estimateUpdate, PE,80,'k','filled');
 axis([-100,100,-100,100]);
 hold on
-legend ('Kalman prediction error (deg) vs Kalman predicition update(deg)');
+legend ('Prediction error (deg) vs Kalman predicition update(deg)');
 xlabel('How much the Kalman updates its next prediction');
 ylabel ('Prediction error on  current prediction');
 
@@ -138,16 +138,16 @@ figure(106);
 clf;
 set(gca,'fontsize', 24);
 hold on
-scatter (partcipantupdate, parterr,80,'k','filled');
-legend ('Partcipant response error (deg) vs partcipant response update(deg)');
+scatter (partcipantupdate, err,80,'k','filled');
+legend ('Partcipant response error (deg) vs partcipant predicition update(deg)');
 xlabel('How much the participant updates the next response (deg)');
-ylabel ('Participant error on current trial (deg)');
+ylabel ('Prediction error on current trial (deg)');
 
 figure(107);
 clf;
 set(gca,'fontsize', 24);
 hold on
-scatter (sdEstimate, naive_err,80,'k','filled');
+scatter (sdEstimate, sdEstimate_err,80,'k','filled');
 legend ('Naive estimate  error (deg) vs How much the estmate updates(deg)');
 xlabel('How much the naive estimate  updates the next response (deg)');
 ylabel ('Naive estimate error on current trial (deg)');
