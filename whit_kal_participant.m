@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =3; %When you have only 1 condition
+iCond =2; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -36,11 +36,11 @@ for i= 2:length (respOri);
     
     kal_predict(i) = wrapTo90(kal_predict(i));
     
-    part_Err(i) = minAngleDiff(stimOri(i), respOri(i-1));%whitney
+    part_Err(i) = minAngleDiff(respOri(i), stimOri(i));%whitney
     
     RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
     
-    kal_PE(i) = minAngleDiff(stimOri(i),kal_predict (i-1));%PE
+    kal_PE(i) = minAngleDiff(stimOri(i),kal_predict(i-1));%PE
     
     kal_Update(i) =  minAngleDiff(kal_predict(i),kal_predict (i-1));
     
