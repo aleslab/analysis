@@ -65,8 +65,8 @@ var_prox=var(part_Err); % amount of variance in the error
 var_dist=var(stimOri); %variance in the stimOri
 
 whit_Slope=polyfit(part_Err,RO,1);
-slope_Part_up_slope=polyfit(partcipant_update, part_Err);
-slope_Kal_up=polyfit(kal_Update, kal_PE);
+slope_Part_up_slope=polyfit(partcipant_update, part_Err, 1);
+slope_Kal_up=polyfit(kal_Update, kal_PE, 1);
 
 
 
