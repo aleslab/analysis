@@ -2,9 +2,8 @@
 
 clear all;
 
-stimOri=[300 299 290 278 270 266 260 250 220 200 190 160 150 145 130 100 90 80 77 70 68 60 50 40 20 0 20 60 80];
-%var_prox = 1000;
-%stimOri=360*rand(50,1);
+stimOri=[300 296 299 292 290 280 278 272 270 265 266 261 260 255 250 220 200 190 160 150 145 130 100 90 80 77 70 68 60 50 40 20 0 20 60 80];
+
 %stimOri = stimOri+randn(size(stimOri))*sqrt(var_prox);
 % respOri = stimOri-20;
 
@@ -23,7 +22,8 @@ clear estimate;
 estimate_initial_time_point = 0;%define value for first Xhat
 estimate(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
-gain = 0.8;%distal / (distal +proximal);
+gain = 0.5;%distal / (distal +proximal);
+estgain = 0.1;
 
 err(1) = 0;
 RO(1)  = 0;
@@ -36,7 +36,7 @@ for i= 2:length (stimOri);
     
     estimate(i)=estimate(i-1) + gain*(stimOri(i)-estimate(i-1));
     
-    sdEstimate(i)  = stimOri(i-1) + gain*minAngleDiff(stimOri(i),stimOri(i-1));
+    sdEstimate(i)  = stimOri(i-1) + estgain*minAngleDiff(stimOri(i),stimOri(i-1));
     
     %estimate(i) = wrapTo90(estimate(i));
     
@@ -47,8 +47,6 @@ for i= 2:length (stimOri);
     PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
     
     estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
-    
-    partcipantupdate(i) = minAngleDiff(estimate(i), estimate(i-1));
     
     sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
      
