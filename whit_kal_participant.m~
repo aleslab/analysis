@@ -36,7 +36,7 @@ for i= 2:length (respOri);
     
     naive_Estimate(i)  = stimOri(i-1) + estgain*minAngleDiff(stimOri(i),stimOri(i-1));%naive
     
-    naive_err(i)= minAngleDiff(naive_Estimate(i), stimOri(i)); %naive
+    naive_err(i)= minAngleDiff(stimOri(i),naive_Estimate(i-1)); %naive
     
     whitney_err(i) = minAngleDiff(respOri(i), stimOri(i)); %whitney error
     
