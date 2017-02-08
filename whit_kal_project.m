@@ -67,9 +67,23 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             participantUpdate(i) = minAngleDiff(respOri(i), respOri(i-1));
             
             
+            %( Response(n) - Stim(n-1) )  = a * ( Stim(n) - Stim(n-1))=resposne_minus_past 
+            
+            % this is the code for a weighted value of current and past
+            % stims with a nominal gain value i made up with the variable
+            % est gain as we dont know what our gain values are yet
+
             response_minus_past(i)  = estgain*minAngleDiff(stimOri(i),stimOri(i-1));
             
+            % a bit unsure about this calc but i wanted to compare how
+            % resposne minus past might update so i needed some measure of
+            % error. decided on minAngleDiff(response_minus_past(i),
+            % stimOri(i))??
+  
+            
             response_minus_past_err(i) = minAngleDiff(response_minus_past(i), stimOri(i));
+            
+            %this seems quite simple Stim(n) - Stim(n-1) is the stimulus update.
             
             response_minus_update(i) = minAngleDiff(response_minus_past(i),response_minus_past(i-1));
             
