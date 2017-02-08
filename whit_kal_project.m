@@ -66,9 +66,10 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
                         
             participantUpdate(i) = minAngleDiff(respOri(i), respOri(i-1));
             
-          
             
             response_minus_past(i)  = estgain*minAngleDiff(stimOri(i),stimOri(i-1));
+            
+            %response_minus_past_err(i) = minAngleDiff(response_minus_past(i), stimOri);
             
             response_minus_update(i) = minAngleDiff(response_minus_past(i),response_minus_past(i-1));
             
