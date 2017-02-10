@@ -246,8 +246,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             ' p: ' num2str(minus(iParticipant,iCond).p) ]});
         
         if iCond ==1
-        xlabel('Response_minus_past(deg)');
-        ylabel('Update on current trial (deg)');
+        xlabel('Minus_past(deg)');
+        ylabel('Update (deg)');
         end
         thisFilename = [ptbCorgiData.paradigmName ...
             '_' thisParticipantId '_minus'];
@@ -280,8 +280,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             ' p: ' num2str(minus_err_up(iParticipant,iCond).p) ]});
         
         if iCond ==1
-        xlabel('Response_minus_update');
-        ylabel('Response_minus_err (deg)');
+        xlabel('min_update');
+        ylabel('min_err (deg)');
         end
         thisFilename = [ptbCorgiData.paradigmName ...
             '_' thisParticipantId '_minus_err_up'];
