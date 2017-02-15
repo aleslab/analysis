@@ -94,6 +94,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         errFromPrev = errFromPrev(2:end);
         PE  = PE(2:end);
         participantUpdate  = participantUpdate(2:end);
+        PEinv=PEinv(2:end);
        % response_minus_past=response_minus_past(2:end);
         %response_minus_update=response_minus_update(2:end);
         %response_minus_past_err=response_minus_past_err(2:end);
@@ -229,8 +230,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         axis square
         hold on
         title({thisLabel; ...
-            [' r: ' num2str(pePu(iParticipant,iCond).r) ...
-            ' p: ' num2str(pePu(iParticipant,iCond).p) ]});
+            [' r: ' num2str(PEinv(iParticipant,iCond).r) ...
+            ' p: ' num2str(PEinv(iParticipant,iCond).p) ]});
         
         if iCond ==1
             xlabel ('Inverse PE (deg)');
@@ -238,7 +239,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             
         end
         thisFilename = [ptbCorgiData.paradigmName ... 
-            '_' thisParticipantId '_PEPU'];
+            '_' thisParticipantId '_PEINV'];
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
         
