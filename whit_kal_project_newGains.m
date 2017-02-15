@@ -94,9 +94,9 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         errFromPrev = errFromPrev(2:end);
         PE  = PE(2:end);
         participantUpdate  = participantUpdate(2:end);
-        response_minus_past=response_minus_past(2:end);
-        response_minus_update=response_minus_update(2:end);
-        response_minus_past_err=response_minus_past_err(2:end);
+       % response_minus_past=response_minus_past(2:end);
+        %response_minus_update=response_minus_update(2:end);
+        %response_minus_past_err=response_minus_past_err(2:end);
         
         
         
