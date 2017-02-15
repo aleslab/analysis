@@ -146,7 +146,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
     
         %This plot is for the getting the weight of the current trial from
         %the slope.
-        figure(150+iParticipant);        
+        figure(200+iParticipant);        
         %put all conditions in 1 plot.
         subplot(1,ptbCorgiData.nConditions,iCond)
         %whitney plot
@@ -245,7 +245,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         
         %recursive version slope is weight on current trial
-        figure (350+iParticipant);
+        figure (400+iParticipant);
         
         if iCond ==1;
             clf;
