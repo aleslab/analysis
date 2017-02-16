@@ -181,8 +181,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             ' p: ' num2str(whitneyInvFit(iParticipant,iCond).p) ]});
         
         if iCond ==1
-        xlabel('Relative orientation of current trial compared to previous trial(deg)');
-        ylabel('Error on current trial (deg)');
+        xlabel('Relative orientation inverse(deg)');
+        ylabel('Error on previous  trial (deg)');
         end
         thisFilename = [ptbCorgiData.paradigmName ...
             '_' thisParticipantId '_whitInv'];
