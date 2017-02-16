@@ -160,8 +160,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         %Calculate the correlation coefficient
         [r p ]= corrcoef(ROinv, errFromPrev);
-        whitneySD(iParticipant,iCond).r = r(1,2);
-        whitneySD(iParticipant,iCond).p = p(1,2);
+        whitneyInvFit(iParticipant,iCond).r = r(1,2);
+        whitneyInvFit(iParticipant,iCond).p = p(1,2);
         %calyculate regression slopes
         myModel = cat(1,ROinv,ones(size(ROinv)))';
         myY     = errFromPrev';
@@ -177,15 +177,15 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         axis square
         hold on
         title({thisLabel; ...
-            [' r: ' num2str(whitneySD(iParticipant,iCond).r) ...
-            ' p: ' num2str(whitneySD(iParticipant,iCond).p) ]});
+            [' r: ' num2str(whitneyInvFit(iParticipant,iCond).r) ...
+            ' p: ' num2str(whitneyInvFit(iParticipant,iCond).p) ]});
         
         if iCond ==1
         xlabel('Relative orientation of current trial compared to previous trial(deg)');
         ylabel('Error on current trial (deg)');
         end
         thisFilename = [ptbCorgiData.paradigmName ...
-            '_' thisParticipantId '_fischerSD'];
+            '_' thisParticipantId '_whitInv'];
 
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
@@ -230,8 +230,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         axis square
         hold on
         title({thisLabel; ...
-            [' r: ' num2str(PEinv(iParticipant,iCond).r) ...
-            ' p: ' num2str(PEinv(iParticipant,iCond).p) ]});
+            [' r: ' num2str(peInvErr(iParticipant,iCond).r) ...
+            ' p: ' num2str(peInvErr(iParticipant,iCond).p) ]});
         
         if iCond ==1
             xlabel ('Inverse PE (deg)');
@@ -239,7 +239,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             
         end
         thisFilename = [ptbCorgiData.paradigmName ... 
-            '_' thisParticipantId '_PEINV'];
+            '_' thisParticipantId '_peInv'];
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
         
