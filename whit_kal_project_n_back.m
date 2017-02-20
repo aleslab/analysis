@@ -95,6 +95,30 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         set(gcf,'position',figurePosition);
         
         
+        figure(100+iParticipant);        
+        %put all conditions in 1 plot.
+        subplot(1,ptbCorgiData.nConditions,iCond)
+        %whitney plot
+        set(gca,'fontsize', 16);
+        hold on
+        scatter (RO_n_back1, err, 40,'k','filled');
+        %add a regresion line
+        
+        %Calculate the correlation coefficient
+        [r p ]= corrcoef(RO_n_back1, err);
+        whitney_n_back1(iParticipant,iCond).r = r(1,2);
+        whitney_n_back1(iParticipant,iCond).p = p(1,2);
+        %calyculate regression slopes
+        myModel = cat(1,RO_n_back1,ones(size(RO)))';
+        myY     = err';
+        [b bint] = regress(myY, myModel);
+        whitney_n_back1_Fit(iParticipant,iCond).b = b;
+        whitney_n_back1_Fit(iParticipant,iCond).bint = bint;
+        whitney_n_back1_Slope(iParticipant,iCond) = b(1);
+        whitney_nback_1_SlopeInt(iParticipant,iCond,:) = bint(1,:);
+        
+        
+        
     end
 end
         
