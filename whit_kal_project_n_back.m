@@ -33,13 +33,9 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         distal_initial_time_point = 1;
         
         %estimate = estimate+gain*value - estimate;
-        respOri(1) = 0;
-        stimOri(1)=0;
-        RO_n_back1(1)=(0);
-        RO_n_back2(1)=(0);
-        RO_n_back3(1)=(0);
         
-        for i= 2:length (respOri);
+        
+        for i= 5:length (stimOri);
             
              err(i) = minAngleDiff(respOri(i), stimOri(i));%whitney
              RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
@@ -48,6 +44,13 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
              RO_n_back3(i)= minAngleDiff (stimOri(i-4), stimOri(i));
              
         end
+        
+        
+        err = err(2:end);
+        RO  = RO(2:end);
+        RO_n_back1(2:end);
+        RO_n_back2(2:end);
+        RO_n_back3(2:end);
              
              
         figure(100+iParticipant);        
@@ -91,6 +94,9 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
         
+        
+    end
+end
         
         
        
