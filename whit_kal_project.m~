@@ -122,15 +122,6 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         [r p ]= corrcoef(RO, err);
         whitneySD(iParticipant,iCond).r = r(1,2);
         whitneySD(iParticipant,iCond).p = p(1,2);
-        %calyculate regression slopes
-        myModel = cat(1,RO,ones(size(RO)))';
-        myY     = err';
-        [b bint] = regress(myY, myModel);
-        whitneyFit(iParticipant,iCond).b = b;
-        whitneyFit(iParticipant,iCond).bint = bint;
-        whitneySlope(iParticipant,iCond) = b(1);
-        whitneySlopeInt(iParticipant,iCond,:) = bint(1,:);
-        
         
         %Now get 
         axis([-90,90,-90,90]);
