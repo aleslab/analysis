@@ -69,7 +69,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             %response with the current stimulus value. 
             %Resp(i) = Resp(i-1) + k *( stimOri(i) - resp(i-1) );
             PE(i) = minAngleDiff(stimOri(i),respOri(i-1));
-            PEinv(i) = minAngleDiff(respOri(i-1),stimOri(i));
+            PEInv(i) = minAngleDiff(respOri(i-1),stimOri(i));
                         
             participantUpdate(i) = minAngleDiff(respOri(i), respOri(i-1));
             
@@ -94,7 +94,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         errFromPrev = errFromPrev(2:end);
         PE  = PE(2:end);
         participantUpdate  = participantUpdate(2:end);
-        PEInv=PEinv(2:end);
+        PEInv=PEInv(2:end);
 
         
         
@@ -190,58 +190,58 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         
        
-%         %Recursive version, slope is weight on past trial
-%         figure (300+iParticipant);
-%         
-%         if iCond ==1;
-%             clf;
-%         end
-%         subplot(1,ptbCorgiData.nConditions,iCond)
-% 
-%         %PE vs participantUpdate
-%         set (gca,'fontsize', 16);
-%         hold on
-%         scatter (PEinv,err,40,'k','filled');
-%         axis([-90,90,-90,90]);
-% 
-%              %add a regresion line
-%         lsline;
-%         
-%         
-%         %Calculate the correlation coefficient
-%         [r p ]= corrcoef(PEinv, err);
-%         peInvErr(iParticipant,iCond).r = r(1,2);
-%         peInvErr(iParticipant,iCond).p = p(1,2);
-%        %calculate regression slopes and confidence values
-%         myModel = cat(1,PEinv,ones(size(PEinv)))';
-%         myY     = err';
-%         [b bint] = regress(myY, myModel);
-%         peInvErrFit(iParticipant,iCond).b = b;
-%         peInvErrFit(iParticipant,iCond).bint = bint;
-%         peInvErrSlope(iParticipant,iCond) = b(1);
-%         peInvErrSlopeInt(iParticipant,iCond,:) = bint(1,:);
-%         
-%         
-%         %Now get 
-%         axis([-90,90,-90,90]);
-%         axis square
-%         hold on
-%         title({thisLabel; ...
-%             [' r: ' num2str(pePu(iParticipant,iCond).r) ...
-%             ' p: ' num2str(pePu(iParticipant,iCond).p) ]});
-%         
-%         if iCond ==1
-%             xlabel ('Inverse PE (deg)');
-%             ylabel('Error (deg)');
-%             
-%         end
-%         thisFilename = [ptbCorgiData.paradigmName ... 
-%             '_' thisParticipantId '_PEPU'];
-%         set(gcf,'FileName',thisFilename)
-%         set(gcf,'position',figurePosition);
-%         
-%         
-%         
+        %Recursive version, slope is weight on past trial
+        figure (300+iParticipant);
+        
+        if iCond ==1;
+            clf;
+        end
+        subplot(1,ptbCorgiData.nConditions,iCond)
+
+        %PE vs participantUpdate
+        set (gca,'fontsize', 16);
+        hold on
+        scatter (PEInv,err,40,'k','filled');
+        axis([-90,90,-90,90]);
+
+             %add a regresion line
+        lsline;
+        
+        
+        %Calculate the correlation coefficient
+        [r p ]= corrcoef(PEInv, err);
+        peInvErr(iParticipant,iCond).r = r(1,2);
+        peInvErr(iParticipant,iCond).p = p(1,2);
+       %calculate regression slopes and confidence values
+        myModel = cat(1,PEInv,ones(size(PEInv)))';
+        myY     = err';
+        [b bint] = regress(myY, myModel);
+        peInvErrFit(iParticipant,iCond).b = b;
+        peInvErrFit(iParticipant,iCond).bint = bint;
+        peInvErrSlope(iParticipant,iCond) = b(1);
+        peInvErrSlopeInt(iParticipant,iCond,:) = bint(1,:);
+        
+        
+        %Now get 
+        axis([-90,90,-90,90]);
+        axis square
+        hold on
+        title({thisLabel; ...
+            [' r: ' num2str(peInvErr(iParticipant,iCond).r) ...
+            ' p: ' num2str(peInvErr(iParticipant,iCond).p) ]});
+        
+        if iCond ==1
+            xlabel ('Inverse PE (deg)');
+            ylabel('Error (deg)');
+            
+        end
+        thisFilename = [ptbCorgiData.paradigmName ... 
+            '_' thisParticipantId '_PEINV'];
+        set(gcf,'FileName',thisFilename)
+        set(gcf,'position',figurePosition);
+        
+        
+        
         %recursive version slope is weight on current trial
         figure (400+iParticipant);
         
