@@ -64,9 +64,9 @@ for i= 2:length (respOri);
 
 
 end
-[a,b]=corrcoef(RO, whitney_err);
+[a,b]=corrcoef(respOri, StimOri);
 
-[r,p]=corrcoef(part_PE_Err, partcipant_update);
+%[r,p]=corrcoef(part_PE_Err, partcipant_update);
 
 %p=polyfit(sdErr,RO,1);
 var_prox=var(whitney_err); % amount of variance in the error
