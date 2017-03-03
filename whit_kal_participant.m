@@ -64,7 +64,7 @@ for i= 2:length (respOri);
 
 
 end
-[a,b]=corrcoef(respOri, StimOri);
+%[a,b]=corrcoef(respOri, StimOri);
 
 %[r,p]=corrcoef(part_PE_Err, partcipant_update);
 
@@ -97,9 +97,9 @@ var_dist=var(stimOri); %variance in the stimOri
 figure(102);
 clf;
 %whitey plot
-set(gca,'fontsize', 24);
+set(gca,'fontsize', 30);
 hold on
-scatter (RO, whitney_err,80,'k','filled');
+scatter (RO, whitney_err,80,'r','filled');
 axis([-70,70,-70,70]);
 hold on
 legend ('Participant error (deg) vs relative orientation(deg)');
