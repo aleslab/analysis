@@ -127,11 +127,11 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             ' p: ' num2str(n_back_2_corr(iParticipant,iCond).p) ]});
         
         if iCond ==1
-        xlabel('Relative orientation of current trial compared to previous trial(deg)');
+        xlabel('Relative orientation of current trial compared to the n-2 trial(deg)');
         ylabel('Error on current trial (deg)');
         end
         thisFilename = [ptbCorgiData.paradigmName ...
-            '_' thisParticipantId '_fischerSD'];
+            '_' thisParticipantId '_n-2 corr'];
 
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
@@ -171,11 +171,11 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             ' p: ' num2str(n_back_3_corr(iParticipant,iCond).p) ]});
         
         if iCond ==1
-        xlabel('Relative orientation of current trial compared to previous trial(deg)');
+        xlabel('Relative orientation of current trial compared n-3 trial(deg)');
         ylabel('Error on current trial (deg)');
         end
         thisFilename = [ptbCorgiData.paradigmName ...
-            '_' thisParticipantId '_fischerSD'];
+            '_' thisParticipantId '_n-3 corr'];
 
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
