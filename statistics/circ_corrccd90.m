@@ -28,8 +28,8 @@ function [rho pval] = circ_corrccd90(alpha1, alpha2)
 % berens@tuebingen.mpg.de - www.kyb.mpg.de/~berens/circStat.html
 %
 
-alpha1 = rad2deg(2*alpha1);
-alpha2 = rad2deg(2*alpha2);
+alpha1 = deg2rad(2*alpha1);
+alpha2 = deg2rad(2*alpha2);
 
 [rhoScal pvalScal] = circ_corrcc(alpha1,alpha2);
 
