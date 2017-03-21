@@ -36,7 +36,7 @@ for i= 2:length (stimOri);
     
     estimate(i)=estimate(i-1) + gain*(stimOri(i)-estimate(i-1));
     
-    sdEstimate(i)  = stimOri(i-1) + estgain*minAngleDiff(stimOri(i),stimOri(i-1));
+    sdEstimate(i)  = stimOri(i-1) + 0.8*minAngleDiff(stimOri(i),stimOri(i-1))+0.2*stimOri(i-2)+ 0.05*stimOri(i-3);
     
     %estimate(i) = wrapTo90(estimate(i));
     
