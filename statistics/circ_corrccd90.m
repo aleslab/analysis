@@ -31,7 +31,18 @@ function [rho pval] = circ_corrccd90(alpha1, alpha2)
 alpha1 = rad2deg(2*alpha1);
 alpha2 = rad2deg(2*alpha2);
 
-[rho pval] = circ_corrcc(alpha1,alpha2);
+[rhoScal pvalScal] = circ_corrcc(alpha1,alpha2);
+
+rho(1,1) = 1;
+rho(1,2) = rhoScal;
+rho(2,1) = rhoScal;
+rho(1,1) = 1;
+
+pval(1,1) = 1; 
+pval(2,2) = 1;
+pval(2,1) = pvalScal;
+pval(1,2) = pvalScal;
+
 
 
 end
