@@ -63,7 +63,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         %add a regresion line
         
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(RO, err);
+        [r p ]= circ_corrccd90(RO, err);
         n_back_1_corr(iParticipant,iCond).r = r(1,2);
         n_back_1_corr(iParticipant,iCond).p = p(1,2);
         %calyculate regression slopes
@@ -105,7 +105,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         %add a regresion line
         
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(RO_n_back_2, err);
+        [r p ]= circ_corrccd90(RO_n_back_2, err);
         n_back_2_corr(iParticipant,iCond).r = r(1,2);
         n_back_2_corr(iParticipant,iCond).p = p(1,2);
         %calyculate regression slopes
@@ -149,7 +149,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         %add a regresion line
         
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(RO_n_back_3, err);
+        [r p ]= circ_corrccd90(RO_n_back_3, err);
         n_back_3_corr(iParticipant,iCond).r = r(1,2);
         n_back_3_corr(iParticipant,iCond).p = p(1,2);
         %calyculate regression slopes
