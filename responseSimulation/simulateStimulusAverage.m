@@ -1,8 +1,10 @@
 function [ response ] = simulateStimulusAverage( stimulus, weights )
 
-stimulus = [0 30 60];
 
-weights = [0.5 0.5];
+
+for i= 2:length (respOri);
+    
+    resposne(i) = stimuli(i)*weights(i)+stimulus(i-1)*weights
 
 
 end
