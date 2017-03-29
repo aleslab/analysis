@@ -102,28 +102,40 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         figure(100+iParticipant);        
         %put all conditions in 1 plot.
         subplot(1,ptbCorgiData.nConditions,iCond)
-        %whitney plot
-        set(gca,'fontsize', 16);
-        hold on
-        scatter (RO, err,40,'k','filled');
-        %add a regresion line
-        lsline;
         
         
+        
+        
+       
+        
+        %%%%starting here%%%
+    
         %Calculate the correlation coefficient
         [r p ]= corrcoef(RO, err);
-        whitneySD(iParticipant,iCond).r = r(1,2);
-        whitneySD(iParticipant,iCond).p = p(1,2);
-        %calyculate regression slopes
+         %calyculate regression slopes
         myModel = cat(1,RO,ones(size(RO)))';
         myY     = err';
         [b bint] = regress(myY, myModel);
+        
+        %%%%ending here%%%%
+      
+           whitneySD(iParticipant,iCond).r = r(1,2);
+        whitneySD(iParticipant,iCond).p = p(1,2);
+    
         whitneyFit(iParticipant,iCond).b = b;
         whitneyFit(iParticipant,iCond).bint = bint;
         whitneySlope(iParticipant,iCond) = b(1);
         whitneySlopeInt(iParticipant,iCond,:) = bint(1,:);
         
         
+             
+        %make plot
+        set(gca,'fontsize', 16);
+        hold on
+        scatter (RO, err,40,'k','filled');
+        %add a regresion line
+        lsline;
+       
         %Now get 
         axis([-90,90,-90,90]);
         axis square
@@ -142,6 +154,9 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
     
+        
+         
+        
         %This plot is for the getting the weight of the current trial from
         %the slope.
         figure(200+iParticipant);        
