@@ -2,7 +2,7 @@ clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
 %participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'J' 'K'}; %experiment
 %1
-participantCodes = {'N'}; %'M' 'O' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' %experiment 2
+participantCodes = {''}; %'M' 'O' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' 'X' 'Y' 'AL' %experiment 2
 ParOrNonPar = 2; %non-parametric bootstrap for all
 BootNo = 1000; %number of simulations for all bootstraps and goodness of fits
 
@@ -16,14 +16,16 @@ for iParticipant = 1:length(participantCodes)
     %         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
     
     %experiment 2 conditions
-    conditionList = {'MoveLine_accelerating_depth_midspeed'; ...
-        'MoveLine_accelerating_depth_slow'; 'MoveLine_accelerating_looming_midspeed'; ...
-        'MoveLine_accelerating_looming_slow'; 'MoveLine_accelerating_cd_midspeed'; ...
-        'MoveLine_accelerating_cd_slow'};
+%     conditionList = {'MoveLine_accelerating_depth_midspeed'; ...
+%         'MoveLine_accelerating_depth_slow'; 'MoveLine_accelerating_looming_midspeed'; ...
+%         'MoveLine_accelerating_looming_slow'; 'MoveLine_accelerating_cd_midspeed'; ...
+%         'MoveLine_accelerating_cd_slow'};
+
+%experiment 3 conditions
+conditionList = {'SpeedDisc_fixed_duration'; 'SpeedDisc_fixed_distance'};    
     
-    
-    analysisType = {'speed_change_changepoint'}; %'real_world_change' 'speed_change_full', ...
-    %'speed_change_changepoint_arcmin', ... 'speed_change_full_arcmin'
+    analysisType = {'speed_only; speed_only_arcmin'}; %'real_world_change' 'speed_change_full', ...
+    %'speed_change_changepoint_arcmin', ... 'speed_change_full_arcmin' 'speed_change_changepoint'
     
     for iAnalysis = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(iAnalysis));
@@ -35,7 +37,10 @@ for iParticipant = 1:length(participantCodes)
             %fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 1/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
             
             %experiment 2
-            fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 2/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
+            %fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 2/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
+            
+            %experiment 3
+            fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 3/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
             
             filenames = dir(fileDir);
             filenames = {filenames.name}; %makes a cell of filenames from the same
@@ -354,6 +359,18 @@ for iParticipant = 1:length(participantCodes)
                     speedDiff = [0 5 10 15 20 25 30];
                     
                 end
+                
+            elseif strcmp(currAnalysisType,'speed_only') 
+                
+                xLabelTitle = 'Proportion speed difference relative to standard';
+                
+                speedDiff = [0 0.095 0.17 0.23 0.28 0.33 0.37]; %0.095 = 0.0947
+                
+            elseif strcmp(currAnalysisType, 'speed_only_arcmin')
+                
+                xLabelTitle = 'Speed difference relative to standard (arcmin/s)';
+                
+                speedDiff = [0 3.95 7.75 11.35 14.95 18.5 21.9];
                 
             end
             %% Psychometric function fitting adapted from PAL_PFML_Demo
