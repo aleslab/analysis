@@ -29,7 +29,7 @@ response = simulateStimulusAverage(stimulus, weights);
 
 assert( abs(response-60) <=tol);
 
-%% Test 3: simple input
+%% Test 4: simple input
 % test that 100% past is correct
 tol = 1e-14;
 stimulus = [30 60];

@@ -1,22 +1,20 @@
-function [ response ] = simulateStimulusAverage( stimulus, weights )
+function [ response ] = simulateStimulusAverage( stimOri, weights )
 
 
-% respOri=wrapTo90(respOri);
-stimulus=wrapTo90(stimulus);
+response (1) = (0);
+%stimOri (1) = 0;
 
-nweights = length(weights);
-
-for i= nweights:length(stimulus);
+for iStim= 2:length (stimOri)
+    mySum = 0;
     
-    response(i) = stimulus(i)*weights(i)+stimulus(i-1)*weights(i-1)+stimulus(i-2)*weights(i-2);
+    for iWeight = 1:length(weights);
     
-end
+    mySum =mySum + stimOri(iStim - iWeight +1) * weights(iWeight);
+    
+    end
+   
+    response(iStim) = mySum;
+end     
 
-minAngleDiff(response,90) <=tol;
 
-response  = response (3:end);
-weights = weights (3:end);
-
-
-end
-
+response = response( length(weights):end)
