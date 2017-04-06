@@ -105,21 +105,23 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         
         
-        
+         [ r, p, b, bint ] = analysis_func ( RO, err);
+         
+
        
         
-        %%%%starting here%%%
-    
-        %Calculate the correlation coefficient
-        [r p ]= corrcoef(RO, err);
-         %calyculate regression slopes
-        myModel = cat(1,RO,ones(size(RO)))';
-        myY     = err';
-        [b bint] = regress(myY, myModel);
-        
+%         %%%%starting here%%%
+%     
+%         %Calculate the correlation coefficient
+%         [r p ]= corrcoef(RO, err);
+%          %calyculate regression slopes
+%         myModel = cat(1,RO,ones(size(RO)))';
+%         myY     = err';
+%         [b bint] = regress(myY, myModel);
+%         
         %%%%ending here%%%%
       
-           whitneySD(iParticipant,iCond).r = r(1,2);
+        whitneySD(iParticipant,iCond).r = r(1,2);
         whitneySD(iParticipant,iCond).p = p(1,2);
     
         whitneyFit(iParticipant,iCond).b = b;
@@ -169,15 +171,13 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         %add a regresion line
         lsline;
         
+        [ r, p, b, bint ] = analysis_func ( ROinv, errFromPrev);
         
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(ROinv, errFromPrev);
+       
         whitneySD(iParticipant,iCond).r = r(1,2);
         whitneySD(iParticipant,iCond).p = p(1,2);
         %calyculate regression slopes
-        myModel = cat(1,ROinv,ones(size(ROinv)))';
-        myY     = errFromPrev';
-        [b bint] = regress(myY, myModel);
         whitneyInvFit(iParticipant,iCond).b = b;
         whitneyInvFit(iParticipant,iCond).bint = bint;
         whitneyInvSlope(iParticipant,iCond) = b(1);
