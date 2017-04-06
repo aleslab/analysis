@@ -222,15 +222,13 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
              %add a regresion line
         lsline;
         
-        
+        [ r, p, b, bint ] = analysis_func ( PEInv, err);
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(PEInv, err);
+       
         peInvErr(iParticipant,iCond).r = r(1,2);
         peInvErr(iParticipant,iCond).p = p(1,2);
        %calculate regression slopes and confidence values
-        myModel = cat(1,PEInv,ones(size(PEInv)))';
-        myY     = err';
-        [b bint] = regress(myY, myModel);
+        
         peInvErrFit(iParticipant,iCond).b = b;
         peInvErrFit(iParticipant,iCond).bint = bint;
         peInvErrSlope(iParticipant,iCond) = b(1);
@@ -273,16 +271,14 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
 
              %add a regresion line
         lsline;
-        
+        [ r, p, b, bint ] = analysis_func (PE, participantUpdate);
         
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(PE, participantUpdate);
+        
         pePu(iParticipant,iCond).r = r(1,2);
         pePu(iParticipant,iCond).p = p(1,2);
        %calculate regression slopes and confidence values
-        myModel = cat(1,PE,ones(size(PE)))';
-        myY     = participantUpdate';
-        [b bint] = regress(myY, myModel);
+       
         pePuFit(iParticipant,iCond).b = b;
         pePuFit(iParticipant,iCond).bint = bint;
         pePuSlope(iParticipant,iCond) = b(1);
