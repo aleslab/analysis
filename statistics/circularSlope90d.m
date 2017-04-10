@@ -16,8 +16,8 @@ function [ b, bint, r, p] = circularSlope90d( Y,X )
 %  
 %Input:
 %
-%   Y = response (degrees) constrained to +/- 90 degrees
-%   X = stimulus values (degrees) constrained to +/- 90 degrees.
+%   Y = y values constrained to +/- 90 degrees
+%   X = x values constrained to +/- 90 degrees.
 %
 %Output:
 % 
@@ -25,7 +25,7 @@ function [ b, bint, r, p] = circularSlope90d( Y,X )
 %bint  = confidence interval for slope
 %   r  = correlation coefficient
 %   p  = p-value for correlation coefficient
-% B = regress(Y,X)
+
 options = optimset(@lsqnonlin);
 options = optimset(options,'Display','off');
 
