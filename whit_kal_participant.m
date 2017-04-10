@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =1; %When you have only 1 condition
+iCond =3; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -70,7 +70,7 @@ end
 
 var_prox=var(whitney_err); % amount of variance in the error
 var_dist=var(stimOri); %variance in the stimOri
-
+S=std(whitney_err);
 
 
 
@@ -89,17 +89,17 @@ var_dist=var(stimOri); %variance in the stimOri
 % ylabel ('Orientation (degs)');
 
 
-figure(102);
-clf;
-%whitey plot
-set(gca,'fontsize', 32);
-hold on
-scatter (RO, whitney_err,90,'b','filled');
-axis([-70,70,-70,70]);
-hold on
-%legend ('Participant error (deg) vs relative orientation(deg)');
-xlabel('Relative orientation of current trial compared to previous trial(deg)');
-ylabel('Participant error on current trial (deg)');
+% figure(102);
+% clf;
+% %whitey plot
+% set(gca,'fontsize', 32);
+% hold on
+% scatter (RO, whitney_err,90,'b','filled');
+% axis([-70,70,-70,70]);
+% hold on
+% %legend ('Participant error (deg) vs relative orientation(deg)');
+% xlabel('Relative orientation of current trial compared to previous trial(deg)');
+% ylabel('Participant error on current trial (deg)');
 
 % figure (103);
 % clf;
@@ -139,14 +139,14 @@ ylabel('Participant error on current trial (deg)');
 % 
 % 
 
-figure(106);
-clf;
-set(gca,'fontsize', 24);
-hold on
-scatter (part_PE_Err, partcipant_update,80,'k','filled');
-legend ('Partcipant response error (deg) vs partcipant response update(deg)');
-xlabel('How much the participant updates the next response (deg)');
-ylabel ('Participant error on current trial (deg)');
+% figure(106);
+% clf;
+% set(gca,'fontsize', 24);
+% hold on
+% scatter (part_PE_Err, partcipant_update,80,'k','filled');
+% legend ('Partcipant response error (deg) vs partcipant response update(deg)');
+% xlabel('How much the participant updates the next response (deg)');
+% ylabel ('Participant error on current trial (deg)');
 
 % figure(107);
 % clf;
