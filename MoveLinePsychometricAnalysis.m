@@ -79,19 +79,30 @@ for iParticipant = 1:length(participantCodes)
             allTrialNumbers = allTrialNumbers';
             %allCorrectPercentages = (condCorrectNumbers./allTrialNumbers); %creates a double of the percentage correct responses for every condition
             
-            if size(condCorrectNumbers,2) > 7
+            if length(condCorrectNumbers) > 7 && length(condCorrectNumbers) == 9
                 
-                %will need to check the arrangement of condCorrectNumbers
-                %to work out the important dimension for this
+                level8 = condCorrectNumbers(8);
                 
-                %once you know this, want to take levels 8 and 9 out and
-                %have them as separate arrays, and then have 
-                %condCorrectNumbers with just the first 7 levels. 
-                %Later in the code these can then be used to produce bar charts.
+                level9 = condCorrectNumbers(9);
+                
+                condCorrectNumbers = condCorrectNumbers(1:7);
+                
+                allTrialNumbers = allTrialNumbers(1:7);
+                
+            elseif length(condCorrectNumbers) > 7 && length(condCorrectNumbers) == 8
+                
+                level8 = condCorrectNumbers(8);
+                
+                level9 = 0;
+                
+                condCorrectNumbers = condCorrectNumbers(1:7);
+                
+                allTrialNumbers = allTrialNumbers(1:7);
                 
             end
+            
             %% Specifying what the levels were in different types of analysis
-           
+            
             %PROPORTION SPEED CHANGE AT POINT OF CHANGE
             
             if strcmp(currAnalysisType, 'speed_change_changepoint');
@@ -405,7 +416,7 @@ for iParticipant = 1:length(participantCodes)
                 xLabelTitle  = 'Proportion speed difference in the world relative to standard (cm/s)';
                 
                 speedDiff = [0 0.11 0.2 0.27 0.33 0.38 0.43];
-        
+                
             end
             %% Psychometric function fitting adapted from PAL_PFML_Demo
             
@@ -523,6 +534,8 @@ for iParticipant = 1:length(participantCodes)
             psychInfo(iCond).betaCI = slopeCI;
             psychInfo(iCond).thresholdSE = thresholdSE;
             psychInfo(iCond).slopeSE = slopeSE;
+            psychInfo(iCond).level8 = level8;
+            psychInfo(iCond).level9 = level9;
             %the original parameters, standard errors from bootstrapping
             %and values from goodness of fit (dev and pdev).
             psychInfo(iCond).condParamsValues = paramsValues;
