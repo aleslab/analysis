@@ -1,8 +1,9 @@
 clearvars;
 cd /Users/Abigail/Documents/psychtoolboxProjects/psychMaster/Data %lab mac
-%participantCodes = {'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'J' 'K'}; %experiment
-%1
-participantCodes = {'N'}; %'M' 'O' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' %experiment 2
+
+participantCodes = {'AA' 'AB' 'AD' 'AG' 'AH'}; %'AE'  'AI' 'AL' = experiment 3
+% 'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'J' 'K' = experiment 1;
+%'M' 'O' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' 'X' 'Y' 'AL' = experiment 2
 ParOrNonPar = 2; %non-parametric bootstrap for all
 BootNo = 1000; %number of simulations for all bootstraps and goodness of fits
 
@@ -16,14 +17,16 @@ for iParticipant = 1:length(participantCodes)
     %         'MoveLine_CRS_depth_slow'; 'MoveLine_CRS_lateral_midspeed'; 'MoveLine_CRS_lateral_slow'};
     
     %experiment 2 conditions
-    conditionList = {'MoveLine_accelerating_depth_midspeed'; ...
-        'MoveLine_accelerating_depth_slow'; 'MoveLine_accelerating_looming_midspeed'; ...
-        'MoveLine_accelerating_looming_slow'; 'MoveLine_accelerating_cd_midspeed'; ...
-        'MoveLine_accelerating_cd_slow'};
+    %     conditionList = {'MoveLine_accelerating_depth_midspeed'; ...
+    %         'MoveLine_accelerating_depth_slow'; 'MoveLine_accelerating_looming_midspeed'; ...
+    %         'MoveLine_accelerating_looming_slow'; 'MoveLine_accelerating_cd_midspeed'; ...
+    %         'MoveLine_accelerating_cd_slow'};
     
+    %experiment 3 conditions
+    conditionList = {'SpeedDisc_fixed_duration'; 'SpeedDisc_fixed_distance'};
     
-    analysisType = {'speed_change_changepoint'}; %'real_world_change' 'speed_change_full', ...
-    %'speed_change_changepoint_arcmin', ... 'speed_change_full_arcmin'
+    analysisType = {'speed_only'; 'speed_only_arcmin'; 'real_world_difference'; 'real_world_proportion_difference'}; %'real_world_change' 'speed_change_full', ...
+    %'speed_change_changepoint_arcmin', ... 'speed_change_full_arcmin' 'speed_change_changepoint'
     
     for iAnalysis = 1:length(analysisType)
         currAnalysisType = cell2mat(analysisType(iAnalysis));
@@ -35,7 +38,10 @@ for iParticipant = 1:length(participantCodes)
             %fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 1/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
             
             %experiment 2
-            fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 2/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
+            %fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 2/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
+            
+            %experiment 3
+            fileDir = strcat('/Users/Abigail/Documents/Experiment Data/Experiment 3/Participant_', currParticipantCode, '/', condAndParticipant, '_*');
             
             filenames = dir(fileDir);
             filenames = {filenames.name}; %makes a cell of filenames from the same
@@ -73,16 +79,19 @@ for iParticipant = 1:length(participantCodes)
             allTrialNumbers = allTrialNumbers';
             %allCorrectPercentages = (condCorrectNumbers./allTrialNumbers); %creates a double of the percentage correct responses for every condition
             
-            %finding the difference between the speeds used in the two sections - to be
-            %plotted on the graph
-            %condInfo = allSessionInfo.conditionInfo;
-            
+            if size(condCorrectNumbers,2) > 7
+                
+                %will need to check the arrangement of condCorrectNumbers
+                %to work out the important dimension for this
+                
+                %once you know this, want to take levels 8 and 9 out and
+                %have them as separate arrays, and then have 
+                %condCorrectNumbers with just the first 7 levels. 
+                %Later in the code these can then be used to produce bar charts.
+                
+            end
             %% Specifying what the levels were in different types of analysis
-            
-            %may also need to add to this section for experiment 2. May
-            %need to do analysis for experiment 2 in terms of world speed
-            %and retinal speed? As looming retinal speed is a lot slower?
-            
+           
             %PROPORTION SPEED CHANGE AT POINT OF CHANGE
             
             if strcmp(currAnalysisType, 'speed_change_changepoint');
@@ -355,6 +364,48 @@ for iParticipant = 1:length(participantCodes)
                     
                 end
                 
+            elseif strcmp(currAnalysisType,'speed_only')
+                
+                xLabelTitle = 'Proportion speed difference relative to standard';
+                
+                if strfind(currCondition, 'fixed_duration')
+                    
+                    speedDiff = [0 0.15 0.26 0.36 0.44 0.51 0.57];
+                    
+                elseif strfind(currCondition, 'fixed_distance')
+                    
+                    speedDiff = [0 0.11 0.20 0.27 0.34 0.39 0.43];
+                    
+                end
+                
+            elseif strcmp(currAnalysisType, 'speed_only_arcmin')
+                
+                xLabelTitle = 'Speed difference relative to standard (arcmin/s)';
+                
+                if strfind(currCondition, 'fixed_duration')
+                    
+                    speedDiff = [0 6.6 13.6 21.5 30.1 39.6 50.4];
+                    
+                elseif strfind(currCondition, 'fixed_distance')
+                    
+                    speedDiff = [0 5.5 11.2 16.3 22.4 28.1 33.3];
+                    
+                end
+                
+                
+            elseif strcmp(currAnalysisType, 'real_world_difference')
+                
+                xLabelTitle  = 'Speed difference in the world relative to standard (cm/s)';
+                
+                speedDiff = [0 5 10 15 20 25 30];
+                
+                
+            elseif strcmp(currAnalysisType, 'real_world_proportion_difference')
+                
+                xLabelTitle  = 'Proportion speed difference in the world relative to standard (cm/s)';
+                
+                speedDiff = [0 0.11 0.2 0.27 0.33 0.38 0.43];
+        
             end
             %% Psychometric function fitting adapted from PAL_PFML_Demo
             

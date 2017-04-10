@@ -36,9 +36,9 @@ for i= 2:length (stimOri);
     
     estimate(i)=estimate(i-1) + gain*(stimOri(i)-estimate(i-1));
     
-    sdEstimate(i)  = stimOri(i-1) + 0.8*minAngleDiff(stimOri(i),stimOri(i-1))+0.2*stimOri(i-2)+ 0.05*stimOri(i-3);
+    %sdEstimate(i)  = stimOri(i-1) + 0.8*minAngleDiff(stimOri(i),stimOri(i-1))+0.2*stimOri(i-2)+ 0.05*stimOri(i-3);
     
-    %estimate(i) = wrapTo90(estimate(i));
+    estimate(i) = wrapTo90(estimate(i));
     
     err(i) = minAngleDiff(estimate(i), stimOri(i));%whitney
     
@@ -48,14 +48,14 @@ for i= 2:length (stimOri);
     
     estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
     
-    sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
+   % sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
      
     
 end
 
 [R,P]=corrcoef(err,RO);
 
-p=polyfit(sdErr,RO,1);
+%p=polyfit(sdErr,RO,1);
 
 
 

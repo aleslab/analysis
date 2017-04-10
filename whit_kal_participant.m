@@ -21,22 +21,21 @@ kal_predict(1) = estimate_initial_time_point; % tell matlab that the first Xhat
 distal_initial_time_point = 1;
 
 gain = .5;
-estgain=0.85;%distal / (distal +proximal);
-%estimate = estimate+gain*value - estimate;
+
 
 part_PE_Err(1) = 0;
 RO(1)  = 0;
 for i= 2:length (respOri);
     
-%     kal_predict(i)=kal_predict(i-1);%kalman
-%     
-%     kal_predict(i)=kal_predict(i-1) + gain*minAngleDiff(stimOri(i),kal_predict(i-1));%kalman
-%     
-%     kal_predict(i) = wrapTo90(kal_predict(i));%kalman wrap function
+    kal_predict(i)=kal_predict(i-1);%kalman
     
-%     naive_Estimate(i)  = stimOri(i-1) + estgain*minAngleDiff(stimOri(i),stimOri(i-1));%naive
-%     
-%     naive_err(i)= minAngleDiff(naive_Estimate(i), stimOri(i)); %naive
+    kal_predict(i)=kal_predict(i-1) + gain*minAngleDiff(stimOri(i),kal_predict(i-1));%kalman
+    
+    kal_predict(i) = wrapTo90(kal_predict(i));%kalman wrap function
+    
+    naive_Estimate(i)  = stimOri(i-1) +gain*minAngleDiff(stimOri(i),stimOri(i-1));%naive
+    
+    naive_err(i)= minAngleDiff(naive_Estimate(i), stimOri(i)); %naive
     
     whitney_err(i) = minAngleDiff(respOri(i), stimOri(i)); %whitney error
     
@@ -68,13 +67,9 @@ end
 
 %[r,p]=corrcoef(part_PE_Err, partcipant_update);
 
-%p=polyfit(sdErr,RO,1);
+
 var_prox=var(whitney_err); % amount of variance in the error
 var_dist=var(stimOri); %variance in the stimOri
-
-% whit_Slope=polyfit(part_PEErr,RO,1);
-% slope_Part_up_slope=polyfit(partcipant_update, part_PEErr, 1);
-% slope_Kal_up=polyfit(kal_Update, kal_PE, 1);
 
 
 
@@ -97,12 +92,12 @@ var_dist=var(stimOri); %variance in the stimOri
 figure(102);
 clf;
 %whitey plot
-set(gca,'fontsize', 30);
+set(gca,'fontsize', 32);
 hold on
-scatter (RO, whitney_err,80,'r','filled');
+scatter (RO, whitney_err,90,'b','filled');
 axis([-70,70,-70,70]);
 hold on
-legend ('Participant error (deg) vs relative orientation(deg)');
+%legend ('Participant error (deg) vs relative orientation(deg)');
 xlabel('Relative orientation of current trial compared to previous trial(deg)');
 ylabel('Participant error on current trial (deg)');
 

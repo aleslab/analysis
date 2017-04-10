@@ -102,28 +102,42 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         figure(100+iParticipant);        
         %put all conditions in 1 plot.
         subplot(1,ptbCorgiData.nConditions,iCond)
-        %whitney plot
-        set(gca,'fontsize', 16);
-        hold on
-        scatter (RO, err,40,'k','filled');
-        %add a regresion line
-        lsline;
         
         
-        %Calculate the correlation coefficient
-        [r p ]= corrcoef(RO, err);
+        
+         [ r, p, b, bint ] = analysis_func ( RO, err);
+         
+
+       
+        
+%         %%%%starting here%%%
+%     
+%         %Calculate the correlation coefficient
+%         [r p ]= corrcoef(RO, err);
+%          %calyculate regression slopes
+%         myModel = cat(1,RO,ones(size(RO)))';
+%         myY     = err';
+%         [b bint] = regress(myY, myModel);
+%         
+        %%%%ending here%%%%
+      
         whitneySD(iParticipant,iCond).r = r(1,2);
         whitneySD(iParticipant,iCond).p = p(1,2);
-        %calyculate regression slopes
-        myModel = cat(1,RO,ones(size(RO)))';
-        myY     = err';
-        [b bint] = regress(myY, myModel);
+    
         whitneyFit(iParticipant,iCond).b = b;
         whitneyFit(iParticipant,iCond).bint = bint;
         whitneySlope(iParticipant,iCond) = b(1);
         whitneySlopeInt(iParticipant,iCond,:) = bint(1,:);
         
         
+             
+        %make plot
+        set(gca,'fontsize', 16);
+        hold on
+        scatter (RO, err,40,'k','filled');
+        %add a regresion line
+        lsline;
+       
         %Now get 
         axis([-90,90,-90,90]);
         axis square
@@ -142,6 +156,9 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
     
+        
+         
+        
         %This plot is for the getting the weight of the current trial from
         %the slope.
         figure(200+iParticipant);        
@@ -154,15 +171,13 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         %add a regresion line
         lsline;
         
+        [ r, p, b, bint ] = analysis_func ( ROinv, errFromPrev);
         
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(ROinv, errFromPrev);
+       
         whitneySD(iParticipant,iCond).r = r(1,2);
         whitneySD(iParticipant,iCond).p = p(1,2);
         %calyculate regression slopes
-        myModel = cat(1,ROinv,ones(size(ROinv)))';
-        myY     = errFromPrev';
-        [b bint] = regress(myY, myModel);
         whitneyInvFit(iParticipant,iCond).b = b;
         whitneyInvFit(iParticipant,iCond).bint = bint;
         whitneyInvSlope(iParticipant,iCond) = b(1);
@@ -207,15 +222,13 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
              %add a regresion line
         lsline;
         
-        
+        [ r, p, b, bint ] = analysis_func ( PEInv, err);
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(PEInv, err);
+       
         peInvErr(iParticipant,iCond).r = r(1,2);
         peInvErr(iParticipant,iCond).p = p(1,2);
        %calculate regression slopes and confidence values
-        myModel = cat(1,PEInv,ones(size(PEInv)))';
-        myY     = err';
-        [b bint] = regress(myY, myModel);
+        
         peInvErrFit(iParticipant,iCond).b = b;
         peInvErrFit(iParticipant,iCond).bint = bint;
         peInvErrSlope(iParticipant,iCond) = b(1);
@@ -258,16 +271,14 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
 
              %add a regresion line
         lsline;
-        
+        [ r, p, b, bint ] = analysis_func (PE, participantUpdate);
         
         %Calculate the correlation coefficient
-        [r p ]= corrcoef(PE, participantUpdate);
+        
         pePu(iParticipant,iCond).r = r(1,2);
         pePu(iParticipant,iCond).p = p(1,2);
        %calculate regression slopes and confidence values
-        myModel = cat(1,PE,ones(size(PE)))';
-        myY     = participantUpdate';
-        [b bint] = regress(myY, myModel);
+       
         pePuFit(iParticipant,iCond).b = b;
         pePuFit(iParticipant,iCond).bint = bint;
         pePuSlope(iParticipant,iCond) = b(1);
