@@ -1,15 +1,15 @@
 
 
-%function [ b, bint, r, p ] = analysis_func( input_1, input_2)
+function [ b, bint, r, p ] = analysis_func( X, Y)
 
 
-    function [ b, bint, r, p] = circularSlope90d( input_1,input_2 )
+    
     
         %Calculate the correlation coefficient
-        [r,  p ]= corr(input_1, input_2);
+        [r,  p ]= circularSlope90d(X, Y);
          %calyculate regression slopes
-        myModel = cat(1,input_1,ones(size(input_1)))';
-        myY     = input_2';
+        myModel = cat(1,X,ones(size(X)))';
+        myY     = Y';
         [b, bint] = regress(myY, myModel);
         
 end
