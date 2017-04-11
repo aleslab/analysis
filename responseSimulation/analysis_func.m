@@ -6,7 +6,7 @@ function [ b, bint, r, p ] = circularSlope90d( X, Y)
 %[ b, bint, r, p] = circularSlope90d( Y,X )
     
         %Calculate the correlation coefficient
-        [r,  p ]= circularSlope90d(X, Y);
+        [r,  p ]= circ_corrccd90(X, Y);
          %calyculate regression slopes
         myModel = cat(1,X,ones(size(X)))';
         myY     = Y';
