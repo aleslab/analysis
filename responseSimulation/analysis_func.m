@@ -10,7 +10,7 @@ function [ b, bint, r, p ] = analysis_func( X, Y)
          %calyculate regression slopes
         myModel = cat(1,X,ones(size(X)))';
         myY     = Y';
-        [b, bint] = circularSlope90d(myY, myModel);
+        [b, bint] = regress(myY, myModel);
         
 end
 
