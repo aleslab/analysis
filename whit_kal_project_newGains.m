@@ -105,9 +105,9 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         
         
-         [ r, p, b, bint ] = analysis_func ( RO, err);
+        [ r, p, b, bint ] = analysis_func ( RO, err);
          
-
+        % [ b, bint, r, p] = circularSlope90d( RO, err);
        
         
 %         %%%%starting here%%%
@@ -173,6 +173,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         [ r, p, b, bint ] = analysis_func ( ROinv, errFromPrev);
         
+        %[ b, bint, r, p] = circularSlope90d( ROinv, errFromPrev );
         %Calculate the correlation coefficient
        
         whitneySD(iParticipant,iCond).r = r(1,2);
@@ -222,7 +223,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
              %add a regresion line
         lsline;
         
-        [ r, p, b, bint ] = analysis_func ( PEInv, err);
+       % [ r, p, b, bint ] = analysis_func ( PEInv, err);
+       [ b, bint, r, p] = circularSlope90d( PEInv, err);
         %Calculate the correlation coefficient
        
         peInvErr(iParticipant,iCond).r = r(1,2);
@@ -273,6 +275,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         lsline;
         [ r, p, b, bint ] = analysis_func (PE, participantUpdate);
         
+        %[ b, bint, r, p] = circularSlope90d( PE,participantUpdate);
         %Calculate the correlation coefficient
         
         pePu(iParticipant,iCond).r = r(1,2);
