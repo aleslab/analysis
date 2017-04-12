@@ -3,7 +3,6 @@
 function [ b, bint, r, p ] = analysis_func( X, Y)
 
 X=X';
-Y=Y';
 %B=ctranspose(Y);
 
     
