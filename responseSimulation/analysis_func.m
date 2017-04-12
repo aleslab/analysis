@@ -8,10 +8,10 @@ X=X';
     
     
         %Calculate the correlation coefficient
-        [ r,  p ]= circularSlope90d(x, y);
+        [ r,  p ]= corr(X, Y);
          %calyculate regression slopes
         myModel = cat(1,X,ones(size(X)))';
-        myY     = y';
+        myY     = Y';
         [b, bint] = regress(myY, myModel);
         
 end
