@@ -3,7 +3,7 @@
 function [ b, bint, r, p ] = analysis_func( X, Y)
 
 
-B=ctranspose(Y);
+%B=ctranspose(Y);
 
     
     
