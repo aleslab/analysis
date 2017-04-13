@@ -29,6 +29,15 @@ function [ b, bint, r, p] = circularSlope90d( Y,X )
 options = optimset(@lsqnonlin);
 options = optimset(options,'Display','off');
 
+if ~isvector(X) || ~isvector(Y)
+    error('Only works for vector inputs');
+end
+
+%Force column vector
+X = X(:);
+%Force column vector;
+Y = Y(:);
+
 
 %This code here is kept for posterity.  To remind of a false start.  I
 %first defaulted to using the circular mean.  Because it's a circular
