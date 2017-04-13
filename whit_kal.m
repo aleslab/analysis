@@ -2,7 +2,7 @@
 
 clear all;
 
-stimOri=[300 296 299 292 290 280 278 272 270 265 266 261 260 255 250 220 200 190 160 150 145 130 100 90 80 77 70 68 60 50 40 20 0 20 60 80];
+stimOri=[0 0 0 200 200 200 0 0 0 0 200 200 200 0 0 0 200 200 200 0 0 0 200 200 200 ];
 
 %stimOri = stimOri+randn(size(stimOri))*sqrt(var_prox);
 % respOri = stimOri-20;
@@ -35,25 +35,25 @@ for i= 2:length (stimOri);
     estimate(i)=estimate(i-1);
     
     estimate(i)=estimate(i-1) + gain*(stimOri(i)-estimate(i-1));
+%     
+%     sdEstimate(i)  = stimOri(i-1) + 0.8*minAngleDiff(stimOri(i),stimOri(i-1))+0.2*stimOri(i-2)+ 0.05*stimOri(i-3);
+%     
+%     estimate(i) = (estimate(i));
+%     
+%     err(i) = minAngleDiff(estimate(i), stimOri(i));%whitney
+%     
+      RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
     
-    %sdEstimate(i)  = stimOri(i-1) + 0.8*minAngleDiff(stimOri(i),stimOri(i-1))+0.2*stimOri(i-2)+ 0.05*stimOri(i-3);
+      PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
+%     
+%     estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
     
-    estimate(i) = wrapTo90(estimate(i));
-    
-    err(i) = minAngleDiff(estimate(i), stimOri(i));%whitney
-    
-    RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
-    
-    PE(i) = minAngleDiff(stimOri(i),estimate (i-1));%PE
-    
-    estimateUpdate(i) =  minAngleDiff(estimate(i),estimate (i-1));
-    
-   % sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
+    %sdErr(i) = minAngleDiff(sdEstimate (i), stimOri(i));%whitney
      
     
 end
 
-[R,P]=corrcoef(err,RO);
+%[R,P]=corrcoef(err,RO);
 
 %p=polyfit(sdErr,RO,1);
 
@@ -69,26 +69,26 @@ hold on
 plot (stimOri,'r', 'Linewidth',4);
 hold on
 plot (estimate,'k','Linewidth',4);
-hold on
-plot(sdEstimate,'g','LineWidth', 4);
+% hold on
+% plot(sdEstimate,'g','LineWidth', 4);
 
 axis([0,30 0, 330]);
 
-legend ('Flight of ball', 'Kalman prediction', 'Estimate');
-xlabel('Time in tenths of a second');
-ylabel ('Height of ball from ground (cm)');
+%legend (
+xlabel('Time in seconds');
+ylabel ('Change in orientation in degrees');
 % 
 
-figure(102);
-%whitney figure
-clf;
-set(gca,'fontsize', 25);
-hold on
-scatter (RO, err, 200,'k','filled');
-axis([-60,60,-60,60]);
-xlabel('Relative Orientation of current compared to previous trial(deg) ');
-ylabel('Error on current trial (deg)');
-
+% figure(102);
+% %whitney figure
+% clf;
+% set(gca,'fontsize', 25);
+% hold on
+% scatter (RO, err, 200,'k','filled');
+% axis([-60,60,-60,60]);
+% xlabel('Relative Orientation of current compared to previous trial(deg) ');
+% ylabel('Error on current trial (deg)');
+% 
 figure (103);
 %precition error to RO figure
 clf;
@@ -99,30 +99,30 @@ axis([-60,60,-60,60]);
 legend ('Serial dependence');
 xlabel ('RO');
 ylabel('error made in prediction of position');
-
-
-figure (104);
-clf;
-%response update figure
-set (gca,'fontsize', 25);
-hold on
-scatter (estimateUpdate,PE,200,'b','filled');
-axis([0,300 0, 300]);
-legend (' Prediction Update');
-xlabel('How much the kalman updates (cms)');
-ylabel ('Amount of prediction error(cms)');
 % 
-
-
-figure(105);
-%standard error figure
-clf;
-set(gca,'fontsize', 28) % 'XTickLabel',{'-100','-90','-80','-70','-60','-50','-40', '30', '-20', '-10', '0','10','20','30','40','50','60','70', '80', '90', '100'},  'YTickLabel',{'-50', '-40', '-30', '-20', '-10', '0', '10', '20', '30', '40', '50'});
-hold on
-scatter (RO, sdErr,200,'r','filled');
-axis([-60,60,-60,60]);
-%legend ('Positive values on the abscissa indicate that the previous trial was more clockwise than the present trial, and positive errors indicate that the reported orientation was more clockwise?')
-xlabel('Relative Orientation of current compared to previous trial(deg) ');
-ylabel('Error on current trial (deg)');
-
-
+% 
+% figure (104);
+% clf;
+% %response update figure
+% set (gca,'fontsize', 25);
+% hold on
+% scatter (estimateUpdate,PE,200,'b','filled');
+% axis([0,300 0, 300]);
+% legend (' Prediction Update');
+% xlabel('How much the kalman updates (cms)');
+% ylabel ('Amount of prediction error(cms)');
+% % 
+% 
+% 
+% figure(105);
+% %standard error figure
+% clf;
+% set(gca,'fontsize', 28) % 'XTickLabel',{'-100','-90','-80','-70','-60','-50','-40', '30', '-20', '-10', '0','10','20','30','40','50','60','70', '80', '90', '100'},  'YTickLabel',{'-50', '-40', '-30', '-20', '-10', '0', '10', '20', '30', '40', '50'});
+% hold on
+% scatter (RO, sdErr,200,'r','filled');
+% axis([-60,60,-60,60]);
+% %legend ('Positive values on the abscissa indicate that the previous trial was more clockwise than the present trial, and positive errors indicate that the reported orientation was more clockwise?')
+% xlabel('Relative Orientation of current compared to previous trial(deg) ');
+% ylabel('Error on current trial (deg)');
+% 
+% 
