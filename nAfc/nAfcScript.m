@@ -1,6 +1,6 @@
 
 %load data
-%ptbCorgiData = uiGetPtbCorgiData();
+ptbCorgiData = uiGetPtbCorgiData();
 
 
 analysis.function = @psychometricFit;

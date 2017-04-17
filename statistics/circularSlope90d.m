@@ -56,7 +56,7 @@ Y = Y-meanAngle;
 %Do a multistart seach, angles make fitting even a simple slope difficult
 %constrainsed to -2, 2. Because for our experiment only the interval 0-1 is
 %interesting and this makes sure we've covered it. 
-slopeGrid = [-2:.2:2];
+slopeGrid = [-1.5:.1:1.5];
 nStarts = length(slopeGrid);
 
 
