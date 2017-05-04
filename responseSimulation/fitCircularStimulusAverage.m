@@ -19,19 +19,21 @@ function [ weights, responseHat, residual] = fitCircularStimulusAverage( stimulu
 %  responseHat: Resulting fit to the response using the weights
 %  residual: Circular difference between the response and responseHat
 
+stimulus = stimulus(:);
+response = response(:);
 weight0 = zeros(nweights,1);
 weights = fminsearch(@circularCostFunc,weight0,[],stimulus,response);
 
 
 weights = weights./sum(weights);
 responseHat = circularStimAverage(weights,stimulus);
-residual    = minAngleDiff(response,responseHat);
+residual    = minAngleDiff(response(nweights:end),responseHat);
 
     function y= circularCostFunc(weights, stim,data)
-        
+        nWeights = length(weights);
         %Truncate edges.
         data = data(nWeights:end);
-        dataHat = circularStimAverage(weights, stim)
+        dataHat = circularStimAverage(weights, stim);
         
         %Sum of the squared angle difference.
         y = sum( minAngleDiff(data,dataHat).^2);
@@ -56,7 +58,7 @@ residual    = minAngleDiff(response,responseHat);
         respSin = stimSin*weights;
         respCos = stimCos*weights;
         
-        dataHat = atan2d(respSin,respCos)';
+        dataHat = atan2d(respSin,respCos);
         
         dataHat = dataHat/2;
     end
