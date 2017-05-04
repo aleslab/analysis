@@ -25,7 +25,7 @@ for iGroup = 1:nGroups,
     xVal = abs([participantData.sessionInfo.conditionInfo(condList).(xAxisField)]);
     thisGroupValue = participantData.sessionInfo.conditionInfo(condList(1)).(analysisOptions.groupingField);
     %  plot(xVal,percentCorrect(iPpt,condList),'o')
-    set(gca,'ColorOrderIndex',iGroup);
+    set(gca,'ColorOrderIndex',iGroup)
     plotHandle(iGroup) = plot2afc(xVal,nCorrect(condList),nTrials(condList));
     hold on;
 
@@ -44,10 +44,10 @@ paradigmName = participantData.sessionInfo.expInfo.paradigmName;
 
 title ([ paradigmName ' ' participantData.participantID],'interpreter','none')
 
-if isfield(analysisOptions,'xlabel')
-    xlabel(analysisOptions.xlabel)
+if isfield(analysisOptions,'xLabel')
+    xlabel(analysisOptions.xLabel);
 else
-    xlabel( xAxisField)
+    xlabel( xAxisField);
 end
 
 ylabel( 'Percent Correct')

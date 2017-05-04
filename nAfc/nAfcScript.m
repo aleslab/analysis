@@ -16,6 +16,6 @@ analysis.function = @simple2afcplot;
 analysis.funcOptions.groupingField = 'contrast';
 %choose what to put on the x-axis. 
 analysis.funcOptions.xAxisField = 'targetDelta';
-
+analysis.funcOptions.xLabel     = 'orientation difference (degrees)';
 
 [analysis, ptbCorgiData] = ptbCorgiAnalyzeEachParticipant(analysis,ptbCorgiData);

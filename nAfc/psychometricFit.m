@@ -14,18 +14,8 @@ nGroups = length(conditionGroups);
 %Whatfield should we use for the xAxis.
 xAxisField = analysisOptions.xAxisField;
 
-options = PAL_minimize('options') %options structure containing default
-%values
 
-%or (not advised):
-% searchGrid = [0 1 0.01 0.01];       %Guesses
-
-paramsFree = [1 1 0 1];
-
-%Fit data:
-
-
-
+%Fit data for each condition grouping:
 
 for iGroup = 1:nGroups,
     
@@ -80,13 +70,13 @@ for iGroup = 1:nGroups,
     %Consider changing both names and type. 
     [results.paramsValues{iGroup} results.LL{iGroup} results.exitflag{iGroup} results.output{iGroup}] = ...
         PAL_PFML_Fit(StimLevels, NumPos, OutOfNum, ...
-        searchGrid, paramsFree, PF,'lapseLimits',[0 1], 'searchOptions',options);
+        searchGrid, paramsFree, PF,'lapseLimits',[0 .1], 'searchOptions',options);
     results.PF{iGroup}         = PF;
     results.StimLevels{iGroup} = StimLevels;
     results.NumPos{iGroup}     = NumPos;
     results.OutOfNum{iGroup}   = OutOfNum; 
     
-    %Now lets make a function we can use for plotting:
+    %Now lets evaluate the function so we can use for easy plotting:
     results.functionFitX{iGroup} = linspace(StimLevels(1),StimLevels(end),100);
     results.functionFitY{iGroup} = PF(results.paramsValues{iGroup}, results.functionFitX{iGroup});
     
