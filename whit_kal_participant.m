@@ -90,17 +90,17 @@ xlabel('Trial number');
 ylabel ('Orientation (degs)');
 
 
-% figure(102);
-% clf;
-% %whitey plot
-% set(gca,'fontsize', 32);
-% hold on
-% scatter (RO, whitney_err,90,'b','filled');
-% axis([-70,70,-70,70]);
-% hold on
-% %legend ('Participant error (deg) vs relative orientation(deg)');
-% xlabel('Relative orientation of current trial compared to previous trial(deg)');
-% ylabel('Participant error on current trial (deg)');
+figure(102);
+clf;
+%whitey plot
+set(gca,'fontsize', 32);
+hold on
+scatter (RO, whitney_err,90,'b','filled');
+axis([-70,70,-70,70]);
+hold on
+%legend ('Participant error (deg) vs relative orientation(deg)');
+xlabel('Relative orientation of current trial compared to previous trial(deg)');
+ylabel('Participant error on current trial (deg)');
 
 % figure (103);
 % clf;

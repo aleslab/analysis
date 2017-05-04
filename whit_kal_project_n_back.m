@@ -56,28 +56,21 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         figure(100+iParticipant);        
         %put all conditions in 1 plot.
         subplot(1,ptbCorgiData.nConditions,iCond)
-        %whitney plot
-        set(gca,'fontsize', 16);
-        hold on
-        scatter (RO, err,40,'k','filled');
-        %add a regresion line
         
-        %Calculate the correlation coefficient
-        [r p ]= circ_corrccd90(RO, err);
-        n_back_1_corr(iParticipant,iCond).r = r(1,2);
-        n_back_1_corr(iParticipant,iCond).p = p(1,2);
-        %calyculate regression slopes
-        myModel = cat(1,RO,ones(size(RO)))';
-        myY     = err';
-        [b bint] = regress(myY, myModel);
+        [ b, bint, r, p ] = analysis_func (RO, err);
+        
+        
         n_back_1_Fit(iParticipant,iCond).b = b;
         n_back_1_Fit(iParticipant,iCond).bint = bint;
         n_back_1_Slope(iParticipant,iCond) = b(1);
         n_back_1_SlopeInt(iParticipant,iCond,:) = bint(1,:);
-        
+        n_back_1_corr(iParticipant,iCond).r = r;
+        n_back_1_corr(iParticipant,iCond).p = p;
         
         %Now get 
+        scatter (RO, err,40,'k','filled');
         axis([-90,90,-90,90]);
+        
         axis square
         hold on
         title({thisLabel; ...
@@ -98,20 +91,13 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         figure(200+iParticipant);        
         %put all conditions in 1 plot.
         subplot(1,ptbCorgiData.nConditions,iCond)
+        [ b, bint, r, p ] = analysis_func (RO_n_back_2, err);
         %whitney plot
-        set(gca,'fontsize', 16);
-        hold on
-        scatter ( RO_n_back_2, err,40,'k','filled');
-        %add a regresion line
         
-        %Calculate the correlation coefficient
-        [r p ]= circ_corrccd90(RO_n_back_2, err);
-        n_back_2_corr(iParticipant,iCond).r = r(1,2);
-        n_back_2_corr(iParticipant,iCond).p = p(1,2);
+        n_back_2_corr(iParticipant,iCond).r = r;
+        n_back_2_corr(iParticipant,iCond).p = p;
         %calyculate regression slopes
-        myModel = cat(1,RO_n_back_2,ones(size(RO_n_back_2)))';
-        myY     = err';
-        [b bint] = regress(myY, myModel);
+        
         n_back_2_Fit(iParticipant,iCond).b = b;
         n_back_2_Fit(iParticipant,iCond).bint = bint;
         n_back_2_Slope(iParticipant,iCond) = b(1);
@@ -119,6 +105,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         
         %Now get 
+        scatter (RO_n_back_2, err,40,'k','filled');
         axis([-90,90,-90,90]);
         axis square
         hold on
@@ -142,20 +129,13 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         figure(300+iParticipant);        
         %put all conditions in 1 plot.
         subplot(1,ptbCorgiData.nConditions,iCond)
-        %whitney plot
-        set(gca,'fontsize', 16);
-        hold on
-        scatter ( RO_n_back_3, err,40,'k','filled');
-        %add a regresion line
+       
         
-        %Calculate the correlation coefficient
-        [r p ]= circ_corrccd90(RO_n_back_3, err);
-        n_back_3_corr(iParticipant,iCond).r = r(1,2);
-        n_back_3_corr(iParticipant,iCond).p = p(1,2);
-        %calyculate regression slopes
-        myModel = cat(1,RO_n_back_3,ones(size(RO_n_back_3)))';
-        myY     = err';
-        [b bint] = regress(myY, myModel);
+        [ b, bint, r, p ] = analysis_func (RO_n_back_3, err);
+        
+        n_back_3_corr(iParticipant,iCond).r = r;
+        n_back_3_corr(iParticipant,iCond).p = p;
+        
         n_back_3_Fit(iParticipant,iCond).b = b;
         n_back_3_Fit(iParticipant,iCond).bint = bint;
         n_back_3_Slope(iParticipant,iCond) = b(1);
@@ -163,6 +143,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         
         %Now get 
+        scatter (RO_n_back_3, err,40,'k','filled');
         axis([-90,90,-90,90]);
         axis square
         hold on
@@ -182,32 +163,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         
         
-       %Linear Regression to fit n-back 
-       %Or equation: R = a*S(i) + b*S(i-1)...
-       % R = myModel*b + bint
-       myModel = cat(1,stimOri(5:end),stimOri(4:end-1), stimOri(3:end-2),...
-           stimOri(2:end-3),stimOri(1:end-4),ones(size(RO_n_back_3)))';
-       myY     = respOri(5:end)';
        
-        [b bint] = regress(myY, myModel);
-        n_back_full_fit(iParticipant,iCond).b = b;
-        n_back_full_fit(iParticipant,iCond).bint = bint;
-        n_back_full_Slope(iParticipant,iCond,:) = b;
-        n_back_full_SlopeInt(iParticipant,iCond,:) = bint(1,:);
-        
-        %Plot slopes
-        figure(1000+iParticipant);        
-        %put all conditions in 1 plot.
-        subplot(1,ptbCorgiData.nConditions,iCond)
-        errorbar(0:4,b(1:5),bint(1:5,1)-b(1:5),bint(1:5,2)-b(1:5))
-       
-        %Analysis looking at stimulus ONLY
-        myModel = cat(1,stimOri(4:end-1), stimOri(3:end-2),...
-        stimOri(2:end-3),stimOri(1:end-4),ones(size(RO_n_back_3)))';
-        myY     = stimOri(5:end)';
-       [b bint] = regress(myY, myModel)
-        
-        
     end
 end
         
