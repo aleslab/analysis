@@ -35,22 +35,26 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         %estimate = estimate+gain*value - estimate;
         
         
-        for i= 5:length (stimOri);
+        for i= 7:length (stimOri);
             
              err(i) = minAngleDiff(respOri(i), stimOri(i));%whitney
              RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney
              RO_n_back_2(i)= minAngleDiff (stimOri(i-2),stimOri (i));
              RO_n_back_3(i) = minAngleDiff (stimOri(i-3), stimOri(i));
              RO_n_back_4(i)= minAngleDiff (stimOri(i-4), stimOri(i));
+             RO_n_back_5(i)=minAngleDiff (stimOri(i-5), stimOri(i));
+             RO_n_back_6(i)=minAngleDiff(stimOri(i-6), stimOri(i));
              
         end
         
         
-        err = err(5:end);
-        RO  = RO(5:end);
-        RO_n_back_2=RO_n_back_2(5:end);
-        RO_n_back_3=RO_n_back_3(5:end);
-        RO_n_back_4=RO_n_back_4(5:end);
+        err = err(7:end);
+        RO  = RO(7:end);
+        RO_n_back_2=RO_n_back_2(7:end);
+        RO_n_back_3=RO_n_back_3(7:end);
+        RO_n_back_4=RO_n_back_4(7:end);
+        RO_n_back_5=RO_n_back_5(7:end);
+        %RO_n_back_6=RO_n_back_6(7:end);
              
              
         figure(100+iParticipant);        
@@ -160,6 +164,77 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
 
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
+        
+        figure(400+iParticipant);        
+        %put all conditions in 1 plot.
+        subplot(1,ptbCorgiData.nConditions,iCond)
+        
+        [ b, bint, r, p ] = analysis_func (RO_n_back_4,err);
+        
+        
+        n_back_4_Fit(iParticipant,iCond).b = b;
+        n_back_4_Fit(iParticipant,iCond).bint = bint;
+        n_back_4_Slope(iParticipant,iCond) = b(1);
+        n_back_4_SlopeInt(iParticipant,iCond,:) = bint(1,:);
+        n_back_4_corr(iParticipant,iCond).r = r;
+        n_back_4_corr(iParticipant,iCond).p = p;
+        
+        %Now get 
+        scatter (RO_n_back_4, err,40,'k','filled');
+        axis([-90,90,-90,90]);
+        
+        axis square
+        hold on
+        title({thisLabel; ...
+            [' r: ' num2str(n_back_1_corr(iParticipant,iCond).r) ...
+            ' p: ' num2str(n_back_1_corr(iParticipant,iCond).p) ]});
+        
+        if iCond ==1
+        xlabel('Relative orientation of current trial compared to previous_n_back_4 trial(deg)');
+        ylabel('Error on current trial (deg)');
+        end
+        thisFilename = [ptbCorgiData.paradigmName ...
+            '_' thisParticipantId '_fischerSD'];
+
+        set(gcf,'FileName',thisFilename)
+        set(gcf,'position',figurePosition);
+        
+        
+        figure(500+iParticipant);        
+        %put all conditions in 1 plot.
+        subplot(1,ptbCorgiData.nConditions,iCond)
+        
+        [ b, bint, r, p ] = analysis_func (RO_n_back_5, err);
+        
+        
+        n_back_5_Fit(iParticipant,iCond).b = b;
+        n_back_5_Fit(iParticipant,iCond).bint = bint;
+        n_back_5_Slope(iParticipant,iCond) = b(1);
+        n_back_5_SlopeInt(iParticipant,iCond,:) = bint(1,:);
+        n_back_5_corr(iParticipant,iCond).r = r;
+        n_back_5_corr(iParticipant,iCond).p = p;
+        
+        %Now get 
+        scatter (RO_n_back_5, err,40,'k','filled');
+        axis([-90,90,-90,90]);
+        
+        axis square
+        hold on
+        title({thisLabel; ...
+            [' r: ' num2str(n_back_1_corr(iParticipant,iCond).r) ...
+            ' p: ' num2str(n_back_1_corr(iParticipant,iCond).p) ]});
+        
+        if iCond ==1
+        xlabel('Relative orientation of current trial compared to previous n-5  trial(deg)');
+        ylabel('Error on current trial (deg)');
+        end
+        thisFilename = [ptbCorgiData.paradigmName ...
+            '_' thisParticipantId '_fischerSD'];
+
+        set(gcf,'FileName',thisFilename)
+        set(gcf,'position',figurePosition);
+        
+        
         
         
         
