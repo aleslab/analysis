@@ -240,7 +240,20 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
        
     end
+    
+    [ gain, responseHat, residual] = fitCircularSimpleKalman( stimOri,respOri );
+    
+    figure (600)
+    plot(responseHat)
+    
+    [ weights, responseHat, residual] = fitCircularStimulusAverage( stimOri,respOri,5 );
+    
+    figure (700)
+    plot(weights)
+    
 end
+
+
         
         
        
