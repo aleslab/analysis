@@ -73,7 +73,15 @@ var_dist=var(stimOri); %variance in the stimOri
 S=std(whitney_err);
 
 
-
+ [ gain, responseHat, residual] = fitCircularSimpleKalman( stimOri,respOri );
+    
+    figure (600)
+    plot(responseHat)
+    
+    [ weights, responseHat, residual] = fitCircularStimulusAverage( stimOri,respOri,5 );
+    
+    figure (700)
+    plot(weights)
 
 % figure(101);
 % clf
