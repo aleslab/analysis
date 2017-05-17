@@ -51,7 +51,7 @@ else
 end
 
 ylabel( 'Percent Correct')
-legend(plotHandle,legendLabels)
+legend(plotHandle,legendLabels,'location','best')
 
 end
 
