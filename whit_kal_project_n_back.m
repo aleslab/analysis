@@ -245,10 +245,30 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
 end
 
 
+disp ('r and p for nbacks')
+
+       for iParticipant = 1 : ptbCorgiData.nParticipants,
+      disp(sprintf('partcipant_id; %s', ptbCorgiData.participantList{iParticipant}));
+    
+    
+    
+    for iCond  = 1 : ptbCorgiData.nConditions,
+        disp(sprintf('contrast; %s', ptbCorgiData.conditionInfo(iCond).label))
         
-        
+        disp(sprintf('n_back_1 r; %f p; %f', n_back_1_corr(iParticipant,iCond).r, n_back_1_corr(iParticipant,iCond).p))
        
         
+        disp(sprintf('n_back_2 r; %f p; %f', n_back_2_corr(iParticipant,iCond).r, n_back_2_corr(iParticipant,iCond).p))
+        
+        
+        disp(sprintf('n_back_3 r; %f p; %f', n_back_3_corr(iParticipant,iCond).r, n_back_3_corr(iParticipant,iCond).p))
+       
+        disp(sprintf('n_back_4 r; %f p; %f', n_back_4_corr(iParticipant,iCond).r, n_back_4_corr(iParticipant,iCond).p)) 
+        
+        disp(sprintf('n_back_5 r; %f p; %f', n_back_5_corr(iParticipant,iCond).r, n_back_5_corr(iParticipant,iCond).p)) 
+        
+    end
+       end 
              
              
              
