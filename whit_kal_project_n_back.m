@@ -54,7 +54,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         RO_n_back_3=RO_n_back_3(7:end);
         RO_n_back_4=RO_n_back_4(7:end);
         RO_n_back_5=RO_n_back_5(7:end);
-        %RO_n_back_6=RO_n_back_6(7:end);
+        RO_n_back_6=RO_n_back_6(7:end);
              
              
         figure(100+iParticipant);        
@@ -186,8 +186,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         axis square
         hold on
         title({thisLabel; ...
-            [' r: ' num2str(n_back_1_corr(iParticipant,iCond).r) ...
-            ' p: ' num2str(n_back_1_corr(iParticipant,iCond).p) ]});
+            [' r: ' num2str(n_back_4_corr(iParticipant,iCond).r) ...
+            ' p: ' num2str(n_back_4_corr(iParticipant,iCond).p) ]});
         
         if iCond ==1
         xlabel('Relative orientation of current trial compared to previous_n_back_4 trial(deg)');
@@ -221,8 +221,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         axis square
         hold on
         title({thisLabel; ...
-            [' r: ' num2str(n_back_1_corr(iParticipant,iCond).r) ...
-            ' p: ' num2str(n_back_1_corr(iParticipant,iCond).p) ]});
+            [' r: ' num2str(n_back_5_corr(iParticipant,iCond).r) ...
+            ' p: ' num2str(n_back_5_corr(iParticipant,iCond).p) ]});
         
         if iCond ==1
         xlabel('Relative orientation of current trial compared to previous n-5  trial(deg)');
@@ -234,6 +234,42 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
         
+        
+        
+        
+        figure(600+iParticipant);        
+        %put all conditions in 1 plot.
+        subplot(1,ptbCorgiData.nConditions,iCond)
+        
+        [ b, bint, r, p ] = analysis_func (RO_n_back_6, err);
+        
+        
+        n_back_6_Fit(iParticipant,iCond).b = b;
+        n_back_6_Fit(iParticipant,iCond).bint = bint;
+        n_back_6_Slope(iParticipant,iCond) = b(1);
+        n_back_6_SlopeInt(iParticipant,iCond,:) = bint(1,:);
+        n_back_6_corr(iParticipant,iCond).r = r;
+        n_back_6_corr(iParticipant,iCond).p = p;
+        
+        %Now get 
+        scatter (RO_n_back_6, err,40,'k','filled');
+        axis([-90,90,-90,90]);
+        
+        axis square
+        hold on
+        title({thisLabel; ...
+            [' r: ' num2str(n_back_6_corr(iParticipant,iCond).r) ...
+            ' p: ' num2str(n_back_6_corr(iParticipant,iCond).p) ]});
+        
+        if iCond ==1
+        xlabel('Relative orientation of current trial compared to previous n-6  trial(deg)');
+        ylabel('Error on current trial (deg)');
+        end
+        thisFilename = [ptbCorgiData.paradigmName ...
+            '_' thisParticipantId '_fischerSD'];
+
+        set(gcf,'FileName',thisFilename)
+        set(gcf,'position',figurePosition);
         
         
         
@@ -267,8 +303,11 @@ disp ('r and p for nbacks')
         
         disp(sprintf('n_back_5 r; %f p; %f', n_back_5_corr(iParticipant,iCond).r, n_back_5_corr(iParticipant,iCond).p)) 
         
+        disp(sprintf('n_back_6 r; %f p; %f', n_back_6_corr(iParticipant,iCond).r, n_back_6_corr(iParticipant,iCond).p)) 
+        
     end
        end 
+       
              
              
              

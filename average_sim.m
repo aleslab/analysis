@@ -10,12 +10,17 @@ respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
 
-[ weights, responseHat, residual] = fitCircularStimulusAverage( stimOri,respOri,5 );
+[ weights, responseHat, residual] = fitCircularStimulusAverage( stimOri,respOri,11 );
 
 %[ gain, responseHat, residual] = fitCircularSimpleKalman( stimOri,respOri );
+
+
+disp('weights')
 
 figure(101);
 clf
 set (gca,'fontsize', 24);
 bar(weights)
+
+
 
