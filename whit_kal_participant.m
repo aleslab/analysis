@@ -72,16 +72,16 @@ var_prox=var(whitney_err); % amount of variance in the error
 var_dist=var(stimOri); %variance in the stimOri
 S=std(whitney_err);
 
-
- [ gain, responseHat, residual] = fitCircularSimpleKalman( stimOri,respOri );
-    
-    figure (600)
-    plot(responseHat)
-    
-    [ weights, responseHat, residual] = fitCircularStimulusAverage( stimOri,respOri,5 );
-    
-    figure (700)
-    plot(weights)
+% 
+%  [ gain, responseHat, residual] = fitCircularSimpleKalman( stimOri,respOri );
+%     
+%     figure (600)
+%     plot(responseHat)
+%     
+%     [ weights, responseHat, residual] = fitCircularStimulusAverage( stimOri,respOri,5 );
+%     
+%     figure (700)
+%     plot(weights)
 
 % figure(101);
 % clf
@@ -113,9 +113,10 @@ hold on
 scatter (RO, whitney_err,90,'k','filled');
 Xline = linspace (-90,90, 10);
 yHat = b*Xline+mean(whitney_err);
-%axis([-70,70,-70,70]);
+axis([-90,90,-90,90]);
+
 hold on
-%legend ('Participant error (deg) vs relative orientation(deg)');
+legend ('Participant error (deg) vs relative orientation(deg)');
 xlabel('Relative orientation of current trial compared to previous trial(deg)');
 ylabel('Participant error on current trial (deg)');
 
