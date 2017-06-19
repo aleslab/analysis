@@ -1,4 +1,4 @@
-function [results ] = psychometricFit( analysisOptions, participantData )
+function [results ] = psychometricFitTemporal( analysisOptions, participantData )
 %WARNING, this is experimental. 
 
 %Pull out the specific data needed. 
@@ -32,7 +32,7 @@ for iGroup = 1:nGroups,
     %reading. 
     options = PAL_minimize('options'); %options structure containing default    
     %This sets the guess rate fixed and lets the offset/slope/lapse rate vary. 
-    paramsFree = [1 1 0 1];
+    paramsFree = [1 1 0 0];
     PF = @PAL_CumulativeNormal;    
     %Now here's a tricky one. We don't know what xVal has. Maybe 0 to 10, or
     %say -10 to 0, or maybe -10 to 10. We're going to treat -10 to 0 as if
@@ -59,9 +59,9 @@ for iGroup = 1:nGroups,
         %different depending on the chosen psychometric function! 
         searchGrid.beta   = linspace(0,(30/max(xVal)),101);
         %Gamma is the guess rate. Going to set it to 50% for now
-        searchGrid.gamma  = 0.5;
+        searchGrid.gamma  = 0;
         %For fitting the lapse rate we'll use a 0 to 6% range. 
-        searchGrid.lambda = linspace(0,.06,61);
+        searchGrid.lambda = 0;
     end
     
     %Now lets do the fit. Returning all results as cell arrays. 

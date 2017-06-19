@@ -4,7 +4,7 @@ function [ ] = simple2afcplot( analysisOptions, participantData )
 
 ptbCorgiSetPlotOptions();
 %Pull out the specific data needed. 
-[nCorrect nTrials] = build2AfcMatrix(participantData.sessionInfo,participantData.experimentData);
+[nCorrect nTrials] = build2AfcResponseMatrix(participantData.sessionInfo,participantData.experimentData);
 %Split into different condition groups
 conditionGroups = groupConditionsByField(participantData.sessionInfo.conditionInfo,...
     analysisOptions.groupingField);
