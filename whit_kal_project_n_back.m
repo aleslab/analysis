@@ -306,10 +306,39 @@ disp ('r and p for nbacks')
         disp(sprintf('n_back_6 r; %f p; %f', n_back_6_corr(iParticipant,iCond).r, n_back_6_corr(iParticipant,iCond).p)) 
         
     end
-       end 
-       
-             
-             
+       end
+    
+    %bar([n_back_1_Slope, n_back_2_Slope, n_back_3_Slope,n_back_4_Slope, n_back_5_Slope, n_back_6_Slope]);
+    
+    Mean_data=[];
+    for i = 1:6;
+        x = ['n_back_' int2str(i) '_Slope'];
+        x = eval(x);
+        Mean_data = [Mean_data;x];
+    end
+    
+   clear x
+   
+   blah=zeros(6,2,2);
+    for i = 1:6;
+        x = ['n_back_' int2str(i) '_SlopeInt'];
+        x = eval(x);
+        x = squeeze(x);
+        blah(i,:,:) = x;
+        clear x
+    end
+    
+    figure;
+%     bar(Mean_data,'DisplayName','Mean_data');hold on
+    ciplot(blah(6,:,1),blah(6,:,2), Mean_data,'k')
+    hold off 
+    
+    for i = 1:length(Mean_data)
+      
+   errorbar(Mean_data(:,i), blah(:,j,i),blah(:,j,i))
+        end
+        hold off
+     
              
             
             
