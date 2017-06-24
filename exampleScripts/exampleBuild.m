@@ -18,22 +18,24 @@ flipTimes = buildMatrixFromField('flipTimes',ptbCorgiData);
 %actually get's automatically called for basic arithmetic ops* / + -
 %Subtract the first frame time so flip times represent trial time instead
 %of global time
-flipTimes = bsxfun(@minus,flipTimes,flipTimes(:,:,:,1));
+flipTimes = bsxfun(@minus,flipTimes,flipTimes(1,:,:,:));
 
 figure(101);clf;
-%Plot line positions for all trials for condition 1
-%Squeeze makes it a 2d matrix, transpose makes the x-axis correct
-plot( squeeze(flipTimes(1,1,:,:))',squeeze(linePos(1,1,:,:))' );
+%Plot line positions for all trials for condition 4, participant 1
+plot( flipTimes(:,:,4,1),linePos(:,:,4,1) );
 
+%Note, the above only works because the trailing dimensions automatically
+%get ignored if there size 1.  If not you need to use squeeze(), because
+%plot() only works on up to 2d matrices
+%plot( squeeze(flipTimes(:,1,:,1)),squeeze(linePos(:,1,:,1)) );
+%
+%To calculate the mean across trials: 
+%plot(squeeze(nanmean(flipTimes,2)),squeeze(nanmean(linePos,2)))
+%
 figure(102);clf;
 %Plot line positions for all participants, all conditions and all trials
 
-%Here's a tricky matlab sequence:
-
-%Make the plotting data the first dimension:
-ftPerm = shiftdim(flipTimes,3);
-lpPerm = shiftdim(linePos,3);
-
-%Use a funny implicit grouping to collapse 4d matrix into 2d matrix:
-plot(ftPerm(:,:),lpPerm(:,:));
+%Here's a matlab trick.  Using (:,:) automatically reshapes the 4d matrix
+%into a 2d matrix
+plot(flipTimes(:,:),linePos(:,:));
 
