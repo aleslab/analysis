@@ -12,7 +12,7 @@ analysis.function = @psychometricFitTemporal;
 analysis.funcOptions.groupingField = 'temporalGap';
 %choose what to put on the x-axis. 
 analysis.funcOptions.xAxisField = 'velocityDegPerSecSection2';
-%[analysis, ptbCorgiData] = ptbCorgiAnalyzeEachParticipant(analysis,ptbCorgiData);
+[analysis, ptbCorgiData] = ptbCorgiAnalyzeEachParticipant(analysis,ptbCorgiData);
 
 %This function creates a simple 2afc errorbar plot
 analysis.function = @simple2afcplot;
