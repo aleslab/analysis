@@ -75,13 +75,50 @@ for iGroup = 1:nGroups,
     results.StimLevels{iGroup} = StimLevels;
     results.NumPos{iGroup}     = NumPos;
     results.OutOfNum{iGroup}   = OutOfNum; 
+    results.fiftyPercentPoint{iGroup} = results.paramsValues{iGroup}(1);
+    results.threshold75{iGroup} = PAL_CumulativeNormal(results.paramsValues{iGroup}, 0.75, 'Inverse');
+    results.Slope{iGroup} = PAL_CumulativeNormal(results.paramsValues{iGroup},...
+        results.threshold75{iGroup}, 'Derivative');
+    BootNo = 1000;
     
+     [SD, paramsSim, LLSim, converged] = PAL_PFML_BootstrapNonParametric(...
+                    StimLevels, NumPos, OutOfNum, [], paramsFree, BootNo, PF,...
+                    'searchGrid',searchGrid, 'lapseLimits',[0 .1], 'searchOptions',options);
+    results.paramsBoot{iGroup} = paramsSim;
     %Now lets evaluate the function so we can use for easy plotting:
     results.functionFitX{iGroup} = linspace(StimLevels(1),StimLevels(end),100);
     results.functionFitY{iGroup} = PF(results.paramsValues{iGroup}, results.functionFitX{iGroup});
+    bootFuncFit = NaN(BootNo, 100);
+    boot75threshold = NaN(BootNo);
+    bootSlopeAt75Threshold = NaN(BootNo);
+    
+    for iBoot = 1:BootNo
+        theseParams =  paramsSim(iBoot,:);
+        bootFuncFit(iBoot, :)  = PF(theseParams, results.functionFitX{iGroup});
+        
+        boot75threshold(iBoot, :) = PAL_CumulativeNormal(theseParams, 0.75, 'Inverse');
+        
+        bootSlopeAt75Threshold(iBoot, :) = PAL_CumulativeNormal(theseParams, boot75threshold(iBoot), 'Derivative');
+   
+    end
     
     
+     
+    loIdx = round(0.025 * BootNo);
+    hiIdx = round(0.975 * BootNo);
     
+    sortedBootFuncFit = sort(bootFuncFit, 2, 'ascend');
+    results.functionFitBootLo{iGroup} = sortedBootFuncFit(loIdx,:);
+    results.functionFitBootHi{iGroup} = sortedBootFuncFit(hiIdx,:);
+    
+    sortedBootThres = sort(boot75threshold,2, 'ascend');
+    results.bootThresLo{iGroup} = sortedBootThres(loIdx);
+    results.bootThresHi{iGroup} = sortedBootThres(hiIdx);
+    
+    sortedBootSlope = sort(bootSlopeAt75Threshold,2, 'ascend');
+    results.bootSlopeLo{iGroup} = sortedBootSlope(loIdx);
+    results.bootSlopeHi{iGroup} = sortedBootSlope(hiIdx);
+        
 end
 
 

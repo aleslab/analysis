@@ -35,7 +35,10 @@ for iGroup = 1:nGroups,
     if isfield( participantData.analysisResults,'functionFitX')
         xValues = participantData.analysisResults.functionFitX{iGroup};
         yValues = participantData.analysisResults.functionFitY{iGroup};
-        plot(xValues,yValues,':','color',get(plotHandle(iGroup),'color'));
+        yLo = participantData.analysisResults.functionFitBootLo{iGroup};
+        yHi = participantData.analysisResults.functionFitBootHi{iGroup};
+        
+        createShadedRegion(xValues,yValues,yLo, yHi,':','color',get(plotHandle(iGroup),'color'));
     end
     
 end
@@ -50,7 +53,7 @@ else
     xlabel( xAxisField);
 end
 
-ylabel( 'Percent Correct')
+ylabel( 'Proportion "Faster" responses')
 legend(plotHandle,legendLabels,'location','best')
 
 end
