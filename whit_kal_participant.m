@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =2; %When you have only 1 condition
+iCond =1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -105,20 +105,20 @@ S=std(whitney_err);
 % whitneySlope(iParticipant,iCond) = b(1);
 % whitneySlopeInt(iParticipant,iCond,:) = bint(1,:);
         
-figure(102);
-clf;
-%whitey plot
-set(gca,'fontsize', 32);
-hold on
-scatter (RO, whitney_err,90,'k','filled');
-Xline = linspace (-90,90, 10);
-yHat = b*Xline+mean(whitney_err);
-axis([-90,90,-90,90]);
-
-hold on
-legend ('Participant error (deg) vs relative orientation(deg)');
-xlabel('Relative orientation of current trial compared to previous trial(deg)');
-ylabel('Participant error on current trial (deg)');
+% figure(102);
+% clf;
+% %whitey plot
+% set(gca,'fontsize', 32);
+% hold on
+% scatter (RO, whitney_err,90,'k','filled');
+% Xline = linspace (-90,90, 10);
+% yHat = b*Xline+mean(whitney_err);
+% axis([-90,90,-90,90]);
+% 
+% hold on
+% legend ('Participant error (deg) vs relative orientation(deg)');
+% xlabel('Relative orientation of current trial compared to previous trial(deg)');
+% ylabel('Participant error on current trial (deg)');
 
 % figure (103);
 % clf;
@@ -190,4 +190,28 @@ ylabel('Participant error on current trial (deg)');
 % xlabel('Trial number');
 % ylabel ('Orientation (degs)');
 
+figure (109);
+clf
+set (gca,'fontsize', 24);
+hold on
+scatter(whitney_err, stimOri,80,'k','filled');
+xlabel('Stimulus orientation');
+ylabel('Whitney error');
+
+
+figure (309)
+clf
+set (gca,'fontsize', 24);
+hold on
+scatter(RO, stimOri,80,'k','filled');
+xlabel('Stimulus orientation');
+ylabel('relative orientation');
+
+
+
+
+%scatter (part_PE_Err, partcipant_update,80,'k','filled');
+% legend ('Partcipant response error (deg) vs partcipant response update(deg)');
+% xlabel('How much the participant updates the next response (deg)');
+% ylabel ('Participant error on current trial (deg)');
 
