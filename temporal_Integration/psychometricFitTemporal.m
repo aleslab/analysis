@@ -107,15 +107,15 @@ for iGroup = 1:nGroups,
     loIdx = round(0.025 * BootNo);
     hiIdx = round(0.975 * BootNo);
     
-    sortedBootFuncFit = sort(bootFuncFit, 2, 'ascend');
+    sortedBootFuncFit = sort(bootFuncFit, 1, 'ascend');
     results.functionFitBootLo{iGroup} = sortedBootFuncFit(loIdx,:);
     results.functionFitBootHi{iGroup} = sortedBootFuncFit(hiIdx,:);
     
-    sortedBootThres = sort(boot75threshold,2, 'ascend');
+    sortedBootThres = sort(boot75threshold,1, 'ascend');
     results.bootThresLo{iGroup} = sortedBootThres(loIdx);
     results.bootThresHi{iGroup} = sortedBootThres(hiIdx);
     
-    sortedBootSlope = sort(bootSlopeAt75Threshold,2, 'ascend');
+    sortedBootSlope = sort(bootSlopeAt75Threshold,1, 'ascend');
     results.bootSlopeLo{iGroup} = sortedBootSlope(loIdx);
     results.bootSlopeHi{iGroup} = sortedBootSlope(hiIdx);
         
