@@ -33,7 +33,7 @@ for i= 2:length (respOri);
     
     kal_predict(i) = wrapTo90(kal_predict(i));%kalman wrap function
     
-    naive_Estimate(i)  = stimOri(i-1) +gain*minAngleDiff(stimOri(i),stimOri(i-1));%naive
+   naive_Estimate(i)  = stimOri(i-1) +gain*minAngleDiff(stimOri(i),stimOri(i-1));%naive
     
     naive_err(i)= minAngleDiff(naive_Estimate(i), stimOri(i)); %naive
     
@@ -105,15 +105,15 @@ S=std(whitney_err);
 % whitneySlope(iParticipant,iCond) = b(1);
 % whitneySlopeInt(iParticipant,iCond,:) = bint(1,:);
         
-figure(102);
-clf;
-%whitey plot
-set(gca,'fontsize', 32);
-hold on
-scatter (RO, whitney_err,90,'k','filled');
-Xline = linspace (-90,90, 10);
-yHat = b*Xline+mean(whitney_err);
-axis([-90,90,-90,90]);
+% figure(102);
+% clf;
+% %whitey plot
+% set(gca,'fontsize', 32);
+% hold on
+% scatter (RO, whitney_err,90,'k','filled');
+% Xline = linspace (-90,90, 10);
+% yHat = b*Xline+mean(whitney_err);
+% axis([-90,90,-90,90]);
 
 % hold on
 % legend ('Participant error (deg) vs relative orientation(deg)');
@@ -144,7 +144,7 @@ axis([-90,90,-90,90]);
 % xlabel('How much the Kalman updates its next prediction');
 % ylabel ('Prediction error on  current prediction');
 
-
+[r,p]=corrcoef(stimOri,whitney_err);
 
 % figure(105);
 % clf;
@@ -203,9 +203,10 @@ figure (309)
 clf
 set (gca,'fontsize', 24);
 hold on
-scatter(stimOri, respOri,80,'k','filled');
+scatter(respOri, stimOri,80,'k','filled');
 xlabel('Stimulus orientation');
 ylabel('respOri');
+
 
 
 
