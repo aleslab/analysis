@@ -4,7 +4,7 @@ function [ ] = simple2afcplot( analysisOptions, participantData )
 
 ptbCorgiSetPlotOptions();
 %Pull out the specific data needed. 
-[nCorrect nTrials] = build2AfcResponseMatrix(participantData.sessionInfo,participantData.experimentData);
+[nCorrect nTrials] = build2AfcMatrix(participantData.sessionInfo,participantData.experimentData);
 %Split into different condition groups
 conditionGroups = groupConditionsByField(participantData.sessionInfo.conditionInfo,...
     analysisOptions.groupingField);
@@ -32,13 +32,17 @@ for iGroup = 1:nGroups,
     legendLabels{iGroup} = [analysisOptions.groupingField ' = '...
         num2str(thisGroupValue,3)];
     
-    if isfield( participantData.analysisResults,'functionFitX')
+    if isfield( participantData.analysisResults,'functionFitBootLo')
         xValues = participantData.analysisResults.functionFitX{iGroup};
         yValues = participantData.analysisResults.functionFitY{iGroup};
         yLo = participantData.analysisResults.functionFitBootLo{iGroup};
         yHi = participantData.analysisResults.functionFitBootHi{iGroup};
         
         createShadedRegion(xValues,yValues,yLo, yHi,':','color',get(plotHandle(iGroup),'color'));
+    else isfield( participantData.analysisResults,'functionFitX')
+        xValues = participantData.analysisResults.functionFitX{iGroup};
+        yValues = participantData.analysisResults.functionFitY{iGroup};
+        plot(xValues,yValues,':','color',get(plotHandle(iGroup),'color'))
     end
     
 end

@@ -12,8 +12,9 @@ iCond =2; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
-respOri=wrapTo90(respOri);
-stimOri=wrapTo90(stimOri);
+% respOri=wrapTo90(respOri);
+% stimOri=wrapTo90(stimOri);
+
 
 estimate_initial_time_point = 0;%define value for first Xhat
 
@@ -203,7 +204,7 @@ figure (309)
 clf
 set (gca,'fontsize', 24);
 hold on
-scatter(respOri, stimOri,80,'k','filled');
+scatter(stimOri, respOri,80,'k','filled');
 xlabel('Stimulus orientation');
 ylabel('respOri');
 
