@@ -1,4 +1,4 @@
-function [ hLine, hPatch ] = createShadedPlot( x,y,yLo,yHi,varargin )
+function [ hLine, hPatch ] = createShadedRegion( x,y,yLo,yHi,varargin )
 %createShadedPlot Plots a line with a shaded region around it. 
 %   
 %[ hLine hPatch ] = createShadedPlot( x,y,yLo,yHi, [extra inputs passed to plot] )
