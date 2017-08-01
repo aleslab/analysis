@@ -46,8 +46,10 @@ for iGroup = 1:nGroups,
     %Sort stim levels. 
     [StimLevels, sortIdx] = sort(StimLevels);
         
+    StimLevels(iGroup,:) = StimLevels;
     NumPos(iGroup,:)   = nCorrect(condList(sortIdx));
     OutOfNum(iGroup,:) = nTrials(condList(sortIdx));
+    
 end
 
     %If options for the search aren't specified lets make one up with some
@@ -60,9 +62,9 @@ end
         %different depending on the chosen psychometric function! 
         searchGrid.beta   = linspace(0,(30/max(xVal)),101);
         %Gamma is the guess rate. Going to set it to 50% for now
-        searchGrid.gamma  = 0;
+        searchGrid.gamma  = .03;
         %For fitting the lapse rate we'll use a 0 to 6% range. 
-        searchGrid.lambda = 0;linspace(0,.06,61);
+        searchGrid.lambda = linspace(0,.05,61);
     end
     
     %Now lets do the fit. Returning all results as cell arrays. 
@@ -74,7 +76,9 @@ end
     thresholdsfuller = 'fixed';  %Each condition gets own threshold
     slopesfuller = 'unconstrained';      %Each condition gets own slope
     guessratesfuller = 'fixed';          %Guess rate fixed
+    
     lapseratesfuller = 'constrained';    %Common lapse rate
+    %lapseratesfuller = 'fixed';    %Common lapse rate
     lapseFit = 'nAPLE';
     %Fit fuller model
       
@@ -83,7 +87,7 @@ end
     [results.paramsValues, results.LL, results.exitflag, results.output] = ...
         PAL_PFML_FitMultiple(StimLevels, NumPos, OutOfNum, ...
       paramsValues, PF,'searchOptions',options,'lapserates',lapseratesfuller,'thresholds',thresholdsfuller,...
-      'slopes',slopesfuller,'guessrates',guessratesfuller,'lapseLimits',[0 1],'lapseFit',lapseFit,'searchOptions',options);
+      'slopes',slopesfuller,'guessrates',guessratesfuller,'lapseLimits',[0 0.05],'lapseFit',lapseFit,'gammaeqlambda',1,'searchOptions',options);
   
    
     results.PF         = PF;
@@ -94,6 +98,7 @@ end
    
     for iGroup = 1:nGroups,
 
+        results.paramsValues(iGroup,:)
         %Now lets evaluate the function so we can use for easy plotting:
         results.functionFitX{iGroup} = linspace(StimLevels(1),StimLevels(end),100);
         results.functionFitY{iGroup} = PF(results.paramsValues(iGroup,:), results.functionFitX{iGroup});
