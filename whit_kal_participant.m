@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =2; %When you have only 1 condition
+iCond =1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -191,29 +191,29 @@ S=std(whitney_err);
 % xlabel('Trial number');
 % ylabel ('Orientation (degs)');
 
-figure (109);
-clf
-set (gca,'fontsize', 24);
-hold on
-scatter(stimOri,whitney_err ,80,'k','filled');
-xlabel('Stimulus orientation');
-ylabel('Whitney error');
-
-
-figure (309)
-clf
-set (gca,'fontsize', 24);
-hold on
-scatter(stimOri, respOri,80,'k','filled');
-xlabel('Stimulus orientation');
-ylabel('respOri');
-
-
-
-
-
-%scatter (part_PE_Err, partcipant_update,80,'k','filled');
-% legend ('Partcipant response error (deg) vs partcipant response update(deg)');
+% figure (109);
+% clf
+% set (gca,'fontsize', 24);
+% hold on
+% scatter(stimOri,whitney_err ,80,'k','filled');
+% xlabel('Stimulus orientation');
+% ylabel('Whitney error');
+% 
+% 
+% figure (309)
+% clf
+% set (gca,'fontsize', 24);
+% hold on
+% scatter(stimOri, respOri,80,'k','filled');
+% xlabel('Stimulus orientation');
+% ylabel('respOri');
+% 
+% 
+% 
+% 
+% 
+% %scatter (part_PE_Err, partcipant_update,80,'k','filled');
+% % legend ('Partcipant response error (deg) vs partcipant response update(deg)');
 % xlabel('How much the participant updates the next response (deg)');
 % ylabel ('Participant error on current trial (deg)');
 
