@@ -14,9 +14,4 @@ hold on
 numgroups=size(N_backs,1);
 numbars=size(N_backs,2);
 groupwidth=min(0.2, numbars/(numbars+1.1));
-% for i = 1:numbars
-%       % Based on barweb.m by Bolu Ajiboye from MATLAB File Exchange
-%       x = (1:numgroups) - groupwidth/2 + (2*i-1) * groupwidth / (2*numbars);  % Aligning error bar with individual bar
-%       errorbar(x, N_backs,(:,i), error(:,i), 'k', 'linestyle', 'none');
-% end
 errorbar(x, N_backs, interval_lower, interval_upper, 'k','linestyle', 'none','linewidth', 2);
