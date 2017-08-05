@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =1; %When you have only 1 condition
+iCond =2; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -109,17 +109,17 @@ S=std(whitney_err);
 figure(102);
 clf;
 %whitey plot
-set(gca,'fontsize', 22);
+set(gca,'fontsize', 28);
 hold on
 scatter (RO, whitney_err,90,'k','filled');
 Xline = linspace (-90,90, 10);
 yHat = b*Xline+mean(whitney_err);
-plot (Xline, yHat,'LineWidth',2);
+plot (Xline, yHat,'LineWidth',8);
 axis([-90,90,-90,90]);
 hold on
-legend ('Participant error (deg) vs relative orientation(deg)');
-xlabel('Relative orientation of current trial compared to previous trial(deg)');
-ylabel('Participant error on current trial (deg)');
+%legend ('Participant error (deg) vs relative orientation(deg)');
+xlabel('Relative orientation of current trial compared to previous trial(deg)','bold');
+ylabel('Participant error on current trial (deg)', 'bold');
 
 % figure (103);
 % clf;
