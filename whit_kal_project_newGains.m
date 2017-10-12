@@ -95,6 +95,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         PE  = PE(2:end);
         participantUpdate  = participantUpdate(2:end);
         PEInv=PEInv(2:end);
+        stimOri=stimOri(2:end);
 
         
         
@@ -157,13 +158,13 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         %whitney plot
         set(gca,'fontsize', 16);
         hold on
-        scatter (ROinv, errFromPrev,40,'k','filled');
+        scatter (stimOri, err,40,'k','filled');
         
-        [ b, bint, r, p ] = analysis_func ( ROinv, errFromPrev);
+        [ b, bint, r, p ] = analysis_func ( stimOri, err);
         
         %add a regresion line
         Xline = linspace (-90,90, 10);
-        yHat = b*Xline+mean(errFromPrev);
+        yHat = b*Xline+mean(err);
        
         plot (Xline, yHat);
         
@@ -171,13 +172,13 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         %[ b, bint, r, p] = circularSlope90d( ROinv, errFromPrev );
         %Calculate the correlation coefficient
        
-        whitneySD(iParticipant,iCond).r = r(1,1);
-        whitneySD(iParticipant,iCond).p = p(1,1);
+        recurSD(iParticipant,iCond).r = r(1,1);
+        recurSD(iParticipant,iCond).p = p(1,1);
         %calyculate regression slopes
-        whitneyInvFit(iParticipant,iCond).b = b;
-        whitneyInvFit(iParticipant,iCond).bint = bint;
-        whitneyInvSlope(iParticipant,iCond) = b(1);
-        whitneyInvSlopeInt(iParticipant,iCond,:) = bint(1,:);
+        recurFit(iParticipant,iCond).b = b;
+        recurFit(iParticipant,iCond).bint = bint;
+        recurSlope(iParticipant,iCond) = b(1);
+        recurSlopeInt(iParticipant,iCond,:) = bint(1,:);
         
         
         %Now get 
@@ -189,11 +190,11 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
             ' p: ' num2str(whitneySD(iParticipant,iCond).p) ]});
         
         if iCond ==1
-        xlabel(' Inverse Relative orientation(deg)');
-        ylabel('Error on previous trial (deg)');
+        xlabel(' stimori(deg)');
+        ylabel('Error (deg)');
         end
         thisFilename = [ptbCorgiData.paradigmName ...
-            '_' thisParticipantId '_whitneyInv'];
+            '_' thisParticipantId '_recufit'];
 
         set(gcf,'FileName',thisFilename)
         set(gcf,'position',figurePosition);
