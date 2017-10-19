@@ -158,7 +158,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         %whitney plot
         set(gca,'fontsize', 16);
         hold on
-        scatter (stimOri, err,40,'k','filled');
+        scatter (stimOri, err,40,'k');
         
         [ b, bint, r, p ] = analysis_func ( stimOri, err);
         
