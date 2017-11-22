@@ -29,14 +29,20 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         stimOri=wrapTo90(stimOri);
         
         err = minAngleDiff(respOri, stimOri);%whitney
+        resp_unwrap = err+stimOri;  
+        resp_unwrap = reshape(resp_unwrap, 24,[]);
+        reshape_err=reshape(err, 24,[]);
+        stim_reshape = reshape(stimOri,24,[]);
         
-        reshape_err=reshape(err, 15,[]);
         allPart(:,iCond,iParticipant) = mean(reshape_err,2);
 %         
 figure
 plot (respOri,'k')
 hold on
 plot(stimOri, 'b')
+xlabel('Trial number');
+ylabel('Orientation in degs');
+
 
 figure (101+iParticipant)
 % plot(reshape_err);
@@ -50,5 +56,18 @@ hold on
 end
 
 
-figure
-errorbar(repmat(1:15,4,1)',squeeze(mean(allPart,3)),squeeze(std(allPart,[],3)./sqrt(size(allPart,3))));
+% figure (501);
+% clf
+% set (gca,'fontsize', 24, 'LineWidth', 5);
+% errorbar(repmat(1:24,1)',squeeze(mean(allPart,3)),squeeze(std(allPart,[],3)./sqrt(size(allPart,3))));
+set(gca,'fontsize', 28);
+
+
+figure(502);
+set(gca,'fontsize', 38);
+baselineSubtract = bsxfun(@minus,resp_unwrap,stim_reshape(1,:));
+plot(baselineSubtract);
+hold on;
+plot(mean(baselineSubtract, 2),'k','linewidth',3);
+xlabel('Error in degrees');
+ylabel('Orientation in degrees');
