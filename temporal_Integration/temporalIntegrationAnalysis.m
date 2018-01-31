@@ -9,7 +9,7 @@ ptbCorgiData = uiGetPtbCorgiData();
 %between contrast groups.
 analysis.function = @psychometricFitTemporal;
 %Choose how to group conditions
-analysis.funcOptions.groupingField = 'temporalGap';
+analysis.funcOptions.groupingField = 'spatialGap';
 %choose what to put on the x-axis.
 analysis.funcOptions.xAxisField = 'velocityDegPerSecSection2';
 [analysis, ptbCorgiData] = ptbCorgiAnalyzeEachParticipant(analysis,ptbCorgiData);
@@ -40,7 +40,7 @@ cellToSave = [analysis.results.conditionLabels; analysis.results.fiftyPercentPoi
 tableToSave = cell2table(cellToSave);
 participantID = char(ptbCorgiData.participantList(1));
 
-dataFileName = strcat(participantID,  '_data.csv');
+dataFileName = strcat(participantID, ptbCorgiData.paradigmName,  '_data.csv');
 writetable(tableToSave, dataFileName);
 
 pdfFileName = strcat(participantID, '_', ptbCorgiData.paradigmName, '.pdf');
