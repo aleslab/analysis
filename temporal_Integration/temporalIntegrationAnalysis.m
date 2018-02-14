@@ -9,7 +9,7 @@ ptbCorgiData = uiGetPtbCorgiData();
 %between contrast groups.
 analysis.function = @psychometricFitTemporal;
 %Choose how to group conditions
-analysis.funcOptions.groupingField = 'spatialGap';
+analysis.funcOptions.groupingField = 'temporalGap'; %temporalGap for exp 4 and 6, 'spatialGap' for exp 5
 %choose what to put on the x-axis.
 analysis.funcOptions.xAxisField = 'velocityDegPerSecSection2';
 [analysis, ptbCorgiData] = ptbCorgiAnalyzeEachParticipant(analysis,ptbCorgiData);
