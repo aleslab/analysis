@@ -40,7 +40,8 @@ cellToSave = [analysis.results.conditionLabels; analysis.results.fiftyPercentPoi
 tableToSave = cell2table(cellToSave);
 participantID = char(ptbCorgiData.participantList(1));
 
-dataFileName = strcat(participantID, ptbCorgiData.paradigmName,  '_data.csv');
+dataFileName = strcat(participantID, '_', ptbCorgiData.paradigmName, '_data.csv');
+
 writetable(tableToSave, dataFileName);
 
 pdfFileName = strcat(participantID, '_', ptbCorgiData.paradigmName, '.pdf');
