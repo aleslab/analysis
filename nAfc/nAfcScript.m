@@ -20,7 +20,7 @@ analysis.function = @simple2afcplot;
 analysis.funcOptions.groupingField = 'contrast';
 %choose what to put on the x-axis. 
 analysis.funcOptions.xAxisField = 'targetDelta';
-analysis.funcOptions.xLabel     = 'orientation difference (degrees)';
+analysis.funcOptions.xLabel     = 'Orientation difference (degrees)';
 
 [analysis, ptbCorgiData] = ptbCorgiAnalyzeEachParticipant(analysis,ptbCorgiData);
 
@@ -31,7 +31,7 @@ for iPpt = 1:nPpt
     
     disp(ptbCorgiData.participantList{iPpt})
     for iContrast = 1:length(analysis.results(iPpt).conditionLabels)
-    disp([analysis.results(iPpt).conditionLabels{iContrast} ' std dev: ' num2str(1./analysis.results(iPpt).paramsValues(iContrast,2))])
+    disp([analysis.results(iPpt).conditionLabels{iContrast} ' Std dev: ' num2str(1./analysis.results(iPpt).paramsValues(iContrast,2))])
     end
 end
 

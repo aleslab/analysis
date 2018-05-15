@@ -56,10 +56,10 @@ hold on
 end
 
 
-% figure (501);
-% clf
-% set (gca,'fontsize', 24, 'LineWidth', 5);
-% errorbar(repmat(1:24,1)',squeeze(mean(allPart,3)),squeeze(std(allPart,[],3)./sqrt(size(allPart,3))));
+figure (501);
+clf
+set (gca,'fontsize', 24, 'LineWidth', 5);
+errorbar(repmat(1:24,1)',squeeze(mean(allPart,3)),squeeze(std(allPart,[],3)./sqrt(size(allPart,3))));
 set(gca,'fontsize', 28);
 
 
