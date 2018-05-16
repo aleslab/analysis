@@ -14,7 +14,7 @@ estimate_initial_time_point = 0;%define value for first Xhat
 kal_predict(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
 
-gain = .5;
+gain = .8;
 
 part_PE_Err(1) = 0;
 RO(1)  = 0;
@@ -32,11 +32,10 @@ end
 
 figure(101);
 clf
-% set (gca,'fontsize', 24);
-% hold on
-% plot (respOri,'r', 'Linewidth',3);
-% hold on
-plot (stimOri,'k', 'Linewidth',2);
-% hold on
-% plot (kal_predict,'k','Linewidth',3);
-
+set (gca,'fontsize', 38);
+hold on
+plot (stimOri,'k', 'Linewidth',10);
+hold on
+plot (kal_predict,'r','Linewidth',3);
+xlabel('Trial number');
+ylabel('Orientation (degs)');

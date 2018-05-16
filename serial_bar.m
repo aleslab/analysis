@@ -11,7 +11,6 @@ ylabel('Regression coefficient');
 ylim([0, 0.30])
 Labels = {'5% ',    '20%'};
 set(gca, 'XTick', 1:2, 'XTickLabel', Labels, 'fontweight', 'bold','fontsize', 32);
-%legend ('Fitted weights 5% contrast experiment one');
 hold on
 numgroups=size(Gains,1);
 numbars=size(Gains,2);

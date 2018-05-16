@@ -84,16 +84,7 @@ S=std(whitney_err);
 %     figure (700)
 %     plot(weights)
 
-% figure(101);
-% clf
-% set (gca,'fontsize', 24);
-% hold on
-% plot (respOri,'r', 'Linewidth',3);
-% hold on
-% plot (stimOri,'g', 'Linewidth',2);
-% hold on
-% plot (kal_predict,'k','Linewidth',3);
-% 
+
 % legend ('Participant response','Kalman Prediction');
 % xlabel('Trial number');
 % ylabel ('Orientation (degs)');
@@ -106,20 +97,20 @@ S=std(whitney_err);
 % whitneySlope(iParticipant,iCond) = b(1);
 % whitneySlopeInt(iParticipant,iCond,:) = bint(1,:);
         
-figure(102);
-clf;
-%whitey plot
-set(gca,'fontsize', 28);
-hold on
-scatter (RO, whitney_err,90,'k','filled');
-Xline = linspace (-90,90, 10);
-yHat = b*Xline+mean(whitney_err);
-plot (Xline, yHat,'LineWidth',8);
-axis([-90,90,-90,90]);
-hold on
+% figure(102);
+% clf;
+% %whitey plot
+% set(gca,'fontsize', 28);
+% hold on
+% scatter (RO, whitney_err,90,'k','filled');
+% Xline = linspace (-90,90, 10);
+% yHat = b*Xline+mean(whitney_err);
+% plot (Xline, yHat,'LineWidth',8);
+% axis([-90,90,-90,90]);
+% hold on
 %legend ('Participant error (deg) vs relative orientation(deg)');
-xlabel('Relative orientation of current trial compared to previous trial(deg)');
-ylabel('Participant error on current trial (deg)');
+% xlabel('Relative orientation of current trial compared to previous trial(deg)');
+% ylabel('Participant error on current trial (deg)');
 
 % figure (103);
 % clf;
@@ -145,7 +136,7 @@ ylabel('Participant error on current trial (deg)');
 % xlabel('How much the Kalman updates its next prediction');
 % ylabel ('Prediction error on  current prediction');
 
-[r,p]=corrcoef(stimOri,whitney_err);
+% [r,p]=corrcoef(stimOri,whitney_err);
 
 % figure(105);
 % clf;
