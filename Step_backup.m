@@ -32,8 +32,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         
         err = minAngleDiff(respOri, stimOri);%whitney
         
-        reshape_err=reshape(err, 24,[]);
-        stim_reshape = reshape(stimOri,24,[]);
+        reshape_err=reshape(err, 15,[]);
+        stim_reshape = reshape(stimOri,15,[]);
        
         allPart(:,iCond,iParticipant) = mean(reshape_err,2);
         
