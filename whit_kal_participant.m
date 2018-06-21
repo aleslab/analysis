@@ -34,7 +34,7 @@ for i= 2:length (respOri);
     
     kal_predict(i) = wrapTo90(kal_predict(i));%kalman wrap function
     
-   naive_Estimate(i)  = stimOri(i-1) +gain*minAngleDiff(stimOri(i),stimOri(i-1));%naive
+    naive_Estimate(i)  = stimOri(i-1) +gain*minAngleDiff(stimOri(i),stimOri(i-1));%naive
     
     naive_err(i)= minAngleDiff(naive_Estimate(i), stimOri(i)); %naive
     
@@ -42,7 +42,7 @@ for i= 2:length (respOri);
     
     RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney/relative orientation
     
-    part_PE_Err(i) = minAngleDiff(respOri(i-1),stimOri(i));% error in terms of PC participant predicitin error
+    part_PE_Err(i) = minAngleDiff(stimOri(i), respOri(i-1));% error in terms of PC participant predicitin error
     
     partcipant_update(i) = minAngleDiff(respOri(i), respOri(i-1));% how much the partcipnat updates
     
@@ -98,19 +98,53 @@ S=std(whitney_err);
 % whitneySlopeInt(iParticipant,iCond,:) = bint(1,:);
         
 % figure(102);
-% clf;
+% %clf;
 % %whitey plot
 % set(gca,'fontsize', 28);
 % hold on
 % scatter (RO, whitney_err,90,'k','filled');
 % Xline = linspace (-90,90, 10);
 % yHat = b*Xline+mean(whitney_err);
-% plot (Xline, yHat,'LineWidth',8);
-% axis([-90,90,-90,90]);
+% plot (Xline, yHat,'LineWidth',6);
+% axis([-40,40,-40,40]);
+% %line([-90 90], [-90 90],'linewidth', 10);
+% box off
 % hold on
-%legend ('Participant error (deg) vs relative orientation(deg)');
+% legend ('Participant error (deg) vs relative orientation(deg)');
 % xlabel('Relative orientation of current trial compared to previous trial(deg)');
 % ylabel('Participant error on current trial (deg)');
+% 
+% nTrialsToSmooth = 30;
+% trialWindow     = 14; %n Trials in either direction, total window 2x +1 
+% nTrialsToTrim   = 15;
+% nTrials = length(RO);
+% 
+% [sortRO,idx] = sort(RO);
+% sort_err = whitney_err(idx);
+% smooth_err = smooth(whitney_err(idx),nTrialsToSmooth);
+% trim_err   = smooth_err((nTrialsToTrim+1):end-nTrialsToTrim);
+% trimSortRO      = sortRO((nTrialsToTrim+1):end-nTrialsToTrim);
+% 
+% clear meanwhit_err sewhit_err trimsortRO
+% 
+% for iT = (trialWindow+1):(nTrials-trialWindow),
+% 
+%     trialsToSmooth = (iT-trialWindow) : (iT+trialWindow);
+%     mean_err(iT-trialWindow) = mean(sort_err(trialsToSmooth));
+%     se_err(iT-trialWindow)   = std(sort_err(trialsToSmooth))./sqrt(length(trialsToSmooth));
+%     trimSortRO(iT-trialWindow)    = sortRO(iT);    
+%     
+% end
+% seToConfInt = tinv(.975,length(trialsToSmooth)-1);
+% 
+% createShadedRegion(trimSortRO,mean_err,...
+%     mean_err-seToConfInt*se_err,mean_err+seToConfInt*se_err,...
+%     'g', 'linewidth', 6)
+% 
+% %createShadedRegion(x,y,y+2,y-2,':','color',[1 0 0])
+% 
+% 
+
 
 % figure (103);
 % clf;
@@ -129,7 +163,7 @@ S=std(whitney_err);
 % %kal estimate vs PE 
 % set (gca,'fontsize', 24);
 % hold on
-% scatter (kal_Update, kal_PE,80,'k','filled');
+% scatter (partcipant_update_Update, kal_PE,80,'k','filled');
 % axis([-100,100,-100,100]);
 % hold on
 % legend ('Kalman prediction error (deg) vs Kalman predicition update(deg)');
@@ -150,16 +184,54 @@ S=std(whitney_err);
 % 
 % 
 
-% figure(106);
-% clf;
-% set(gca,'fontsize', 24);
-% hold on
-% scatter (part_PE_Err, partcipant_update,80,'k','filled');
-% legend ('Partcipant response error (deg) vs partcipant response update(deg)');
-% xlabel('How much the participant updates the next response (deg)');
-% ylabel ('Participant error on current trial (deg)');
+figure(106);
+% clf
+set(gca,'fontsize', 26);
+hold on
+scatter (part_PE_Err, partcipant_update,90,'k','filled');
+% legend (dummy(1), '5% contrast');
+% legend (dummy(2), '20% contrast');f
+Xline = linspace (-40,40, 10);
+yHat = b*Xline+mean(part_PE_Err);
+xlabel('Prediction error on current trial (deg)');
+ylabel ('Update magnitude on the next response (deg)');
+axis([-40,40,-40,40]);
+line([-90 90], [-90 90],'linewidth', 6);
+box off
 
-% figure(107);
+nTrialsToSmooth = 30;
+trialWindow     = 14; %n Trials in either direction, total window 2x +1 
+nTrialsToTrim   = 15;
+nTrials = length(part_PE_Err);
+
+[sortPE,idx] = sort(part_PE_Err);
+sortPptUpdate = partcipant_update(idx);
+smoothPptUpdate = smooth(partcipant_update(idx),nTrialsToSmooth);
+trimPptUpdate   = smoothPptUpdate((nTrialsToTrim+1):end-nTrialsToTrim);
+trimSortPE      = sortPE((nTrialsToTrim+1):end-nTrialsToTrim);
+
+clear meanPptUpdate sePptUpdate trimSortPE
+
+for iT = (trialWindow+1):(nTrials-trialWindow),
+
+    trialsToSmooth = (iT-trialWindow) : (iT+trialWindow);
+    meanPptUpdate(iT-trialWindow) = mean( sortPptUpdate(trialsToSmooth));
+    sePptUpdate(iT-trialWindow)   = std(sortPptUpdate(trialsToSmooth))./sqrt(length(trialsToSmooth));
+    trimSortPE(iT-trialWindow)    = sortPE(iT);    
+    
+end
+
+seToConfInt = tinv(.975,length(trialsToSmooth)-1);
+
+createShadedRegion(trimSortPE,meanPptUpdate,...
+    meanPptUpdate-seToConfInt*sePptUpdate,meanPptUpdate+seToConfInt*sePptUpdate,...
+    'k','linewidth', 6)
+
+
+% figure(201)
+% 
+% scatter3(respOri(1:end-1),stimOri(2:end),respOri(2:end))
+% % figure(107);
 % clf;
 % set(gca,'fontsize', 24);
 % hold on

@@ -37,6 +37,8 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         PEInv(1)=0;
         err(1) = 0;
         RO(1)  = 0;
+        PE(1) = 0;
+        err(1)=0;
         for i= 2:length (respOri);
 
             %Response Error from Fischer and Whitney:
@@ -160,7 +162,7 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
         hold on
         scatter (stimOri, err,40,'k');
         
-        [ b, bint, r, p ] = analysis_func ( stimOri, err);
+        [ b, bint, r, p ] = analysis_func (stimOri, err);
         
         %add a regresion line
         Xline = linspace (-90,90, 10);
