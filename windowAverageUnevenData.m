@@ -30,7 +30,7 @@ function [ yMean, yStdErr, yVar, yN] = windowAverageUnevenData( xOrig,yOrig,xNew
 % %Setup locations to average and window size
 % xNew  = linspace(0,360,20);
 % windowSize = 18; %360/20 
-% [ yMean yStdErr yVar yN xEdges] = windowAverageUnevenSampled( xOrig,yOrig,xNew,windowSize );
+% [ yMean yStdErr yVar yN xEdges] = windowAverageUnevenData( xOrig,yOrig,xNew,windowSize );
 % 
 % scatter(xOrig,yOrig)
 % hold on;
