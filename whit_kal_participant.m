@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =1; %When you have only 1 condition
+iCond =3; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -88,7 +88,7 @@ S=std(whitney_err);
 % legend ('Participant response','Kalman Prediction');
 % xlabel('Trial number');
 % ylabel ('Orientation (degs)');
-[ b, bint, r, p ] = analysis_func ( RO, whitney_err);
+%[ b, bint, r, p ] = analysis_func ( RO, whitney_err);
 
 % whitneySD(iParticipant,iCond).r = r(1,1);
 % whitneySD(iParticipant,iCond).p = p(1,1);
@@ -183,20 +183,24 @@ S=std(whitney_err);
 % ylabel('Naive estimate error on current trial (deg)');
 % 
 % 
+%[ b, bint, r, p ] = analysis_func (part_PE_Err,partcipant_update);
+[b,~,~,~, yUnwrap] = circularSlope90d(partcipant_update, part_PE_Err);
 
 figure(106);
 % clf
 set(gca,'fontsize', 26);
 hold on
-scatter (part_PE_Err, partcipant_update,90,'k','filled');
-% legend (dummy(1), '5% contrast');
-% legend (dummy(2), '20% contrast');f
-Xline = linspace (-40,40, 10);
-yHat = b*Xline+mean(part_PE_Err);
+scatter (part_PE_Err,partcipant_update ,90,'k','filled');
+Xline = linspace (-90,90, 10);
+yHat = b*Xline+mean(partcipant_update);
+plot(Xline, yHat,'LineWidth',8,'Color',[.6 0 0]);
 xlabel('Prediction error on current trial (deg)');
-ylabel ('Update magnitude on the next response (deg)');
-axis([-40,40,-40,40]);
-line([-90 90], [-90 90],'linewidth', 6);
+ylabel ('Update on the next response (deg)');
+axis([-90,90,-90,90]);
+%axis([-40,40,-40,40]);
+%line([-40 40],[-40, 40],'linewidth', 6, 'k');
+%line([-90 90], [-90 90],'linewidth', 8);
+% box off
 box off
 
 nTrialsToSmooth = 30;
@@ -225,7 +229,7 @@ seToConfInt = tinv(.975,length(trialsToSmooth)-1);
 
 createShadedRegion(trimSortPE,meanPptUpdate,...
     meanPptUpdate-seToConfInt*sePptUpdate,meanPptUpdate+seToConfInt*sePptUpdate,...
-    'k','linewidth', 6)
+    'k','linewidth', 8)
 
 
 % figure(201)
