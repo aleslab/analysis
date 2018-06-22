@@ -1,6 +1,6 @@
-function [ b, bint, r, p] = circularSlope90d( Y,X )
+function [ b, bint, r, p, yUnwrap] = circularSlope90d( Y,X )
 %circularSlope90d calculate slopes and correlation coefficent (for FA)
-%[ b, bint, r, p] = circularSlope90d( Y,X )
+%[ b, bint, r, p, yUnwrap] = circularSlope90d( Y,X )
 %
 % This code fits a line to circular data.  It does this by first doing a
 % nonlinear least squares fit using a cost function that respects the 
@@ -21,10 +21,12 @@ function [ b, bint, r, p] = circularSlope90d( Y,X )
 %
 %Output:
 % 
-%   b  = Fitted slope
-%bint  = confidence interval for slope
-%   r  = correlation coefficient
-%   p  = p-value for correlation coefficient
+%   b       = Fitted slope
+%bint       = confidence interval for slope
+%   r       = correlation coefficient
+%   p       = p-value for correlation coefficient
+%   yUnwrap = Values of Y unwrapped to be nearer to choose closest value
+%             near linear fit
 
 options = optimset(@lsqnonlin);
 options = optimset(options,'Display','off');
