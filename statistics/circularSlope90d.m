@@ -96,6 +96,11 @@ Y = minAngleDiff(Y,yHat)+yHat;
 %The unwrap might result in a non-zero mean.  We don't care about this mean
 %angle.  
 Y = Y-mean(Y);
+
+%We're going to return the unwrapped Y with the mean angle from above. 
+yUnwrap = Y+meanAngle;
+
+
 %Now with linear Y, lets find the slopes and correlation coefficient.
 
 %Correlation coefficient
