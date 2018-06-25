@@ -27,7 +27,7 @@ figure(102);
 %whitey plot
 set(gca,'fontsize', 28);
 hold on
-scatter (RO, whitney_err,90,'k','filled');
+scatter (RO, whitney_err,0,'k','filled');
 Xline = linspace (-90,90, 10);
 yHat = b*Xline+mean(whitney_err);
 plot (Xline, yHat,'LineWidth',6);
