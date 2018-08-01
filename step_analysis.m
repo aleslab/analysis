@@ -91,8 +91,8 @@ xlabel('Error in degrees');
 ylabel('Orientation in degrees');
 plot (squeeze(allPartStim(:,iCond,iParticipant)),'k','linewidth',3)
 legendLabel{lgndIdx} = 'Stimulus';lgndIdx = lgndIdx+1;
-% figure
-% errorbar(repmat(1:15,4,1)',squeeze(mean(allPart,3)),squeeze(std(allPart,[],3)./sqrt(size(allPart,3))));
+figure
+errorbar(repmat(1:15,4,1)',squeeze(mean(allPart,3)),squeeze(std(allPart,[],3)./sqrt(size(allPart,3))));
  end
  legend(legendLabel)
  
