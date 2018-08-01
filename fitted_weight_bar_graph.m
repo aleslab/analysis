@@ -1,19 +1,18 @@
 figure(101);
 clf;
-x=[1,; 2; 3; 4; 5; 6; 7; 8; 9; 10; 11];
-weights = [1.03; 0.03; 0.01;  0.00; 0.02; 0.02; -0.03; 0.00; 0.01; -0.03; -0.00];
+x=[1,; 2; 3; 4; 5; 6; 7];
+weights = [1.03; 0.02; 0.00;  0.00; 0.01; 0.00; 0];
 %error = [0.90; 0.09; 0.11; 0.07; 0.12; 0.05; 0.11; 0.09 ];
-interval_lower= [0.07; 0.05; 0.04; 0.03; 0.02; 0.03; 0.02; 0.02; 0.03; 0.01; 0.01];
-interval_upper=[0.07; 0.05; 0.04; 0.03; 0.03; 0.04; 0.02; 0.02; 0.02; 0.03; 0.01];
-width=0.8;
+interval_lower= [0.05; 0.02; 0.02; 0.02; 0.02; 0.02;0.02 ];
+interval_upper=[0.06; 0.02; 0.03; 0.02; 0.02; 0.02; 0.02 ];
+width=0.6;
 bar(x,weights,width,'FaceColor',[1.0,1.0,1.0],'EdgeColor',[0 .01 .01],'LineWidth',8);
 % set('BarWidth',0.8); 
-ylabel('SD Regression slopes');
+ylabel('Mean fitted weights');
 xlabel('Trial number','fontweight', 'bold','fontsize', 32); 
-ylim([-0.050, 1.2])
-Labels = {'n','n-1', 'n-2', 'n-3', 'n-4', 'n-5','n-6' 'n-7', 'n-8', 'n-9', 'n-10'} ;
-set(gca, 'XTick', 1:11, 'XTickLabel', Labels, 'fontweight', 'bold','fontsize', 32);
-
+ylim([-0.07, 1.2])
+Labels = {'n','n-1', 'n-2', 'n-3', 'n-4', 'n-5', 'n-6'};
+set(gca, 'XTick', 1:7, 'XTickLabel', Labels, 'fontweight', 'bold','fontsize', 32);
 %legend ('Fitted weights 5% contrast experiment one');
 hold on
 numgroups=size(weights,1);

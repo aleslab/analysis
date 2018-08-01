@@ -2,7 +2,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =3; %When you have only 1 condition
+iCond =1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -20,18 +20,19 @@ RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney/relative orientation
 end
 
 %[ b, bint, r, p ] = analysis_func ( RO, whitney_err);
-[b,~,~,~, yUnwrap] = circularSlope90d(whitney_err, RO);
+[b,~,~,~, whitney_err_unwrap] = circularSlope90d(whitney_err, RO);
 
 figure(102);
 %clf;
 %whitey plot
 set(gca,'fontsize', 28);
 hold on
-scatter (RO, whitney_err,0,'k','filled');
-Xline = linspace (-90,90, 10);
-yHat = b*Xline+mean(whitney_err);
-plot (Xline, yHat,'LineWidth',6);
-axis([-40,40,-40,40]);
+scatter (RO, whitney_err_unwrap,0);
+Xline = linspace (-60,60, 10);
+yHat = b*Xline+mean(whitney_err_unwrap);
+
+plot (Xline, yHat,'LineWidth',8);
+axis([-60,60,-60,60]);
 %line([-90 90], [-90 90],'linewidth', 10);
 box off
 hold on
@@ -64,7 +65,7 @@ seToConfInt = tinv(.975,length(trialsToSmooth)-1);
 
 createShadedRegion(trimSortRO,mean_err,...
     mean_err-seToConfInt*se_err,mean_err+seToConfInt*se_err,...
-    'g', 'linewidth', 6)
+    'k', 'linewidth', 0)
 
-createShadedRegion(x,y,y+2,y-2,':','color',[1 0 0])
+%createShadedRegion(x,y,y+2,y-2,':','color',[1 0 0])
 
