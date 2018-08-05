@@ -84,11 +84,10 @@ ylabel('Participant error on current trial (deg)');
 
     end
     
-    for 
     
-allPartwhitney_err(:,iCond,iParticipant) = mean(whitney_err_unwrap);
-allPartNewRO(:,iCond,iParticipant) = mean(ROnew);
-
+    
+    
+ 
 
 
 

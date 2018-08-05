@@ -8,7 +8,7 @@ fileToLoad = uigetfile; load(fileToLoad);
 [sortedData] = organizeData(sessionInfo,experimentData);
 
 % 
-iCond =3; %When you have only 1 condition
+iCond =1; %When you have only 1 condition
 respOri = [sortedData(iCond).trialData(:).respOri];
 stimOri = [sortedData(iCond).trialData(:).stimOri];
 
@@ -97,23 +97,23 @@ S=std(whitney_err);
 % whitneySlope(iParticipant,iCond) = b(1);
 % whitneySlopeInt(iParticipant,iCond,:) = bint(1,:);
         
-% figure(102);
-% %clf;
-% %whitey plot
-% set(gca,'fontsize', 28);
-% hold on
-% scatter (RO, whitney_err,90,'k','filled');
-% Xline = linspace (-90,90, 10);
-% yHat = b*Xline+mean(whitney_err);
-% plot (Xline, yHat,'LineWidth',6);
-% axis([-40,40,-40,40]);
-% %line([-90 90], [-90 90],'linewidth', 10);
-% box off
-% hold on
-% legend ('Participant error (deg) vs relative orientation(deg)');
-% xlabel('Relative orientation of current trial compared to previous trial(deg)');
-% ylabel('Participant error on current trial (deg)');
-% 
+figure(102);
+%clf;
+%whitey plot
+set(gca,'fontsize', 28);
+hold on
+scatter (RO, naive_err,90,'k','filled');
+Xline = linspace (-90,90, 10);
+%yHat = b*Xline+mean(whitney_err);
+%plot (Xline, yHat,'LineWidth',6);
+axis([-40,40,-40,40]);
+%line([-90 90], [-90 90],'linewidth', 10);
+box off
+hold on
+legend ('Participant error (deg) vs relative orientation(deg)');
+xlabel('Relative orientation of current trial compared to previous trial(deg)');
+ylabel('Participant error on current trial (deg)');
+
 % nTrialsToSmooth = 30;
 % trialWindow     = 14; %n Trials in either direction, total window 2x +1 
 % nTrialsToTrim   = 15;

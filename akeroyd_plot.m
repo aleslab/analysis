@@ -1,4 +1,3 @@
-
 ptbCorgiData = uiGetPtbCorgiData();
 
 %Set some figure options:
@@ -53,7 +52,7 @@ figure(102+iParticipant);
 %whitey plot
 set(gca,'fontsize', 28);
 
-scatter (RO, whitney_err_unwrap,6);
+scatter (stimOri, whitney_err_unwrap,6);
 hold on
 Xline = linspace (-60,60, 10);
 yHat = b*Xline+mean(whitney_err_unwrap);
@@ -70,13 +69,13 @@ createShadedRegion(ROnew,WE_mean,...
 
 
 
-plot (Xline, yHat,'LineWidth',8);
-axis([-90,90,-30,30]);
+%plot (Xline, yHat,'LineWidth',8);
+axis([-40,40,-30,30]);
 %line([-90 90], [-90 90],'linewidth', 10);
 box off
 hold on
-legend ('Participant error (deg) vs relative orientation(deg)');
-xlabel('Relative orientation of current trial compared to previous trial(deg)');
+%legend ('Participant error (deg) vs relative orientation(deg)');
+xlabel('stimOri(deg)');
 ylabel('Participant error on current trial (deg)');
 
 
