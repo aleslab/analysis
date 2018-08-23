@@ -1,7 +1,7 @@
 clc;
 clear all;
 
-%value = [0.39	0.50	0.48	0.29	0.25	0.32	0.34	0.48	0.41	0.45]; % value = actual stim ori
+%value = [10 13 15 28 15 	0.50	0.48	0.29	0.25	0.32	0.34	0.48	0.41	0.45]; % value = actual stim ori
 
 
 fileToLoad = uigetfile; load(fileToLoad);
@@ -34,22 +34,22 @@ for i= 2:length (respOri);
     
     kal_predict(i) = wrapTo90(kal_predict(i));%kalman wrap function
     
-    naive_Estimate(i)  = stimOri(i-1) +gain*minAngleDiff(stimOri(i),stimOri(i-1));%naive
-    
-    naive_err(i)= minAngleDiff(naive_Estimate(i), stimOri(i)); %naive
-    
-    whitney_err(i) = minAngleDiff(respOri(i), stimOri(i)); %whitney error
-    
-    RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney/relative orientation
-    
-    part_PE_Err(i) = minAngleDiff(stimOri(i), respOri(i-1));% error in terms of PC participant predicitin error
-    
-    partcipant_update(i) = minAngleDiff(respOri(i), respOri(i-1));% how much the partcipnat updates
-    
-    kal_PE(i) = minAngleDiff(kal_predict(i-1), stimOri(i));%kalman prediciton error
-    
-    kal_Update(i) =  minAngleDiff(kal_predict(i),kal_predict (i-1));% how much the partcipant updates
-    
+%     naive_Estimate(i)  = stimOri(i-1) +gain*minAngleDiff(stimOri(i),stimOri(i-1));%naive
+%     
+%     naive_err(i)= minAngleDiff(naive_Estimate(i), stimOri(i)); %naive
+%     
+%     whitney_err(i) = minAngleDiff(respOri(i), stimOri(i)); %whitney error
+%     
+%     RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney/relative orientation
+%     
+%     part_PE_Err(i) = minAngleDiff(stimOri(i), respOri(i-1));% error in terms of PC participant predicitin error
+%     
+%     partcipant_update(i) = minAngleDiff(respOri(i), respOri(i-1));% how much the partcipnat updates
+%     
+%     kal_PE(i) = minAngleDiff(kal_predict(i-1), stimOri(i));%kalman prediciton error
+%     
+%     kal_Update(i) =  minAngleDiff(kal_predict(i),kal_predict (i-1));% how much the partcipant updates
+%     
     
     
     
