@@ -2,31 +2,25 @@
 ptbCorgiData = uiGetPtbCorgiData();
 
 
-% 
-reaction_times(reaction_times==0)=NaN;
 
-meanRT=nanmean(reaction_times, 2);
-
-meanRT=squeeze(meanRT);
-
-meanRT=(meanRT');
 
 %Data cond list
-dataCond = [2 3 4 6 7 8];
+dataCond = [1 2 3 ];
 %To create pairs;
-dataNowCond = ...
+dataNowCond = ... % in cons 1-4 (ABCD); match pairs so they go to there most likely pair A goes to B, B goes to C and C goes to A
    [1 1; ...
-    3 4;...
-    2 4;...
+    1 2;...
+    1 3;...
+    2 1;...
+    2 2;...
     2 3;...
-    5 5;...
-    7 8;...
-    6 8;...
-    6 7];
+    3 1;...
+    3 2;...
+    3 3];
 
 %Instruction list  of conditions to completely ignore
-instrCond = [];
-correctResponese = [ 'x' '3' 'x' '1' 'x' '3' 'x' '1'];
+instrCond = [4 8]; % ignore omitted cons in this analysis
+correctResponese = [ '1' '2' '3' 'b' 'x' '1' '2' '3' 'b'];
 
 
 for iPpt = 1:ptbCorgiData.nParticipants,
@@ -85,46 +79,30 @@ for iPpt = 1:ptbCorgiData.nParticipants,
     %For A first
     
     idx = 1;
-    for iPrevCond = dataCond,
+    for iPair = 1:length(dataNowCond),
         
-        iNowCond = dataNowCond(iPrevCond,1);
-        condPairId(idx,:) = [idx iPrevCond iNowCond];
+        iPrevCond = dataNowCond(iPair,1);
+        iNowCond = dataNowCond(iPair,2);
+        condPairId(iPair,:) = [iPair iPrevCond iNowCond];
         rtSubset = reaction_times(1,:,iPrevCond,iPpt);
         respSubset = RTBoxEvent(1,:,iPrevCond,iPpt);
         trlSelect=stimCondNum(1,:,iPrevCond,iPpt)==iNowCond;
         corrResp = correctResponese(iNowCond);
         
-        pairedRt(trlSelect,idx,iPpt)= rtSubset(trlSelect);
-        pairedRt(~trlSelect,idx,iPpt)= NaN;
+        pairedRt(trlSelect,iPair,iPpt)= rtSubset(trlSelect);
+        pairedRt(~trlSelect,iPair,iPpt)= NaN;
         
-        responseChosen(trlSelect,idx,iPpt) = respSubset(trlSelect);
-        responseChosen(~trlSelect,idx,iPpt)= 'x';
+        responseChosen(trlSelect,iPair,iPpt) = respSubset(trlSelect);
+        responseChosen(~trlSelect,iPair,iPpt)= 'x';
 
-        responseChoseA(trlSelect,idx,iPpt) = double(respSubset(trlSelect)=='3');
-        responseChoseA(~trlSelect,idx,iPpt)= NaN;
-
-        isRespCorrect(trlSelect,idx,iPpt) = double(respSubset(trlSelect)==corrResp);
-        isRespCorrect(~trlSelect,idx,iPpt)= NaN;
-        
-        
-        idx=idx+1;
-        iNowCond = dataNowCond(iPrevCond,2);
-        trlSelect=stimCondNum(1,:,iPrevCond,iPpt)==iNowCond;
-        pairedRt(trlSelect,idx,iPpt)= rtSubset(trlSelect);
-        pairedRt(~trlSelect,idx,iPpt)= NaN;
-        corrResp = correctResponese(iNowCond);      
-        
-        responseChosen(trlSelect,idx,iPpt) = respSubset(trlSelect);
-        responseChosen(~trlSelect,idx,iPpt)= 'x';
-
-        responseChoseA(trlSelect,idx,iPpt) = double(respSubset(trlSelect)=='3');
-        responseChoseA(~trlSelect,idx,iPpt)= NaN;
+        responseChoseA(trlSelect,iPair,iPpt) = double(respSubset(trlSelect)=='3');
+        responseChoseA(~trlSelect,iPair,iPpt)= NaN;
 
         isRespCorrect(trlSelect,idx,iPpt) = double(respSubset(trlSelect)==corrResp);
         isRespCorrect(~trlSelect,idx,iPpt)= NaN;
         
-        condPairId(idx,:) = [idx iPrevCond iNowCond];
-        idx=idx+1;
+        
+     
         
     end
     
@@ -147,8 +125,3 @@ percCorr= squeeze(nanmean(isRespCorrect))'
 disp('Percent pressed ''a'' ')
 percA = squeeze(nanmean(responseChoseA(:,:,:)))'
 
-%1= expected task 1, 2= unexpected task 1, 3 = Z
-%5 = expected task 2, 6 = unexpected task 2, 4 = Z task 2
-trialLabel = [3 2 2 1 1 3 4 6 6 5 5 4]; 
-eu=trialLabel; %Just to save typing
-correctRTExUnex=[mean(onlyCorrectRT(:,eu==1)'); mean(onlyCorrectRT(:,eu==2)'); mean(meanRT(:,eu==3)'); mean(onlyCorrectRT(:,eu==5)'); mean(onlyCorrectRT(:,eu==6)'); mean(meanRT(:,eu==4)');]'
