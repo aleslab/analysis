@@ -55,9 +55,9 @@ set(gca,'fontsize', 28);
 
 scatter (RO, whitney_err_unwrap,6);
 hold on
-Xline = linspace (-60,60, 10);
+Xline = linspace (-35,35, 8);
 yHat = b*Xline+mean(whitney_err_unwrap);
-ROnew  = linspace(-70,70,50);
+ROnew  = linspace(-35,35,50);
 [WE_mean, WE_StdErr] = windowAverageUnevenData( RO,whitney_err_unwrap,ROnew,12);
 
 WE_mean(isnan(WE_mean))=0;
@@ -68,10 +68,8 @@ createShadedRegion(ROnew,WE_mean,...
     WE_mean-WE_StdErr,WE_mean+WE_StdErr,...
      'linewidth', 4);
 
-
-
 plot (Xline, yHat,'LineWidth',8);
-axis([-90,90,-30,30]);
+axis([-45,45,-30,30]);
 %line([-90 90], [-90 90],'linewidth', 10);
 box off
 hold on

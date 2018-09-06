@@ -6,7 +6,7 @@ ptbCorgiData = uiGetPtbCorgiData();
 
 %Data cond list
 dataCond = [1 2 3 ];
-%To create pairs;
+%To create pairs;cl
 dataNowCond = ... % in cons 1-4 (ABCD); match pairs so they go to there most likely pair A goes to B, B goes to C and C goes to A
    [1 1; ...
     1 2;...
@@ -124,4 +124,7 @@ percCorr= squeeze(nanmean(isRespCorrect))'
 
 disp('Percent pressed ''a'' ')
 percA = squeeze(nanmean(responseChoseA(:,:,:)))'
+
+disp ('total number of trials per screen posistion')
+% totalPerCon= sum(trialIdx)
 
