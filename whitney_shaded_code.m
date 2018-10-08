@@ -36,7 +36,7 @@ axis([-60,60,-60,60]);
 %line([-90 90], [-90 90],'linewidth', 10);
 box off
 hold on
-legend ('Participant error (deg) vs relative orientation(deg)');
+%legend ('Participant error (deg) vs relative orientation(deg)');
 xlabel('Relative orientation of current trial compared to previous trial(deg)');
 ylabel('Participant error on current trial (deg)');
 

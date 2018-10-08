@@ -1,4 +1,3 @@
-
 ptbCorgiData = uiGetPtbCorgiData();
 
 %Set some figure options:
@@ -30,15 +29,15 @@ respOri=wrapTo90(respOri);
 stimOri=wrapTo90(stimOri);
 
     
-
-
+part_PR_Err(1)=0;
+participant_update (1)=0;
 
 for i= 2:length (respOri);
     
 
-whitney_err(i) = minAngleDiff(respOri(i), stimOri(i)); %whitney error
+part_PE_Err(i) = minAngleDiff(stimOri(i), respOri(i-1)); %whitney error
     
-RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney/relative orientation
+participant_update(i)=  minAngleDiff (respOri(i),respOri (i-1));%whitney/relative orientation
 
 
    
@@ -46,30 +45,30 @@ RO(i)=  minAngleDiff (stimOri(i-1),stimOri (i));%whitney/relative orientation
 end
 
 %[ b, bint, r, p ] = analysis_func ( RO, whitney_err);
-[b,~,~,~, whitney_err_unwrap] = circularSlope90d(whitney_err, RO);
+[b,~,~,~,part_PE_Err ] = circularSlope90d(part_PE_Err, participant_update);
 
 figure(102+iParticipant);
 %clf;
 %whitey plot
 set(gca,'fontsize', 28);
 
-scatter (RO, whitney_err_unwrap,0);
+scatter (part_PE_Err, participant_update,0);
 hold on
 Xline = linspace (-35,35, 8);
-yHat = b*Xline+mean(whitney_err_unwrap);
-ROnew  = linspace(-35,35,50);
-[WE_mean, WE_StdErr] = windowAverageUnevenData( RO,whitney_err_unwrap,ROnew,12);
+yHat = b*Xline+mean(part_PE_Err);
+part_Pe_new  = linspace(-35,35,50);
+[WE_mean, WE_StdErr] = windowAverageUnevenData(participant_update ,part_PE_Err,part_Pe_new,12);
 
 WE_mean(isnan(WE_mean))=0;
 WE_StdErr(isnan(WE_StdErr)) = 0;
-plot(ROnew, WE_mean)
+plot(part_Pe_new, WE_mean)
 
-createShadedRegion(ROnew,WE_mean,...
+createShadedRegion(part_Pe_new,WE_mean,...
     WE_mean-WE_StdErr,WE_mean+WE_StdErr,...
      'linewidth', 4);
 
 %plot (Xline, yHat,'LineWidth',8);
-axis([-45,45,-30,30]);
+axis([-90,90,-90,90]);
 line([-90 90], [-90 90],'linewidth', 10);
 box off
 hold on
