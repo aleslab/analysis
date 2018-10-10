@@ -3,19 +3,22 @@ clear all;
 
 %stimOri = [10 12 15 11 15 16 11 13 13 14 11 10 13 16 12 11 14 17 12 18 ]; % value = actual stim ori
 %true =    [ 13.2 13.1 14 13.4 13.2 13.1 14.5 12.5 12.5 11.5 13.5 12.5 11.5 12.4 13.5 13.8 13.1 13 13.5];  
-stimOri = [ 10 30 11 40 50 12 16 18 50 3 21 30 50 45 10 22 5 45 13 48];
-true    = [ 11 31 12 39 49 11 17 20 49 2 22 31 52 43 11 21 6 47 12 47];
+% stimOri = [ 10 10 10 10 60 60 60 60 11 11 11 11 90 90 90 90 10 10 10 10 50 50 50 50 5 5 5 5 ];
+% measuOri= [ 12 12 12 14 58 62 64 59 10 13 12 13 88 87 92 91 12 12 14 12 48 27 47 48 3 6 3 4 ];
 
+stimOri = [ 10 10 10 10 100 100 100 100 5  5 5 5 130 130 130 130 10 10 10 10 150 150 150 150 50 50 50 50];
+measuOri= [ 12 15 14 13 97  95  96   98 7  4  7 7 125 127 129 135 8 9 12 13  145 148 146 159 48 45 52 54
 estimate_initial_time_point = 0;%define value for first Xhat
 
 kal_predict(1) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
 
-gain = .3;
+% gain = .3;
+% weight =0.5;
+%estimate = measuOri*0.9;
 
 
-part_PE_Err(1) = 0;
-RO(1)  = 0;
+
 for i= 2:length (stimOri);
     
     kal_predict(i)=kal_predict(i-1);%kalman
@@ -24,7 +27,7 @@ for i= 2:length (stimOri);
     
     kal_predict(i) = wrapTo90(kal_predict(i));%kalman wrap function
    
-
+    estimate (i) = 0.7*measuOri(i)+ 0.3*measuOri(i-1);
 
 end
 
@@ -32,19 +35,39 @@ end
 figure(102);
 clf;
 %simulation plot
-set(gca,'fontsize', 28);
+set(gca,'fontsize', 28,'FontWeight', 'Bold');
 hold on
 plot (stimOri, 'k','LineWidth',8) 
 hold on
 plot (kal_predict, 'r','LineWidth',8)
 hold on
-plot(true,'g', 'LineWidth',8)
+plot(measuOri,'g', 'LineWidth',8)
+box off
+axis([0,20,0,170]);
+hold on
+% legend ('Participant error (deg) vs relative orientation(deg)');
+xlabel('Time');
+ylabel('Stimulus value');
+
+
+figure(103);
+clf;
+%simulation plot
+set(gca,'fontsize', 28,'FontWeight', 'Bold');
+hold on
+plot (stimOri, 'k','LineWidth',8) 
+hold on
+plot (measuOri, 'r','LineWidth',8)
+hold on
+plot (estimate,'g','LineWidth',8)
 box off
 axis([0,20,0,60]);
 hold on
 % legend ('Participant error (deg) vs relative orientation(deg)');
 xlabel('Time');
 ylabel('Stimulus value');
+
+
 
 
 
