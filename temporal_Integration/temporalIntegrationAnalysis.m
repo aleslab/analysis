@@ -7,9 +7,10 @@ ptbCorgiData = uiGetPtbCorgiData();
 %Jointly fitting a lapse rate to both conditions
 %Just allowing the slope/variance of the underlying normal to change
 %between contrast groups.
-analysis.function = @psychometricFitTemporal;
+analysis.function = @psychometricFitTemporalMultiple; %@psychometricFitTemporalMultiple 
+%if accounting for lapse rate; @psychometricFitTemporal if not
 %Choose how to group conditions
-analysis.funcOptions.groupingField = 'temporalGap'; %temporalGap for exp 4 and 6, 'spatialGap' for exp 5
+analysis.funcOptions.groupingField = 'spatialGap'; %temporalGap for exp 4,6 and 8, 'spatialGap' for exp 5
 %choose what to put on the x-axis.
 analysis.funcOptions.xAxisField = 'velocityDegPerSecSection2';
 [analysis, ptbCorgiData] = ptbCorgiAnalyzeEachParticipant(analysis,ptbCorgiData);
@@ -40,13 +41,13 @@ cellToSave = [analysis.results.conditionLabels; analysis.results.fiftyPercentPoi
 tableToSave = cell2table(cellToSave);
 participantID = char(ptbCorgiData.participantList(1));
 
-dataFileName = strcat(participantID, '_', ptbCorgiData.paradigmName, '_data.csv');
+dataFileName = strcat(participantID, '_', ptbCorgiData.paradigmName, '_data_new.csv');
 
 writetable(tableToSave, dataFileName);
 
-pdfFileName = strcat(participantID, '_', ptbCorgiData.paradigmName, '.pdf');
+pdfFileName = strcat(participantID, '_', ptbCorgiData.paradigmName, '_new.pdf');
 saveas(gcf, pdfFileName);
 
-svgFileName = strcat(participantID, '_', ptbCorgiData.paradigmName, '.svg');
+svgFileName = strcat(participantID, '_', ptbCorgiData.paradigmName, '_new.svg');
 saveas(gcf, svgFileName);
 
