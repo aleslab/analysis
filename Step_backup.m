@@ -73,27 +73,57 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
 % stimBaselineSubtract= wrapTo90(bsxfun(@minus,allPartStim,allPartStim(1,:)));
 
 
-figure(501+iParticipant);clf
-set(gca,'fontsize', 38);
-
+figure(501+iParticipant)
+clf;
+set(gca, 'fontweight', 'bold','fontsize', 32);
+hold on
 lgndIdx = 1;
  for iCond  = 1 : ptbCorgiData.nConditions,
 
 
 
 
-plot(squeeze(allPartResp(:,iCond,iParticipant)));
+plot(squeeze(allPartResp(:,iCond,iParticipant)),'linewidth',8);
 hold on;
 legendLabel{lgndIdx} =  ptbCorgiData.conditionInfo(iCond).label;
 lgndIdx = lgndIdx+1;
 %plot(mean(respBaselineSubtract, 2),'k','linewidth',3);
 xlabel('Error in degrees');
 ylabel('Orientation in degrees');
-plot (squeeze(allPartStim(:,iCond,iParticipant)),'k','linewidth',3)
+plot (squeeze(allPartStim(:,iCond,iParticipant)),'k','linewidth',8)
 legendLabel{lgndIdx} = 'Stimulus';lgndIdx = lgndIdx+1;
 % figure
 % errorbar(repmat(1:15,4,1)',squeeze(mean(allPart,3)),squeeze(std(allPart,[],3)./sqrt(size(allPart,3))));
  end
- legend(legendLabel)
+ %legend(legendLabel)
  
- end
+end
+ 
+
+% figure (201);clf
+% 
+% set(gca,'fontsize', 36,'FontWeight', 'Bold');
+% hold on
+% xlabel('Relative Orientation of Previous Trial(deg)');
+% ylabel ('Error on Current Trial(deg)')
+% 
+% axis([-30,30,-20,20])
+% line([0, 0], [0, 0],'linewidth', 10);
+% N=ptbCorgiData.nParticipants;
+% stderrmean=nanstd(allPartErrUnwrap,[],3)/sqrt(N);
+% err_mean=nanmean(allPartErrUnwrap,3);
+% RO_mean= nanmean(allPartROnew,3);
+% plot(RO_mean, err_mean)
+% 
+% 
+% %cond1
+% createShadedRegion(RO_mean(:,1),err_mean(:,1),...
+%     err_mean(:,1)-stderrmean(:,1),err_mean(:,1)+stderrmean(:,1),...
+%      'linewidth', 4);
+% hold on;
+% 
+%  createShadedRegion(RO_mean(:,2),err_mean(:,2),...
+%     err_mean(:,2)-stderrmean(:,2),err_mean(:,2)+stderrmean(:,2),...
+%      'linewidth', 4);
+% 
+%  

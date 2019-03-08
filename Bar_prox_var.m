@@ -1,15 +1,15 @@
 x=[1; 2];
-Gains = [136, 39];
+Gains = [1.01, 0.95];
 %error = [0.90; 0.09; 0.11; 0.07; 0.12; 0.05; 0.11; 0.09 ];
-interval_lower= [75; 19];
-interval_upper=[74; 22];
+interval_lower= [0.1; 0.13];
+interval_upper= [0.08; 0.16];
 width=0.7;
 bar(Gains,width,'FaceColor',[1.0,1.0,1.0],'EdgeColor',[0 .01 .01],'LineWidth',8);
 % set('BarWidth',0.8); 
-ylabel('Error variance');
+ylabel('Modelled Kalman Gains');
 %xlabel('5% MCA vs 20% MCA vs 2AFC','fontweight', 'bold','fontsize', 32); 
-ylim([0, 220])
-Labels = {'5%', '20%'};
+ylim([0, 1.3])
+Labels = {'Peripheral', 'Central'};
 set(gca, 'XTick', 1:2, 'XTickLabel', Labels, 'fontweight', 'bold','fontsize', 32);
 %legend ('Fitted weights 5% contrast experiment one');
 hold on

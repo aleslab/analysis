@@ -50,7 +50,7 @@ end
 figure(102+iParticipant);
 %clf;
 %whitey plot
-set(gca,'fontsize', 28);
+%set(gca,'fontsize', 28);
 
 
 Xline = linspace (-35,35, 8);
@@ -70,6 +70,14 @@ end
 
 
 figure (201);clf
+
+set(gca,'fontsize', 36,'FontWeight', 'Bold');
+hold on
+xlabel('Relative Orientation of Previous Trial(deg)');
+ylabel ('Error on Current Trial(deg)')
+
+axis([-30,30,-20,20])
+line([0, 0], [0, 0],'linewidth', 10);
 N=ptbCorgiData.nParticipants;
 stderrmean=nanstd(allPartErrUnwrap,[],3)/sqrt(N);
 err_mean=nanmean(allPartErrUnwrap,3);
@@ -87,4 +95,6 @@ hold on;
     err_mean(:,2)-stderrmean(:,2),err_mean(:,2)+stderrmean(:,2),...
      'linewidth', 4);
 
+ plot (Xline, yHat,'LineWidth',8);
+ axis([-35,35,-30,30]);
  

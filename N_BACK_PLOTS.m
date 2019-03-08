@@ -1,14 +1,14 @@
 figure(101);
 clf;
 x=[1,; 2; 3; 4; 5; 6];
-weights = [0.02; 0.02;  -0.01; 0.; 0.0; 0.0];
+weights = [0.00; 0.00;  -0.00; -0.01; -0.01; 0.0];
 %error = [0.90; 0.09; 0.11; 0.07; 0.12; 0.05; 0.11; 0.09 ];
-interval_lower= [0.02; 0.02; 0.03; 0.02; 0.02; 0.02];
-interval_upper=[0.04; 0.01; 0.03; 0.02; 0.02; 0.01];
+interval_lower= [0.01; 0.02; 0.02; 0.02; 0.03; 0.03];
+interval_upper=[0.01; 0.01; 0.02; 0.02; 0.01; 0.01];
 width=0.6;
 bar(x,weights,width,'FaceColor',[1.0,1.0,1.0],'EdgeColor',[0 .01 .01],'LineWidth',8);
 % set('BarWidth',0.8); 
-ylabel('SD regression slopes');
+ylabel('Regression slope');
 xlabel('Trial number','fontweight', 'bold','fontsize', 32); 
 ylim([-0.07, 1.])
 Labels = {'n-1', 'n-2', 'n-3', 'n-4', 'n-5','n-6' };

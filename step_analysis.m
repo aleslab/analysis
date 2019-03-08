@@ -43,17 +43,17 @@ for iParticipant = 1 : ptbCorgiData.nParticipants,
          
         allPartResp(:,iCond,iParticipant) = mean(resp_unwrap,2);
         allPartStim(:,iCond,iParticipant) = stimBaselineSubtract(:,1);
-%         
-% figure
-% plot (respOri,'k')
-% hold on
-% plot(stimOri, 'b')
-% 
-% figure (101+iParticipant)
-% % plot(reshape_err);
-% 
-% plot(mean(reshape_err, 2));
-% hold on
+        
+figure
+plot (respOri,'k')
+hold on
+plot(stimOri, 'b')
+
+figure (101+iParticipant)
+% plot(reshape_err);
+
+plot(mean(reshape_err, 2));
+hold on
 
 
 
@@ -86,7 +86,7 @@ plot(squeeze(allPartResp(:,iCond,iParticipant)));
 hold on;
 legendLabel{lgndIdx} =  ptbCorgiData.conditionInfo(iCond).label;
 lgndIdx = lgndIdx+1;
-%plot(mean(respBaselineSubtract, 2),'k','linewidth',3);
+plot(mean(respBaselineSubtract, 2),'k','linewidth',3);
 xlabel('Error in degrees');
 ylabel('Orientation in degrees');
 plot (squeeze(allPartStim(:,iCond,iParticipant)),'k','linewidth',3)

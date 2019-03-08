@@ -72,6 +72,7 @@ for iGroup = 1:nGroups,
     
     %  plot(xVal,percentCorrect(iPpt,condList),'o')
     set(gca,'ColorOrderIndex',iGroup)
+    %set(gca,'fontweight', 'bold','fontsize', 36,'ColorOrderIndex');
     plotHandle(iGroup) = plot2afc(StimLevels,nCorrect(condList(sortIdx)),nTrials(condList(sortIdx)));
     hold on;
 

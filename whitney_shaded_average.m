@@ -51,7 +51,10 @@ end
 figure(102+iParticipant);
 %clf;
 %whitey plot
-set(gca,'fontsize', 28);
+set(gca,'fontsize', 36,'FontWeight', 'Bold');
+hold on
+xlabel('Relative Orientation of Previous Trial(deg)');
+ylabel ('Error on Current Trial(deg)')
 
 scatter (RO, whitney_err_unwrap,0);
 hold on
@@ -68,14 +71,15 @@ createShadedRegion(ROnew,WE_mean,...
     WE_mean-WE_StdErr,WE_mean+WE_StdErr,...
      'linewidth', 4);
 
-%plot (Xline, yHat,'LineWidth',8);
-axis([-45,45,-30,30]);
-line([-90 90], [-90 90],'linewidth', 10);
+plot (Xline, yHat,'LineWidth',8);
+axis([-35,35,-30,30]);
+%line([-35, 35], [-30 30],'linewidth', 10);
+
 box off
 hold on
-legend ('Participant error (deg) vs relative orientation(deg)');
-xlabel('Relative orientation of current trial compared to previous trial(deg)');
-ylabel('Participant error on current trial (deg)');
+%legend ('Participant error (deg) vs relative orientation(deg)');
+% label('Relative orientation of current trial compared to previous trial(deg)');
+% ylabel('Participant error on current trial (deg)');
 
 
     end

@@ -12,7 +12,7 @@ ylabel('Mean fitted weights');
 xlabel('Trial number','fontweight', 'bold','fontsize', 32); 
 ylim([-0.07, 1.2])
 Labels = {'n','n-1', 'n-2', 'n-3', 'n-4', 'n-5', 'n-6'};
-set(gca, 'XTick', 1:7, 'XTickLabel', Labels, 'fontweight', 'bold','fontsize', 32);
+set(gca, 'XTick', 1:7, 'XTickLabel', Labels, 'fontweight', 'bold','fontsize', 36);
 %legend ('Fitted weights 5% contrast experiment one');
 hold on
 numgroups=size(weights,1);
