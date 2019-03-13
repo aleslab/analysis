@@ -9,7 +9,7 @@ estimate_initial_time_point = 0;%define value for first Xhat
 kal_predict(10) = estimate_initial_time_point; % tell matlab that the first Xhat 
 distal_initial_time_point = 1;
 
-gain = .8;
+gain = .9;
 
 
 part_PE_Err(1) = 0;
