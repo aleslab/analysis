@@ -1,9 +1,9 @@
-% close all;
-% clear all;
+close all;
+clear all;
 
 %JMA: uiPtbCorgiData loads project data
-%ptbCorgiData = uiGetPtbCorgiData();
-ptbCorgiData=ptbCorgiLoadData('stepGabor_P1_6_file_cat20171018_162630.mat')
+ptbCorgiData = uiGetPtbCorgiData();
+%ptbCorgiData=ptbCorgiLoadData('stepGabor_P1_6_file_cat20171018_162630.mat')
 %Set some figure options:
 figurePosition = [0 0 1000 500];
 
@@ -74,7 +74,7 @@ createShadedRegion(xVal,allPartMean,...
      'linewidth', 5);
 
 for iCond  = 1 : ptbCorgiData.nConditions,
-plot(squeeze(allPartResp(:,iCond,iParticipant)),'linewidth',8);
+plot(squeeze(allPartResp(:,iCond,iParticipant)),'linewidth',10);
 hold on;
 legendLabel{lgndIdx} =  ptbCorgiData.conditionInfo(iCond).label;
 lgndIdx = lgndIdx+1;

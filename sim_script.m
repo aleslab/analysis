@@ -1,5 +1,5 @@
-stimOri=[5 15 20 28 20 18  45 33 23 45 22 41 33 28 37 33 12 34 45 11 30 22 45 12 34 21 9 12];
-measure=[11 25 15 65 90 70 90 30 15 25 30 88 74 60 88 16 11 5  17 67 88 67 55 22 12 33 22 11];
+stimOri=[0 0 0 0 0  0 0 0 0 0 50 50 50 50 50 50 50 50 50 50 0 0 0 0 0 0 0 0 0 0 ];
+measure=[2 4 2 4 4  4 2 6 3 5 45 55 60 56 60 45 55 56 53 63 0 0 0 0 0 0 0 0 0 0 ];
 %measure=[12 11 13 12 79 83 82 81 18 21 19 22 88 92 88 89 12 10 12 11 88 92 91 90 8  12 11 11];
 % stimOri=[10 10 10 10 20 20 20 20 30 30 30 30 50 50 50 50 20 20 20 20 40 40 40 40 60 60 60 60];
 % measure=[17 22 11 20 30 10 30 33 55 20 22 44 60 45 70 40 40 22 40 10 30 60 50 75 33 70 60 45];
@@ -30,26 +30,26 @@ end
     clf;
     set(gca, 'fontweight', 'bold','fontsize', 32);
     hold on
-    plot(kal_predict, 'r', 'Linewidth', 12);
+    plot(kal_predict, 'r', 'Linewidth', 16);
     hold on
-    plot (stimOri, 'k', 'Linewidth', 12);
+    plot (stimOri, 'k', 'Linewidth', 16);
     hold on
-    plot (measure, 'g', 'Linewidth', 12);
+    plot (measure, 'g', 'Linewidth', 16);
     xlabel('Time');
-    ylabel ('Stimulus Value')
+    ylabel ('Voltage')
     axis([0,30,-0,100]);
     
     figure (202)
     clf;
     set(gca,'fontsize', 38, 'FontWeight', 'bold');
     hold on 
-    plot(response, 'r', 'Linewidth', 12);
+    plot(response, 'r', 'Linewidth', 16);
     hold on
-    plot (stimOri, 'k', 'Linewidth', 12);
+    plot (stimOri, 'k', 'Linewidth', 16);
     hold on
-    plot (measure, 'g', 'Linewidth', 12);
+    plot (measure, 'g', 'Linewidth', 16);
     xlabel('Time','fontweight', 'bold','fontsize', 32);
-    ylabel ('Stimulus Value','fontweight', 'bold','fontsize', 32)
+    ylabel ('Voltage','fontweight', 'bold','fontsize', 32)
     axis([0,30,-0,100]);
      
     
