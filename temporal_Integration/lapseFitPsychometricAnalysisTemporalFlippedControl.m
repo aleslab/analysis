@@ -1,5 +1,5 @@
 cd /Users/Abigail/Documents/Experiment_Data/Experiment_8
-participantCodes = {'BL' 'BK' 'BJ' 'BH' 'BG'}; %AM did not finish the experiment and AN may need to be excluded 
+participantCodes = {'BL' 'BK' 'BJ' 'BH' 'BG'}; 
 
 for iParticipant = 1:length(participantCodes)
     
