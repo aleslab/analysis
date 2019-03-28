@@ -87,6 +87,8 @@ end
     lapseFit = 'nAPLE';
     %Fit fuller model
       
+    BootNo = 1000;
+    
     results = struct();
     paramsValues = [0 .01 0 0;0 .01 0 0];
     [results.paramsValues, results.LL, results.exitflag, results.output] = ...
@@ -94,19 +96,48 @@ end
       paramsValues, PF,'searchOptions',options,'lapserates',lapseratesfuller,'thresholds',thresholdsfuller,...
       'slopes',slopesfuller,'guessrates',guessratesfuller,'lapseLimits',[0 0.04],'lapseFit',lapseFit,'gammaeqlambda',1,'searchOptions',options);
   
-   
+
+  [SD, paramsSim, LLSim, converged] = ...
+      PAL_PFML_BootstrapNonParametricMultiple(StimLevels,NumPos, OutOfNum,...      
+      results.paramsValues,BootNo, PF,'searchOptions',options,'lapserates',lapseratesfuller,'thresholds',thresholdsfuller,...
+      'slopes',slopesfuller,'guessrates',guessratesfuller,'lapseLimits',[0 0.04],'lapseFit',lapseFit,'gammaeqlambda',1,'searchOptions',options);
+  
+    
     results.PF         = PF;
     results.StimLevels = StimLevels;
     results.NumPos     = NumPos;
-    results.OutOfNum   = OutOfNum; 
-    
+    results.OutOfNum       = OutOfNum; 
+    results.bootstrapFits  = paramsSim;
+    results.bootStapSD     = SD;
+ 
    
     for iGroup = 1:nGroups,
 
         results.paramsValues(iGroup,:)
+        
         %Now lets evaluate the function so we can use for easy plotting:
         results.functionFitX{iGroup} = linspace(StimLevels(1),StimLevels(end),100);
         results.functionFitY{iGroup} = PF(results.paramsValues(iGroup,:), results.functionFitX{iGroup});
+        
+        bootFuncFit = NaN(BootNo, 100);
+        
+        for iBoot = 1:BootNo
+            theseParams =  paramsSim(iBoot,iGroup,:);
+            bootFuncFit(iBoot, :)  = PF(theseParams, results.functionFitX{iGroup});        
+        end
+        
+        loIdx = round(0.025 * BootNo);
+        hiIdx = round(0.975 * BootNo);
+        
+        sortedBootFuncFit = sort(bootFuncFit, 1, 'ascend');
+
+        results.functionFitBootLo{iGroup} = sortedBootFuncFit(loIdx,:);
+        results.functionFitBootHi{iGroup} = sortedBootFuncFit(hiIdx,:);
+        
+        sortedBootParams = sort(paramsSim(:,iGroup,:), 1, 'ascend');
+        results.bootstrapParamCI{iGroup} = sortedBootParams([loIdx hiIdx],:);
+        
+        
     end
     
     

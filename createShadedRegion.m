@@ -26,6 +26,14 @@ if ~isequal(size(x),size(y),size(yLo),size(yHi))
     error('Input to function not correct,  all matrices must have have equal sizes')
 end
 
+%Conform inputs to row vectors. 
+if isvector(x)
+    x = x(:);
+    y = y(:);
+    yLo = yLo(:);
+    yHi = yHi(:);
+end
+
 
 %Plot the line. 
 hLine = plot(x,y,varargin{:});
